@@ -1,0 +1,17 @@
+# Auto detect text files and perform LF normalization
+* text=auto
+
+*.h text
+*.hpp text
+*.c text
+*.cpp text
+*.txt text
+*.md text
+*.cmake text
+*.dox text
+*.lua text
+*.sh eol=lf
+*.bat eol=crlf
+
+*.png binary
+

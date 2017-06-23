@@ -1,0 +1,11 @@
+
+*.doxcfg
+
+bin/
+lib/
+
+build*/
+
+
+x64/
+Win32/
