@@ -4,17 +4,7 @@
 #-----------------------------------------------------------
 # User options
 
-# Windows only
-if(WIN32)
-    # option(RENDER_DIRECT2D  "Renderer: Direct2D" OFF)   
-endif()
-
-# Cross-platform
-option(RENDER_OPENGL        "Renderer: OPENGL" OFF)
-option(BUILD_TEST           "Include unittests" ON)
 option(BUILD_SAMPLE         "Include sample" ON)
-
-# This is for development but can be used by the user.
 option(ALLOC_STATS "Track memory allocations" OFF)
 
 #-----------------------------------------------------------
@@ -41,18 +31,11 @@ set(BUILD_SHARED_LIBS FALSE)
 if(WIN32 AND NOT UNIX)
     set(INSTALL_MISC_DIR .)
 elseif(UNIX)
-    set(INSTALL_MISC_DIR share/gwork)
+    set(INSTALL_MISC_DIR resource)
 endif()
 
 #-----------------------------------------------------------
 # Renderer config
-#   - Order alphabetic.
-
-if(RENDER_NULL)
-    set(DSSE_RENDER_NAME "Null")
-    set(DSSE_RENDER_INCLUDES "")
-    set(DSSE_RENDER_LIBRARIES )
-endif(RENDER_NULL)
 
 if(RENDER_OPENGL)
     find_package(GLFW REQUIRED)
@@ -67,25 +50,3 @@ if(RENDER_OPENGL)
     set(DSSE_RENDER_INCLUDES "${GLFW_INCLUDE_DIR}")
     set(DSSE_RENDER_LIBRARIES ${GLFW_LIBRARIES} ${GLFW_DEPENDENCIES})
 endif(RENDER_OPENGL)
-
-#-----------------------------------------------------------
-# Sanity checks and summary
-
-if(NOT DSSE_INPUT_NAME)
-    set(DSSE_INPUT_NAME ${DSSE_RENDER_NAME})
-endif()
-
-if(NOT DSSE_RENDER_NAME)
-    message(FATAL_ERROR "No renderer was specified. See RENDER_<name> options.")
-endif(NOT DSSE_RENDER_NAME)
-
-if(DSSE_RENDER_INCLUDES)
-    list(REMOVE_DUPLICATES DSSE_RENDER_INCLUDES)
-endif()
-if(DSSE_RENDER_LIBRARIES)
-    list(REMOVE_DUPLICATES DSSE_RENDER_LIBRARIES)
-endif()
-
-message("Using renderer ${DSSE_RENDER_NAME} on platform ${DSSE_PLATFORM_NAME}")
-message("${DSSE_RENDER_NAME} includes: ${DSSE_RENDER_INCLUDES}")
-message("${DSSE_RENDER_NAME} libs: ${DSSE_RENDER_LIBRARIES}")

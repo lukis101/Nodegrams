@@ -2,7 +2,6 @@
 
 # configure cmake
 cmake_minimum_required(VERSION 3.1)
-cmake_policy(SET CMP0004 OLD)
 
 # we require C++11 - this set appropriate flags for compilers, which may not be portable
 set(CMAKE_CXX_STANDARD 11)
@@ -35,8 +34,28 @@ make_directory(${CMAKE_LIBRARY_OUTPUT_DIRECTORY})
 # configure projects
 include(${DSSE_SOURCE_DIR}/cmake/Config.cmake)
 
-# add our projects
-add_subdirectory(src)
-add_subdirectory(doc)
+include_directories(
+    ${DSSE_SOURCE_DIR}/include
+)
 
+include(cmake_sources.txt)
+
+add_library(Dsse STATIC ${DSSE_HEADERS} ${DSSE_SOURCES})
+
+install(DIRECTORY ${DSSE_SOURCE_DIR}/include
+        DESTINATION include)
+
+install(TARGETS Dsse
+        RUNTIME DESTINATION bin
+        LIBRARY DESTINATION lib
+        ARCHIVE DESTINATION lib)
+
+# SpdLog lib
+include_directories(${DSSE_SOURCE_DIR}/external/spdlog/include)
+install(DIRECTORY ${DSSE_SOURCE_DIR}/external/spdlog/include
+        DESTINATION include)
+
+# add our projects
+add_subdirectory(doc)
+add_subdirectory(programs)
 

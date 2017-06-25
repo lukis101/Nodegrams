@@ -1,0 +1,29 @@
+
+set(DSSE_HEADERS
+    include/Dsse/Config.h
+    include/Dsse/DssEngine.h
+    include/Dsse/DataTypes.h
+    include/Dsse/NodeBase.h
+    include/Dsse/modules/ModuleBase.h
+)
+
+set(DSSE_SOURCES
+    src/Dsse/NodeBase.cpp
+    src/Dsse/DssEngine.cpp
+)
+
+# header folder groups
+source_group("${DSSE_HEADER_FOLDER}"
+             REGULAR_EXPRESSION "include/Dsse/[^/]+\\.h")
+source_group("${DSSE_HEADER_FOLDER}\\Core"
+             REGULAR_EXPRESSION "include/Dsse/core/[^/]+\\.h")
+source_group("${DSSE_HEADER_FOLDER}\\Modules"
+             REGULAR_EXPRESSION "include/Dsse/modules/[^/]+\\.h")
+
+# source folder groups
+source_group("${DSSE_SOURCE_FOLDER}"
+             REGULAR_EXPRESSION "[^/]+\\.cpp")
+source_group("${DSSE_SOURCE_FOLDER}\\core"
+             REGULAR_EXPRESSION "src/core/[^/]+\\.cpp")
+source_group("${DSSE_SOURCE_FOLDER}\\modules"
+             REGULAR_EXPRESSION "src/modules/[^/]+\\.cpp")
