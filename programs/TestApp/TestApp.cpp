@@ -24,7 +24,7 @@
 int main( int argc, char* argv[] )
 {
 	auto l = spdlog::stdout_logger_mt("DsseTest");
-	Dsse::Dsse engine(l);
+    dsse::Dsse engine(l);
 
 	int ret = engine.Init();
 	l->info( "Dsse.Init() = {}", ret);

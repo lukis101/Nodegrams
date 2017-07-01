@@ -11,9 +11,11 @@
 #include <Dsse/Config.h>
 #include <string>
 #include <list>
+#include <memory>
 
-namespace Dsse
+namespace dsse
 {
+    using std::shared_ptr;
     //
     // All strings are UTF-8 for Unicode. This is backwards compatible with ASCII.
     // See: http://www.utf8everywhere.org

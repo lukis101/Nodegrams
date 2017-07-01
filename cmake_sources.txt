@@ -1,15 +1,27 @@
 
 set(DSSE_HEADERS
+    include/Dsse/modules/ModuleBase.h
+	
     include/Dsse/Config.h
     include/Dsse/DssEngine.h
     include/Dsse/DataTypes.h
+	
     include/Dsse/NodeBase.h
-    include/Dsse/modules/ModuleBase.h
+    include/Dsse/NodeContainer.h
+	
+    include/Dsse/ContainerNode.h
+    include/Dsse/LuaNode.h
+	
+    include/Dsse/inoutlets/InletBase.h
+    include/Dsse/inoutlets/OutletBase.h
+    include/Dsse/inoutlets/FloatInlet.h
+    include/Dsse/inoutlets/FloatOutlet.h
 )
 
 set(DSSE_SOURCES
-    src/Dsse/NodeBase.cpp
     src/Dsse/DssEngine.cpp
+    src/Dsse/NodeBase.cpp
+    src/Dsse/ContainerNode.cpp
 )
 
 # header folder groups
@@ -19,6 +31,8 @@ source_group("${DSSE_HEADER_FOLDER}\\Core"
              REGULAR_EXPRESSION "include/Dsse/core/[^/]+\\.h")
 source_group("${DSSE_HEADER_FOLDER}\\Modules"
              REGULAR_EXPRESSION "include/Dsse/modules/[^/]+\\.h")
+source_group("${DSSE_HEADER_FOLDER}\\inoutlets"
+             REGULAR_EXPRESSION "include/Dsse/inoutlets/[^/]+\\.h")
 
 # source folder groups
 source_group("${DSSE_SOURCE_FOLDER}"

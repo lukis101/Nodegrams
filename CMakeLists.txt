@@ -51,8 +51,12 @@ install(TARGETS Dsse
         ARCHIVE DESTINATION lib)
 
 # SpdLog lib
-include_directories(${DSSE_SOURCE_DIR}/external/spdlog/include)
-install(DIRECTORY ${DSSE_SOURCE_DIR}/external/spdlog/include
+# include_directories(${DSSE_SOURCE_DIR}/external/spdlog/include)
+# install(DIRECTORY ${DSSE_SOURCE_DIR}/external/spdlog/include
+        # DESTINATION include)
+# GLM lib
+include_directories(${DSSE_SOURCE_DIR}/external/glm)
+install(DIRECTORY ${DSSE_SOURCE_DIR}/external/glm
         DESTINATION include)
 
 # add our projects

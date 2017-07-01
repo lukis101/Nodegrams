@@ -23,7 +23,7 @@
 #include "Dsse/DataTypes.h"
 #include "Dsse/Config.h"
 
-namespace Dsse
+namespace dsse
 {
 	class DSSE_EXPORT Dsse
 	{
@@ -33,6 +33,7 @@ namespace Dsse
 		~Dsse();
 		int Init();
 		int Shutdown();
+		int RegisterDataType();
 
 	protected:
 		String m_version;

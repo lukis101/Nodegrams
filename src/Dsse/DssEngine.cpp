@@ -5,7 +5,7 @@
 #include "Dsse/DssEngine.h"
 //#include <iostream>
 
-namespace Dsse
+namespace dsse
 {
 	Dsse::Dsse()
 	{
