@@ -6,11 +6,12 @@ set(DSSE_HEADERS
     include/Dsse/DssEngine.h
     include/Dsse/DataTypes.h
 	
-    include/Dsse/NodeBase.h
-    include/Dsse/NodeContainer.h
+    include/Dsse/nodes/NodeBase.h
+    include/Dsse/nodes/NodeContainer.h
 	
-    include/Dsse/ContainerNode.h
-    include/Dsse/LuaNode.h
+    include/Dsse/nodes/TestNode.h
+    include/Dsse/nodes/ContainerNode.h
+    # include/Dsse/nodes/LuaNode.h
 	
     include/Dsse/inoutlets/InletBase.h
     include/Dsse/inoutlets/OutletBase.h
@@ -20,24 +21,33 @@ set(DSSE_HEADERS
 
 set(DSSE_SOURCES
     src/Dsse/DssEngine.cpp
-    src/Dsse/NodeBase.cpp
-    src/Dsse/ContainerNode.cpp
+	
+    src/Dsse/nodes/NodeBase.cpp
+    src/Dsse/nodes/TestNode.cpp
+    src/Dsse/nodes/LuaNode.cpp
+    src/Dsse/nodes/ContainerNode.cpp
+	
+    src/Dsse/inoutlets/InletBase.cpp
+    src/Dsse/inoutlets/OutletBase.cpp
+    src/Dsse/inoutlets/FloatInlet.cpp
+    src/Dsse/inoutlets/FloatOutlet.cpp
 )
 
 # header folder groups
 source_group("${DSSE_HEADER_FOLDER}"
              REGULAR_EXPRESSION "include/Dsse/[^/]+\\.h")
-source_group("${DSSE_HEADER_FOLDER}\\Core"
+source_group("${DSSE_HEADER_FOLDER}\\core"
              REGULAR_EXPRESSION "include/Dsse/core/[^/]+\\.h")
-source_group("${DSSE_HEADER_FOLDER}\\Modules"
+source_group("${DSSE_HEADER_FOLDER}\\modules"
              REGULAR_EXPRESSION "include/Dsse/modules/[^/]+\\.h")
+source_group("${DSSE_HEADER_FOLDER}\\nodes"
+             REGULAR_EXPRESSION "include/Dsse/nodes/[^/]+\\.h")
 source_group("${DSSE_HEADER_FOLDER}\\inoutlets"
              REGULAR_EXPRESSION "include/Dsse/inoutlets/[^/]+\\.h")
 
 # source folder groups
-source_group("${DSSE_SOURCE_FOLDER}"
-             REGULAR_EXPRESSION "[^/]+\\.cpp")
-source_group("${DSSE_SOURCE_FOLDER}\\core"
-             REGULAR_EXPRESSION "src/core/[^/]+\\.cpp")
-source_group("${DSSE_SOURCE_FOLDER}\\modules"
-             REGULAR_EXPRESSION "src/modules/[^/]+\\.cpp")
+source_group("${DSSE_SOURCE_FOLDER}" REGULAR_EXPRESSION "src/Dsse/[^/]+\\.cpp")
+source_group("${DSSE_SOURCE_FOLDER}\\core"      REGULAR_EXPRESSION "src/Dsse/core/[^/]+\\.cpp")
+source_group("${DSSE_SOURCE_FOLDER}\\modules"   REGULAR_EXPRESSION "src/Dsse/modules/[^/]+\\.cpp")
+source_group("${DSSE_SOURCE_FOLDER}\\nodes"     REGULAR_EXPRESSION "src/Dsse/nodes/[^/]+\\.cpp")
+source_group("${DSSE_SOURCE_FOLDER}\\inoutlets" REGULAR_EXPRESSION "src/Dsse/inoutlets/[^/]+\\.cpp")

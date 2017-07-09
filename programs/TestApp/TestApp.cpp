@@ -23,28 +23,28 @@
 
 int main( int argc, char* argv[] )
 {
-	auto l = spdlog::stdout_logger_mt("DsseTest");
-    dsse::Dsse engine(l);
-
-	int ret = engine.Init();
-	l->info( "Dsse.Init() = {}", ret);
-
-	ret = engine.Shutdown();
-	l->info("Dsse.Shutdown() = {}", ret);
-
 	try
 	{
-		//auto console = spdlog::stdout_logger_mt("console");
-		//auto console = spdlog::stderr_logger_mt("console");
-		auto console = spdlog::basic_logger_mt("console", "log.txt");
+	    auto l_dsse = spdlog::stdout_logger_mt("DsseTest");
+        auto l_iolet = spdlog::stdout_logger_mt("iolet");
 
-		// Console logger with color
-		//auto console = spdlog::stdout_color_mt("console");
-		console->info("Welcome to spdlog!");
-		console->error("Some error message with arg{}..", 1);
-		console->warn("Easy padding in numbers like {:08d}", 12);
-		console->critical("Support for int: {0:d};  hex: {0:X};  oct: {0:o}; bin: {0:b}", 42);
+        dsse::Dsse engine(l_dsse);
+
+	    int ret_init = engine.Init();
+        l_dsse->info( "Dsse.Init() = {}", ret_init);
+
+        //dsse::TestNode testnode(nullptr,0);
+
+	    int ret_deinit = engine.Shutdown();
+        l_dsse->info("Dsse.Shutdown() = {}", ret_deinit);
+
+		/*
+        auto l_console = spdlog::stdout_logger_mt("console");
+		//auto l_console = spdlog::basic_logger_mt("console", "log.txt");
+        l_console->warn("Easy padding in numbers like {:08d}", 12);
+        l_console->critical("Support for int: {0:d};  hex: {0:X};  oct: {0:o}; bin: {0:b}", 42);
 		spdlog::get("console")->info("loggers can be retrieved from a global registry using the spdlog::get(logger_name) function");
+        */
 	}
 	catch (const spdlog::spdlog_ex& ex)
 	{

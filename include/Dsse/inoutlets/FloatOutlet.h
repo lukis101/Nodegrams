@@ -5,24 +5,30 @@
 
 #include "Dsse/DataTypes.h"
 #include "Dsse/Config.h"
-#include "Dsse/NodeBase.h"
+#include "Dsse/nodes/NodeBase.h"
 #include "Dsse/inoutlets/OutletBase.h"
 #include "Dsse/inoutlets/FloatInlet.h"
 
 namespace dsse
 {
-    class DSSE_EXPORT FloatOutlet : public OutletBase
-    {
-    public:
-		//DataType inbuffer;
-		
-        FloatOutlet(NodeBase node);
-        ~FloatOutlet();
-        NodeBase getNode();
-        void WriteData(float data);
-        int connectTo(FloatInlet inlet);
-	protected:
-		float m_outValue;
-    };
+class FloatInlet;
+	
+class DSSE_EXPORT FloatOutlet : public OutletBase
+{
+public:
+	//DataType inbuffer;
+	
+	FloatOutlet(NodeBase* node, String name, String desc, float defValue);
+	~FloatOutlet();
+	NodeBase* getNode();
+	void WriteData(float data);
+	bool ConnectTo(FloatInlet* inlet);
+    void SendData();
+    String GetDataString();
+protected:
+	float m_outValue;
+	float m_defValue;
+};
+
 }
 #endif // ifndef DSSE_FLOATOUTLET_H

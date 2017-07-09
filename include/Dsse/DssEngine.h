@@ -22,44 +22,27 @@
 
 #include "Dsse/DataTypes.h"
 #include "Dsse/Config.h"
+#include "Dsse/nodes/TestNode.h"
+#include "Dsse/nodes/NodeContainer.h"
 
 namespace dsse
 {
-	class DSSE_EXPORT Dsse
-	{
-	public:
-		Dsse();
-		Dsse(std::shared_ptr<spdlog::logger> logger);
-		~Dsse();
-		int Init();
-		int Shutdown();
-		int RegisterDataType();
 
-	protected:
-		String m_version;
-		std::shared_ptr<spdlog::logger> m_logger;
-	};
+class DSSE_EXPORT Dsse
+{
+public:
+	Dsse();
+	Dsse(std::shared_ptr<spdlog::logger> logger);
+	~Dsse();
+	int Init();
+	int Shutdown();
+	int RegisterDataType();
 
-    //
-    /// Base class for all renderer implementations.
-    ///
-    /// \note We never instance this directly, only the derived implementations.
-    //
-	class DSSE_EXPORT Base
-	{
-	protected:
+protected:
+	String m_version;
+    //NodeContainer m_rootcontainer;
+	std::shared_ptr<spdlog::logger> m_logger;
+};
 
-		/// Constructor. Not public as we only instance derived implementations.
-		Base();
-
-	public:
-
-		virtual ~Base();
-
-		virtual void Init() {}
-		virtual void Begin() {}
-		virtual void End() {}
-	};
-}
-
+} // namespace dsse
 #endif // ifndef DSSE_DSSE_H
