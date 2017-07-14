@@ -13,13 +13,11 @@
 namespace dsse
 {
 	
-class DSSE_EXPORT TestNode : public NodeBase
+class DSSE_EXPORT TestNode : public StaticNode
 {
 public:
-    TestNode(NodeContainer* parent, int id);
+    TestNode();
     ~TestNode();
-    int GetInletCount();
-    int GetOutletCount();
 //protected:
 };
 

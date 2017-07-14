@@ -5,10 +5,10 @@
 namespace dsse
 {
 
-NodeBase::NodeBase(NodeContainer* parent, int id)
+NodeBase::NodeBase()
 {
-	m_parent = parent;
-	m_id = id;
+	m_parent = nullptr;
+	m_id = -1;
 	name = "UnnamedNode";
 	classname = "Unknown";
 	category = "Unknown";

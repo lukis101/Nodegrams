@@ -16,7 +16,7 @@ class DSSE_EXPORT NodeContainer
 {
 public:
     //virtual ~NodeContainer() = 0;
-    virtual NodeBase * getNode(String name) = 0;
+    //virtual NodeBase * getNode(String name) = 0;
 };
 
 }

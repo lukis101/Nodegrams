@@ -1,20 +1,23 @@
 
 #pragma once
-#ifndef DSSE_NODECONTAINER_H
-#define DSSE_NODECONTAINER_H
+#ifndef DSSE_CONTAINERNODE_H
+#define DSSE_CONTAINERNODE_H
 
 
 #include "Dsse/DataTypes.h"
 #include "Dsse/Config.h"
-#include "Dsse/NodeBase.h"
+#include "Dsse/nodes/DynamicNode.h"
 
 namespace dsse
 {
-    class NodeContainer
-    {
-    public:
-        virtual ~NodeContainer() = 0;
-        virtual NodeBase getNode() = 0;
-    };
+	
+class ContainerNode : public DynamicNode
+{
+public:
+	ContainerNode();
+	~ContainerNode();
+	NodeBase* getNode(int id);
+};
+
 }
-#endif // ifndef DSSE_NODECONTAINER_H
+#endif // ifndef DSSE_CONTAINERNODE_H

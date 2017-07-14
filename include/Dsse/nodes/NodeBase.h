@@ -21,6 +21,7 @@ class NodeContainer;
 	
 class DSSE_EXPORT NodeBase
 {
+	friend class Dsse;
 public:
 	String name;
 	String classname;
@@ -30,10 +31,11 @@ public:
 	//shared_ptr<NodeContainer> parent;
 	bool processed; // Logic and data exchange complete
 	
-	NodeBase(NodeContainer* parent, int id);
-    ~NodeBase();
+	NodeBase();
+    virtual ~NodeBase();
 	virtual void DoLogic() = 0;
 	int GetID() { return m_id; }
+	virtual bool IsStatic() = 0;
 	
 	virtual int GetInletCount() = 0;
 	InletBase* GetInlet(String name);

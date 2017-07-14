@@ -7,8 +7,8 @@
 namespace dsse
 {
 
-TestNode::TestNode(NodeContainer* parent, int id)
-	: NodeBase(parent, id)
+TestNode::TestNode()
+	: StaticNode(2, 2)
 {
 	name = "UnnamedNode";
 	classname = "Unknown";
@@ -21,13 +21,5 @@ TestNode::~TestNode()
 	spdlog::get("iolet")->info("TestNode({}) destr()", this->m_id);
 }
 
-int TestNode::GetInletCount()
-{
-	return 2;
-}
-int TestNode::GetOutletCount()
-{
-	return 2;
-}
 
 }

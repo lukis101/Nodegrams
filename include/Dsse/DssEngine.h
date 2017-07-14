@@ -37,10 +37,21 @@ public:
 	int Init();
 	int Shutdown();
 	int RegisterDataType();
+	
+	int RegisterNode(Nodebase* node);
+	NodeBase* ReleaseNode(int nodeid); // Does not destroy, up to caller!
+	void DeleteNode(int nodeid);
+	NodeBase* GetNode(int nodeid);
+	void MoveNode(int nodeid, int destid);
 
+	const vector<String> GetNodeList();
+	const vector<NodeBase> GetNodes();
+	void PrintNodes(std::shared_ptr<spdlog::logger> logger, bool recursive=false);
+
+    NodeContainer rootcontainer;
 protected:
-	String m_version;
-    //NodeContainer m_rootcontainer;
+	vector<NodeBase*> m_nodereg;
+	String m_version = "0.1.0";
 	std::shared_ptr<spdlog::logger> m_logger;
 };
 
