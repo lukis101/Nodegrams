@@ -16,7 +16,13 @@ class ContainerNode : public DynamicNode
 public:
 	ContainerNode();
 	~ContainerNode();
+	
+	bool IsContainer() { return true };
 	NodeBase* getNode(int id);
+	void AssignNode(int id);
+	//void AssignNode(NodeBase* node);
+protected:
+	std::vector<NodeBase*> m_nodes;
 };
 
 }

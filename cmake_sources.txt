@@ -7,10 +7,11 @@ set(DSSE_HEADERS
     include/Dsse/DataTypes.h
 	
     include/Dsse/nodes/NodeBase.h
-    include/Dsse/nodes/NodeContainer.h
+    include/Dsse/nodes/StaticNode.h
+    include/Dsse/nodes/DynamicNode.h
 	
-    include/Dsse/nodes/TestNode.h
     include/Dsse/nodes/ContainerNode.h
+    include/Dsse/nodes/TestNode.h
     # include/Dsse/nodes/LuaNode.h
 	
     include/Dsse/inoutlets/InletBase.h
@@ -23,9 +24,12 @@ set(DSSE_SOURCES
     src/Dsse/DssEngine.cpp
 	
     src/Dsse/nodes/NodeBase.cpp
+    src/Dsse/nodes/StaticNode.cpp
+    src/Dsse/nodes/DynamicNode.cpp
+	
+    src/Dsse/nodes/ContainerNode.cpp
     src/Dsse/nodes/TestNode.cpp
     src/Dsse/nodes/LuaNode.cpp
-    src/Dsse/nodes/ContainerNode.cpp
 	
     src/Dsse/inoutlets/InletBase.cpp
     src/Dsse/inoutlets/OutletBase.cpp

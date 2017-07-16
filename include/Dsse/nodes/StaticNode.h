@@ -1,7 +1,7 @@
 
 #pragma once
-#ifndef DSSE_TESTNODE_H
-#define DSSE_TESTNODE_H
+#ifndef DSSE_STATICNODE_H
+#define DSSE_STATICNODE_H
 
 //#include <memory>
 
@@ -17,33 +17,25 @@ class DSSE_EXPORT StaticNode : public NodeBase
 public:
     StaticNode(int numinlets, int numoutlets);
     virtual ~StaticNode();
-
+	
 	bool IsStatic() { return true };
-    int GetInletCount()  { return m_numinlets; };
+	bool IsContainer() { return false }; // can containers be static?
+
+    int GetInletCount() { return m_numinlets; };
+	//int GetInletIndex(String name);
 	InletBase* GetInlet(String name);
 	InletBase* GetInlet(int index);
 
     int GetOutletCount() { return m_numoutlets; };
+	//int GetOutletIndex(String name);
 	OutletBase* GetOutlet(String name);
 	OutletBase* GetOutlet(int index);
-//protected:
-};
-class DSSE_EXPORT DynamicNode : public NodeBase
-{
-public:
-    DynamicNode();
-    virtual ~DynamicNode();
-	
-	bool IsStatic() { return false };
-	virtual int GetInletCount() = 0;
-	InletBase* GetInlet(String name);
-	InletBase* GetInlet(int index);
-	
-	virtual int GetOutletCount() = 0;
-	OutletBase* GetOutlet(String name);
-	OutletBase* GetOutlet(int index);
-//protected:
+protected:
+	int m_numinlets;
+	int m_numoutlets;
+	InletBase** m_inlets;
+	OutletBase** m_outlets;
 };
 
 }
-#endif // ifndef DSSE_TESTNODE_H
+#endif // ifndef DSSE_STATICNODE_H
