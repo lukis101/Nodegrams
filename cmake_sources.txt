@@ -13,6 +13,7 @@ set(DSSE_HEADERS
     include/Dsse/nodes/ContainerNode.h
     include/Dsse/nodes/TestNode.h
     # include/Dsse/nodes/LuaNode.h
+    include/Dsse/nodes/time/SysTimeNode.h
 
     include/Dsse/inoutlets/InletBase.h
     include/Dsse/inoutlets/OutletBase.h
@@ -30,6 +31,7 @@ set(DSSE_SOURCES
     src/Dsse/nodes/ContainerNode.cpp
     src/Dsse/nodes/TestNode.cpp
     src/Dsse/nodes/LuaNode.cpp
+    src/Dsse/nodes/time/SysTimeNode.cpp
 
     src/Dsse/inoutlets/InletBase.cpp
     src/Dsse/inoutlets/OutletBase.cpp

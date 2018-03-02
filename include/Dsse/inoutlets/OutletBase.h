@@ -32,6 +32,7 @@ public:
 	virtual bool Disconnect(InletBase* inlet);
 	bool IsConnectedTo(InletBase* inlet);
 	int GetNumConnections();
+	//void WriteData(data_type data); // Syntax for child classes
 protected:
 	NodeBase* m_node;
     bool m_dataChanged;

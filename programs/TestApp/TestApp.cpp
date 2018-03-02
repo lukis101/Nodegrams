@@ -21,6 +21,8 @@
 #include <iostream>
 #include "Dsse/DssEngine.h"
 #include "Dsse/nodes/TestNode.h"
+#include "Dsse/nodes/time/SysTimeNode.h"
+
 
 int main( int argc, char* argv[] )
 {
@@ -35,8 +37,13 @@ int main( int argc, char* argv[] )
         l_dsse->info( "Dsse.Init() = {}", ret_init);
 
         dsse::TestNode testnode;
+        dsse::SysTimeNode systimenode;
+
         engine.RegisterNode(&testnode);
+        engine.RegisterNode(&systimenode);
         testnode.DoLogic();
+        systimenode.DoLogic();
+        engine.ReleaseNode(systimenode.GetID());
         engine.ReleaseNode(testnode.GetID());
 
 	    int ret_deinit = engine.Shutdown();
