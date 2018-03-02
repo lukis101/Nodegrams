@@ -3,11 +3,8 @@
 #ifndef DSSE_STATICNODE_H
 #define DSSE_STATICNODE_H
 
-//#include <memory>
-
-#include "Dsse/DataTypes.h"
-#include "Dsse/Config.h"
-#include "Dsse/nodes/NodeBase.h"
+//#include "Dsse/nodes/NodeBase.h"
+#include "Dsse/DssEngine.h"
 
 namespace dsse
 {
@@ -17,9 +14,10 @@ class DSSE_EXPORT StaticNode : public NodeBase
 public:
     StaticNode(int numinlets, int numoutlets);
     virtual ~StaticNode();
-	
-	bool IsStatic() { return true };
-	bool IsContainer() { return false }; // can containers be static?
+
+	bool IsStatic() { return true; };
+	bool IsContainer() { return false; }; // can containers be static?
+	virtual void DoLogic() = 0;
 
     int GetInletCount() { return m_numinlets; };
 	//int GetInletIndex(String name);

@@ -1,7 +1,7 @@
  /*
 	Dreamshows engine test app
 
-	Copyright 2017 Lukas Jonyla
+	Copyright 2018 Lukas Jonyla
 
 	Licensed under the Apache License, Version 2.0 (the "License");
 	you may not use this file except in compliance with the License.
@@ -18,14 +18,15 @@
 
 #include "spdlog/spdlog.h"
 
-#include "Dsse/DssEngine.h"
 #include <iostream>
+#include "Dsse/DssEngine.h"
+#include "Dsse/nodes/TestNode.h"
 
 int main( int argc, char* argv[] )
 {
 	try
 	{
-	    auto l_dsse = spdlog::stdout_logger_mt("DsseTest");
+	    auto l_dsse = spdlog::stdout_logger_mt("dsse");
         auto l_iolet = spdlog::stdout_logger_mt("iolet");
 
         dsse::Dsse engine(l_dsse);
@@ -33,7 +34,10 @@ int main( int argc, char* argv[] )
 	    int ret_init = engine.Init();
         l_dsse->info( "Dsse.Init() = {}", ret_init);
 
-        //dsse::TestNode testnode(nullptr,0);
+        dsse::TestNode testnode;
+        engine.RegisterNode(&testnode);
+        testnode.DoLogic();
+        engine.ReleaseNode(testnode.GetID());
 
 	    int ret_deinit = engine.Shutdown();
         l_dsse->info("Dsse.Shutdown() = {}", ret_deinit);

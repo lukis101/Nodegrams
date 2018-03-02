@@ -1,8 +1,5 @@
 
-#include "spdlog/spdlog.h"
-
 #include "Dsse/nodes/TestNode.h"
-#include "Dsse/nodes/NodeContainer.h"
 
 namespace dsse
 {
@@ -10,16 +7,19 @@ namespace dsse
 TestNode::TestNode()
 	: StaticNode(2, 2)
 {
-	name = "UnnamedNode";
-	classname = "Unknown";
-	category = "Unknown";
-	
-	spdlog::get("iolet")->info("TestNode({}) constr()", this->m_id);
+	name = "TestNode";
+	category = "TESTS";
+
+	spdlog::get("dsse")->info("TestNode[{}] constr()", this->m_id);
 }
 TestNode::~TestNode()
 {
-	spdlog::get("iolet")->info("TestNode({}) destr()", this->m_id);
+	spdlog::get("dsse")->info("TestNode[{}] destr()", this->m_id);
 }
 
+void TestNode::DoLogic()
+{
+	spdlog::get("dsse")->info("TestNode[{}].DoLogic()", this->m_id);
+}
 
 }

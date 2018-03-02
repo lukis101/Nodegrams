@@ -4,21 +4,15 @@
 #define DSSE_NODEBASE_H
 
 //#include <memory>
-//#include <vector>
-#include <array>
 
-#include "Dsse/DataTypes.h"
-#include "Dsse/Config.h"
-#include "Dsse/nodes/NodeContainer.h"
+#include "Dsse/DssEngine.h"
 #include "Dsse/inoutlets/InletBase.h"
 #include "Dsse/inoutlets/OutletBase.h"
 
 namespace dsse
 {
-class InletBase;
-class OutletBase;
-class NodeContainer;
-	
+class ContainerNode;
+
 class DSSE_EXPORT NodeBase
 {
 	friend class Dsse;
@@ -28,8 +22,8 @@ public:
 	String custname; // custom(user defined) name
 	bool custnamed;
 	bool processed; // inner logic and data exchange complete
-	//shared_ptr<NodeContainer> parent;
-	
+	//shared_ptr<ContainerNode> m_parent;
+
 	NodeBase();
     virtual ~NodeBase();
 
@@ -37,20 +31,20 @@ public:
 	virtual bool IsContainer() = 0;
 	virtual void DoLogic() = 0;
 	int GetID() { return m_id; }
-	
+
 	virtual int GetInletCount() = 0;
-	InletBase* GetInlet(String name) = 0;
-	InletBase* GetInlet(int index) = 0;
-	
+	virtual InletBase* GetInlet(String name) = 0;
+	virtual InletBase* GetInlet(int index) = 0;
+
 	virtual int GetOutletCount() = 0;
-	OutletBase* GetOutlet(String name) = 0;
-	OutletBase* GetOutlet(int index) = 0;
-	
+	virtual OutletBase* GetOutlet(String name) = 0;
+	virtual OutletBase* GetOutlet(int index) = 0;
+
 	void setCustomName(String name);
 	String GetName();
 
 protected:
-	NodeContainer* m_parent;
+	ContainerNode* m_parent;
 	int m_id;
 };
 

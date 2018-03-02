@@ -5,24 +5,21 @@
 
 #include <vector>
 
-#include "Dsse/DataTypes.h"
-#include "Dsse/Config.h"
-#include "Dsse/nodes/NodeBase.h"
-#include "Dsse/inoutlets/InletBase.h"
+#include "Dsse/DssEngine.h"
 
 namespace dsse
 {
-class InletBase;
 class NodeBase;
-	
+class InletBase;
+
 class DSSE_EXPORT OutletBase
 {
 public:
 	String name;
 	String description;
-	std::vector< InletBase* > connections;
+	std::vector<InletBase*> connections;
 	//DataType outdata;
-	
+
 	OutletBase(NodeBase* node, String name, String desc);
 	virtual ~OutletBase();
 

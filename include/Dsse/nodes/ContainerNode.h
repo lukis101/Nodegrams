@@ -3,21 +3,20 @@
 #ifndef DSSE_CONTAINERNODE_H
 #define DSSE_CONTAINERNODE_H
 
-
-#include "Dsse/DataTypes.h"
-#include "Dsse/Config.h"
 #include "Dsse/nodes/DynamicNode.h"
 
 namespace dsse
 {
-	
-class ContainerNode : public DynamicNode
+
+class DSSE_EXPORT ContainerNode : public DynamicNode
 {
 public:
 	ContainerNode();
 	~ContainerNode();
-	
-	bool IsContainer() { return true };
+
+    void DoLogic(void);
+	bool IsContainer() { return true; };
+
 	NodeBase* getNode(int id);
 	void AssignNode(int id);
 	//void AssignNode(NodeBase* node);

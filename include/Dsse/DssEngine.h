@@ -19,48 +19,52 @@
 #define DSSE_DSSE_H
 
 #include <ostream>
+#include <vector>
 
 #include "spdlog/spdlog.h"
 
 #include "Dsse/DataTypes.h"
 #include "Dsse/Config.h"
-#include "Dsse/nodes/TestNode.h"
-#include "Dsse/nodes/NodeContainer.h"
+
+#include "Dsse/nodes/ContainerNode.h"
 
 namespace dsse
 {
 
 class DSSE_EXPORT Dsse
 {
+	//friend class NodeBase;
 public:
 	Dsse(std::shared_ptr<spdlog::logger> logger);
-	//Dsse();
+	Dsse();
 	~Dsse();
 	int Init();
 	int Shutdown();
 	int RegisterDataType();
-	
-	int RegisterNode(Nodebase* node); // assign id
+
+	int RegisterNode(NodeBase* node); // allocate new id
 	NodeBase* ReleaseNode(int nodeid); // does not destroy, up to caller!
 	void DeleteNode(int nodeid);
 	NodeBase* GetNode(int nodeid);
 	void MoveNode(int nodeid, int destid);
 
-	const vector<String> GetNodeList();
-	const vector<NodeBase*> GetNodes();
+	const std::vector<String> GetNodeList();
+	const std::vector<NodeBase*> GetNodes();
 	void PrintNodes(std::ostream stream, bool recursive);
 
-    NodeContainer rootcontainer;
+    ContainerNode rootcontainer;
 protected:
-	const int NODECAP = 100;
+	const static int NODECAP = 100;
 	NodeBase* m_nodereg[NODECAP]; // !!! TODO
 	int m_nodecount;
 	int m_maxid; // highest registry index
 	int m_minfreeid; // first(lowest) free index
 	String m_version = "0.1.0";
 	std::shared_ptr<spdlog::logger> m_logger;
-	
-	bool RegisterNode(Nodebase* node, int id); // known id (eg. from remote)
+
+	int RegisterNode(NodeBase* node, int id); // known id (eg. from remote)
+private:
+    bool CheckID(int id);
 };
 
 } // namespace dsse

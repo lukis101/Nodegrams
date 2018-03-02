@@ -3,16 +3,13 @@
 #ifndef DSSE_INLETBASE_H
 #define DSSE_INLETBASE_H
 
-#include "Dsse/Config.h"
-#include "Dsse/DataTypes.h"
-#include "Dsse/nodes/NodeBase.h"
-#include "Dsse/inoutlets/OutletBase.h"
+#include "Dsse/DssEngine.h"
 
 namespace dsse
 {
 class NodeBase;
 class OutletBase;
-	
+
 class DSSE_EXPORT InletBase
 {
 	//friend class OutletBase;
@@ -41,6 +38,6 @@ protected:
 	bool m_dataChanged;
 
 };
-	
+
 }
 #endif // ifndef DSSE_INLETBASE_H
