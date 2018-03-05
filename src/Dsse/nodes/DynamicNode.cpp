@@ -7,11 +7,11 @@ namespace dsse
 DynamicNode::DynamicNode()
 	: NodeBase()
 {
-	spdlog::get("dsse")->info("DynamicNode() \"{}\" constr()", name);
+	spdlog::get("dsse")->debug("DynamicNode() \"{}\" constr()", name);
 }
 DynamicNode::~DynamicNode()
 {
-	spdlog::get("dsse")->info("DynamicNode() \"{}\" destr()", name);
+	spdlog::get("dsse")->debug("DynamicNode() \"{}\" destr()", name);
 }
 
 InletBase* DynamicNode::GetInlet(String inletname)

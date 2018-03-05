@@ -9,6 +9,7 @@
 
 namespace dsse
 {
+class NodeBase;
 
 class DSSE_EXPORT DynamicNode : public NodeBase
 {

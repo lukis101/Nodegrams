@@ -19,22 +19,20 @@ OutletBase::OutletBase(NodeBase* node, String name, String desc)
 	m_node = node;
 	this->name = name;
 	this->description = desc;
-	
-	spdlog::get("iolet")->info("OutletBase \"{}\" constr()", name);
+
+	spdlog::get("iolet")->debug("OutletBase \"{}\" constr()", name);
 }
 OutletBase::~OutletBase()
 {
-	spdlog::get("iolet")->info("OutletBase \"{}\" destr()", name);
+	spdlog::get("iolet")->debug("OutletBase \"{}\" destr()", name);
 }
 
 String OutletBase::GetFullName()
 {
-	const String prefix = "(o)";
 	String fname;
-	fname.reserve(prefix.size() + m_node->name.size() + 1 + name.size());
-	fname += prefix;
+	fname.reserve(m_node->name.size() + 5 + name.size());
 	fname += m_node->name;
-	fname += '.';
+	fname += ":out:";
 	fname += name;
 	return fname;
 }

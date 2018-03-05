@@ -9,6 +9,7 @@ Dsse::Dsse(std::shared_ptr<spdlog::logger> logger)
 	//: rootcontainer()
 {
 	m_logger = logger;
+    typereg = new TypeRegistry(this);
 	rootcontainer.m_id = 1;
 	rootcontainer.m_parent = &rootcontainer;
 	m_nodereg[0] = &rootcontainer;
@@ -21,6 +22,7 @@ Dsse::Dsse() : Dsse::Dsse(spdlog::stdout_logger_mt("dsse"))
 }
 Dsse::~Dsse()
 {
+    delete typereg;
 }
 
 int Dsse::Init()
@@ -76,9 +78,14 @@ int Dsse::RegisterNode(NodeBase* node, int id)
         }
         else // find next free slot
         {
-            for(int i=m_minfreeid+1; i<NODECAP; i++)
+            for (int i=m_minfreeid+1; i<NODECAP; i++)
+            {
                 if (m_nodereg[i-1] != nullptr)
+                {
                     m_minfreeid = i;
+                    break;
+                }
+            }
         }
     }
 	// Init node

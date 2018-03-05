@@ -11,7 +11,7 @@
 
 namespace dsse
 {
-	
+
 InletBase::InletBase(NodeBase* node, String name, String desc)
 {
 	m_dataReady = false;
@@ -20,24 +20,20 @@ InletBase::InletBase(NodeBase* node, String name, String desc)
 	m_node = node;
 	this->name = name;
 	this->description = desc;
-	
-	auto m_logger = spdlog::stdout_logger_mt("inlet");
-	m_logger->info("InletBase \"{}\" constr()", name);
+
+	spdlog::get("iolet")->debug("InletBase \"{}\" constr()", name);
 }
 InletBase::~InletBase()
 {
-	auto m_logger = spdlog::stdout_logger_mt("inlet");
-	m_logger->info("InletBase \"{}\" destr()", name);
+	spdlog::get("iolet")->debug("InletBase \"{}\" destr()", name);
 }
 
 String InletBase::GetFullName()
 {
-	const String prefix = "(i)";
 	String fname;
-	fname.reserve(prefix.size() + m_node->name.size() + 1 + name.size());
-	fname += prefix;
+	fname.reserve(m_node->name.size() + 4 + name.size());
 	fname += m_node->name;
-	fname += '.';
+	fname += ":in:";
 	fname += name;
 	return fname;
 }

@@ -22,40 +22,42 @@ namespace dsse
     //
     typedef std::string     String;
     typedef char            UnicodeChar;    // TODO - deal with multibyte UTF8 chars.
-    
+
+    typedef int DataType;
+
     struct DSSE_EXPORT Point
     {
         Point(int x_=0, int y_=0)
         :   x(x_), y(y_)
         {}
-        
+
         void set(int x_, int y_)
         {
             x = x_, y = y_;
         }
-        
+
         void operator += (const Point& p)
         {
             x += p.x;
             y += p.y;
         }
-        
+
         Point operator + (const Point& p) const
         {
             return Point(x + p.x, p.y + y);
         }
-        
+
         void operator -= (const Point& p)
         {
             x -= p.x;
             y -= p.y;
         }
-        
+
         Point operator - (const Point& p) const
         {
             return Point(x - p.x, y - p.y);
         }
-        
+
         int x, y;
     };
 
@@ -64,11 +66,11 @@ namespace dsse
         Rect(int x_ = 0, int y_ = 0, int w_ = 0, int h_ = 0)
         :   x(x_), y(y_), w(w_), h(h_)
         {}
-        
+
         Rect(const Point& o, const Point& sz)
         :   x(o.x), y(o.y), w(sz.x), h(sz.y)
         {}
-        
+
         bool operator == (const Rect &other) const
         {
             return x == other.x && y == other.y && w == other.w && h == other.h;
@@ -79,7 +81,7 @@ namespace dsse
             const Rect m(x + rct.x, y + rct.y, w + rct.w, h + rct.h);
             return m;
         }
-        
+
         Point GetSize() const { return Point(w,h); }
 
         int x, y, w, h;
@@ -184,7 +186,7 @@ namespace dsse
         static const Color GreyLight(230, 230, 230, 255);
         static const Color GworkPink(255, 65, 199, 255);
     }
-    
+
     struct Font
     {
         typedef std::list<Font*> List;
@@ -207,7 +209,7 @@ namespace dsse
 
         // This is the real font size, after it's been scaled by Render->Scale()
         float realsize;
-        
+
         void *render_data;      // optional renderer data
     };
 
@@ -220,7 +222,7 @@ namespace dsse
         bool    failed;
         int     width;
         int     height;
-        
+
         bool    readable;
         void*   surface;
 
@@ -234,6 +236,6 @@ namespace dsse
         {
         }
     };
-    
+
 }
 #endif // ifndef DSSE_PLATFORMTYPES_H

@@ -5,6 +5,10 @@ set(DSSE_HEADERS
     include/Dsse/Config.h
     include/Dsse/DataTypes.h
     include/Dsse/DssEngine.h
+    include/Dsse/TypeRegistry.h
+
+    include/Dsse/datatypes/DataBox.h
+    include/Dsse/datatypes/Float.h
 
     include/Dsse/nodes/NodeBase.h
     include/Dsse/nodes/StaticNode.h
@@ -17,12 +21,18 @@ set(DSSE_HEADERS
 
     include/Dsse/inoutlets/InletBase.h
     include/Dsse/inoutlets/OutletBase.h
-    include/Dsse/inoutlets/FloatInlet.h
-    include/Dsse/inoutlets/FloatOutlet.h
+    include/Dsse/inoutlets/SimpleInlet.h
+    include/Dsse/inoutlets/SimpleOutlet.h
+    # include/Dsse/inoutlets/FloatInlet.h
+    # include/Dsse/inoutlets/FloatOutlet.h
 )
 
 set(DSSE_SOURCES
     src/Dsse/DssEngine.cpp
+    src/Dsse/TypeRegistry.cpp
+
+    src/Dsse/datatypes/DataBox.cpp
+    src/Dsse/datatypes/Float.cpp
 
     src/Dsse/nodes/NodeBase.cpp
     src/Dsse/nodes/StaticNode.cpp
@@ -35,8 +45,10 @@ set(DSSE_SOURCES
 
     src/Dsse/inoutlets/InletBase.cpp
     src/Dsse/inoutlets/OutletBase.cpp
-    src/Dsse/inoutlets/FloatInlet.cpp
-    src/Dsse/inoutlets/FloatOutlet.cpp
+    src/Dsse/inoutlets/SimpleInlet.cpp
+    src/Dsse/inoutlets/SimpleOutlet.cpp
+    # src/Dsse/inoutlets/FloatInlet.cpp
+    # src/Dsse/inoutlets/FloatOutlet.cpp
 )
 
 # header folder groups

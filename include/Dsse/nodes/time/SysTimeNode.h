@@ -4,7 +4,7 @@
 #define DSSE_SYSCLOCKNODE_H
 
 #include "Dsse/nodes/StaticNode.h"
-#include "Dsse/inoutlets/FloatOutlet.h"
+#include "Dsse/inoutlets/SimpleOutlet.h"
 
 namespace dsse
 {
@@ -12,15 +12,15 @@ namespace dsse
 class DSSE_EXPORT SysTimeNode : public StaticNode
 {
 public:
-    String name = "SysTimeNode__";
-
     SysTimeNode();
     ~SysTimeNode();
 
 	void DoLogic();
 protected:
-    FloatOutlet* out_ms;
-    FloatOutlet* out_sec;
+    DataBox* dout_ms;
+    DataBox* dout_sec;
+    SimpleOutlet* out_ms;
+    SimpleOutlet* out_sec;
 };
 
 }

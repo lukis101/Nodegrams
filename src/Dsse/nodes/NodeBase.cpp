@@ -15,12 +15,12 @@ NodeBase::NodeBase()
 	custnamed = false;
 	processed = false;
 
-	spdlog::get("dsse")->info("NodeBase() \"{}\" constr()", name);
+	spdlog::get("dsse")->debug("NodeBase() \"{}\" constr()", name);
 }
 
 NodeBase::~NodeBase()
 {
-	spdlog::get("dsse")->info("NodeBase() \"{}\" destr()", name);
+	spdlog::get("dsse")->debug("NodeBase() \"{}\" destr()", name);
 }
 
 void NodeBase::setCustomName(String thename)

@@ -26,21 +26,25 @@
 #include "Dsse/DataTypes.h"
 #include "Dsse/Config.h"
 
+#include "Dsse/TypeRegistry.h"
 #include "Dsse/nodes/ContainerNode.h"
 
 namespace dsse
 {
+class TypeRegistry;
 
 class DSSE_EXPORT Dsse
 {
 	//friend class NodeBase;
 public:
+    TypeRegistry* typereg;
+    ContainerNode rootcontainer;
+
 	Dsse(std::shared_ptr<spdlog::logger> logger);
 	Dsse();
 	~Dsse();
 	int Init();
 	int Shutdown();
-	int RegisterDataType();
 
 	int RegisterNode(NodeBase* node); // allocate new id
 	NodeBase* ReleaseNode(int nodeid); // does not destroy, up to caller!
@@ -52,7 +56,6 @@ public:
 	const std::vector<NodeBase*> GetNodes();
 	void PrintNodes(std::ostream stream, bool recursive);
 
-    ContainerNode rootcontainer;
 protected:
 	const static int NODECAP = 100;
 	NodeBase* m_nodereg[NODECAP]; // !!! TODO

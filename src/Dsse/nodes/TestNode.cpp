@@ -10,16 +10,16 @@ TestNode::TestNode()
 	name = "TestNode";
 	category = "TESTS";
 
-	spdlog::get("dsse")->info("TestNode[{}] constr()", this->m_id);
+	spdlog::get("dsse")->debug("TestNode[{}] constr()", this->m_id);
 }
 TestNode::~TestNode()
 {
-	spdlog::get("dsse")->info("TestNode[{}] destr()", this->m_id);
+	spdlog::get("dsse")->debug("TestNode[{}] destr()", this->m_id);
 }
 
 void TestNode::DoLogic()
 {
-	spdlog::get("dsse")->info("TestNode[{}].DoLogic()", this->m_id);
+	spdlog::get("dsse")->info("[{}:TestNode].DoLogic()", this->m_id);
 }
 
 }

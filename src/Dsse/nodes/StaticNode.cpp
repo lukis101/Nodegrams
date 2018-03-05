@@ -13,11 +13,11 @@ StaticNode::StaticNode(int numinlets, int numoutlets)
 	m_inlets = new InletBase*[numinlets];
 	m_outlets = new OutletBase*[numoutlets];
 
-	spdlog::get("dsse")->info("StaticNode() \"{}\" constr()", name);
+	spdlog::get("dsse")->debug("StaticNode() \"{}\" constr()", name);
 }
 StaticNode::~StaticNode()
 {
-	spdlog::get("dsse")->info("StaticNode() \"{}\" destr()", name);
+	spdlog::get("dsse")->debug("StaticNode() \"{}\" destr()", name);
 	delete[] m_inlets;
 	delete[] m_outlets;
 }

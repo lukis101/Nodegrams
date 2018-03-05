@@ -13,18 +13,18 @@
 
 namespace dsse
 {
-	
+
 FloatInlet::FloatInlet(NodeBase* node, String name, String desc, float defValue)
 	: InletBase(node, name, desc)
 {
 	m_defValue = defValue;
 	m_inValue = m_defValue;
-	
-	spdlog::get("iolet")->info("Float \"{}\" constr()", GetFullName());
+
+	spdlog::get("iolet")->debug("Float \"{}\" constr()", GetFullName());
 }
 FloatInlet::~FloatInlet()
 {
-	spdlog::get("iolet")->info("Float \"{}\" destr()", GetFullName());
+	spdlog::get("iolet")->debug("Float \"{}\" destr()", GetFullName());
 }
 
 bool FloatInlet::Connect(FloatOutlet* outlet)

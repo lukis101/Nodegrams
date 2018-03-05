@@ -7,11 +7,11 @@ namespace dsse
 ContainerNode::ContainerNode()
 	: DynamicNode()
 {
-	spdlog::get("dsse")->info("ContainerNode() \"{}\" constr()", name);
+	spdlog::get("dsse")->debug("ContainerNode() \"{}\" constr()", name);
 }
 ContainerNode::~ContainerNode()
 {
-	spdlog::get("dsse")->info("ContainerNode() \"{}\" destr()", name);
+	spdlog::get("dsse")->debug("ContainerNode() \"{}\" destr()", name);
 }
 
 void ContainerNode::DoLogic()

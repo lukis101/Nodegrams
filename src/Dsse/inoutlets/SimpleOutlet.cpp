@@ -3,9 +3,7 @@
 
 #include "spdlog/spdlog.h"
 
-#include "Dsse/inoutlets/OutletBase.h"
-#include "Dsse/inoutlets/FloatOutlet.h"
-#include "Dsse/nodes/NodeBase.h"
+#include "Dsse/inoutlets/SimpleOutlet.h"
 
 //#include "Dsse/DataTypes.h"
 //#include "Dsse/DssEngine.h"
@@ -13,20 +11,19 @@
 namespace dsse
 {
 
-FloatOutlet::FloatOutlet(NodeBase* node, String name, String desc, float defValue)
+SimpleOutlet::SimpleOutlet(NodeBase* node, DataBox* databox, String name, String desc)
 	: OutletBase(node, name, desc)
 {
-	m_defValue = defValue;
-    m_outValue = m_defValue;
+    m_data = databox;
 
-	spdlog::get("iolet")->debug("Float \"{}\" constr()", GetFullName());
+	spdlog::get("iolet")->debug("SimpleOutlet \"{}\" constr()", GetFullName());
 }
-FloatOutlet::~FloatOutlet()
+SimpleOutlet::~SimpleOutlet()
 {
-	spdlog::get("iolet")->debug("Float \"{}\" destr()", GetFullName());
+	spdlog::get("iolet")->debug("SimpleOutlet \"{}\" destr()", GetFullName());
 }
 
-bool FloatOutlet::ConnectTo(FloatInlet* inlet)
+bool SimpleOutlet::ConnectTo(InletBase* inlet)
 {
 	if( IsConnectedTo(inlet) )
 	{
@@ -47,16 +44,7 @@ bool FloatOutlet::ConnectTo(FloatInlet* inlet)
 			GetFullName(), inlet->GetFullName());
 	return false;
 }
-void FloatOutlet::WriteData(float data)
-{
-	if( m_outValue != data )
-	{
-		m_outValue = data;
-		m_dataChanged = true;
-	}
-	m_dataReady = true;
-}
-void FloatOutlet::SendData()
+void SimpleOutlet::SendData()
 {
 	if( !m_dataReady )
 	{
@@ -66,16 +54,11 @@ void FloatOutlet::SendData()
 	{
 		for(auto iter = connections.begin(); iter != connections.end(); ++iter)
 		{
-			FloatInlet* inlet = static_cast<FloatInlet*>(*iter);
-			inlet->ReceiveData(m_outValue);
+			(*iter)->ReceiveData(m_data);
 		}
 		m_dataReady = false;
 		m_dataSent = true;
 	}
-}
-String FloatOutlet::GetDataString()
-{
-	return "TODO";
 }
 
 } // namespace dsse

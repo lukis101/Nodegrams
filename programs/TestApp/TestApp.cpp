@@ -18,23 +18,29 @@
 
 #include "spdlog/spdlog.h"
 
+#include <memory>
 #include <iostream>
 #include "Dsse/DssEngine.h"
 #include "Dsse/nodes/TestNode.h"
 #include "Dsse/nodes/time/SysTimeNode.h"
+#include "Dsse/datatypes/Float.h"
 
 
 int main( int argc, char* argv[] )
 {
 	try
 	{
+        //spdlog::set_level(spdlog::level::debug);
 	    auto l_dsse = spdlog::stdout_logger_mt("dsse");
+        //l_dsse->set_level(spdlog::level::debug);
         auto l_iolet = spdlog::stdout_logger_mt("iolet");
+        l_iolet->set_level(spdlog::level::debug);
 
         dsse::Dsse engine(l_dsse);
 
 	    int ret_init = engine.Init();
-        l_dsse->info( "Dsse.Init() = {}", ret_init);
+        l_dsse->info("Dsse.Init() = {}", ret_init);
+        engine.typereg->RegisterDataType(new dsse::Float(&engine));
 
         dsse::TestNode testnode;
         dsse::SysTimeNode systimenode;

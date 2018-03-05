@@ -23,6 +23,7 @@ public:
 	OutletBase(NodeBase* node, String name, String desc);
 	virtual ~OutletBase();
 
+	virtual bool ConnectTo(InletBase* inlet) = 0;
 	NodeBase* GetNode() { return m_node; }
 	bool IsDataReady() { return m_dataReady; }
 	String GetFullName();
