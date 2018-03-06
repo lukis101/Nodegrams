@@ -9,6 +9,7 @@ set(DSSE_HEADERS
 
     include/Dsse/datatypes/DataBox.h
     include/Dsse/datatypes/Float.h
+    include/Dsse/datatypes/Double.h
 
     include/Dsse/nodes/NodeBase.h
     include/Dsse/nodes/StaticNode.h
@@ -33,6 +34,7 @@ set(DSSE_SOURCES
 
     src/Dsse/datatypes/DataBox.cpp
     src/Dsse/datatypes/Float.cpp
+    src/Dsse/datatypes/Double.cpp
 
     src/Dsse/nodes/NodeBase.cpp
     src/Dsse/nodes/StaticNode.cpp
