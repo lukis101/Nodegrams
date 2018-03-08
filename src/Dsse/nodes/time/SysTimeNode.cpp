@@ -8,15 +8,16 @@ static const String NODE_NAME = "SysTimeNode";
 static const String NODE_CATEGORY = "TIME";
 static const String NODE_DESCR = "";
 
-SysTimeNode::SysTimeNode()
-	: StaticNode(0, 2)
+SysTimeNode::SysTimeNode(Dsse* engine)
+	: StaticNode(engine, 0, 2)
 {
 	spdlog::get("dsse")->debug("SysTimeNode[{}] constr()", this->m_id);
 
 	name = NODE_NAME;
 	category = NODE_CATEGORY;
 
-    //dout_ms = new DataBox
+    dout_ms = new Double(m_engine);
+    dout_sec = new Float(m_engine);
     m_outlets[0] = out_ms = new SimpleOutlet(this, dout_ms, "Milliseconds", "UNIX time in milliseconds");
     m_outlets[1] = out_sec = new SimpleOutlet(this, dout_sec, "Seconds", "UNIX time in seconds");
 }
@@ -36,9 +37,8 @@ void SysTimeNode::DoLogic()
     (system_clock::now().time_since_epoch()).count();
     uint32_t sec = static_cast<uint32_t>(ms/1000);
 
-    // TODO use proper outlet data types
-    //out_ms->WriteData(static_cast<float>(sec));
-    //out_sec->WriteData(static_cast<float>(sec));
+    dout_ms->SetValue(static_cast<double>(ms));
+    dout_sec->SetValue(static_cast<float>(sec));
 }
 
 }

@@ -24,6 +24,7 @@
 #include "Dsse/nodes/TestNode.h"
 #include "Dsse/nodes/time/SysTimeNode.h"
 #include "Dsse/datatypes/Float.h"
+#include "Dsse/datatypes/Double.h"
 
 
 int main( int argc, char* argv[] )
@@ -41,16 +42,13 @@ int main( int argc, char* argv[] )
 	    int ret_init = engine.Init();
         l_dsse->info("Dsse.Init() = {}", ret_init);
         engine.typereg->RegisterDataType(new dsse::Float(&engine));
+        engine.typereg->RegisterDataType(new dsse::Double(&engine));
 
-        dsse::TestNode testnode;
-        dsse::SysTimeNode systimenode;
-
-        engine.RegisterNode(&testnode);
-        engine.RegisterNode(&systimenode);
-        testnode.DoLogic();
-        systimenode.DoLogic();
-        engine.ReleaseNode(systimenode.GetID());
-        engine.ReleaseNode(testnode.GetID());
+        int tnode = engine.AddNode(new dsse::TestNode(&engine));
+        int stnode = engine.AddNode(new dsse::SysTimeNode(&engine));
+        engine.DoLogic();
+        engine.DeleteNode(tnode);
+        engine.DeleteNode(stnode);
 
 	    int ret_deinit = engine.Shutdown();
         l_dsse->info("Dsse.Shutdown() = {}", ret_deinit);

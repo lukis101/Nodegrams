@@ -14,7 +14,7 @@ class NodeBase;
 class DSSE_EXPORT DynamicNode : public NodeBase
 {
 public:
-    DynamicNode();
+    DynamicNode(Dsse*);
     virtual ~DynamicNode();
 
 	bool IsStatic() { return false; };

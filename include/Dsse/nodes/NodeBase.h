@@ -24,7 +24,7 @@ public:
 	bool processed; // inner logic and data exchange complete
 	//shared_ptr<ContainerNode> m_parent;
 
-	NodeBase();
+	NodeBase(Dsse*);
     virtual ~NodeBase();
 
 	virtual bool IsStatic() = 0;
@@ -44,6 +44,7 @@ public:
 	String GetName();
 
 protected:
+    Dsse* m_engine;
 	ContainerNode* m_parent;
 	int m_id;
 };

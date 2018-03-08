@@ -6,16 +6,18 @@
 namespace dsse
 {
 Dsse::Dsse(std::shared_ptr<spdlog::logger> logger)
-	//: rootcontainer()
 {
 	m_logger = logger;
-    typereg = new TypeRegistry(this);
-	rootcontainer.m_id = 1;
-	rootcontainer.m_parent = &rootcontainer;
-	m_nodereg[0] = &rootcontainer;
 	m_nodecount = 1;
 	m_maxid = 1;
 	m_minfreeid = 2;
+    typereg = new TypeRegistry(this);
+    rootcontainer = new ContainerNode(this);
+	rootcontainer->m_id = 1;
+	rootcontainer->m_parent = rootcontainer;
+	m_nodereg[0] = rootcontainer;
+	for (int i=1; i < NODECAP; i++)
+        m_nodereg[i] = nullptr;
 }
 Dsse::Dsse() : Dsse::Dsse(spdlog::stdout_logger_mt("dsse"))
 {
@@ -35,6 +37,13 @@ int Dsse::Shutdown()
 	m_logger->info("Dsse shutting down..");
 	return 0;
 }
+void Dsse::DoLogic()
+{
+	m_logger->info("Dsse.DoLogic()");
+	for (int n=0; n <= m_maxid; n++)
+        if (m_nodereg[n] != nullptr)
+            m_nodereg[n]->DoLogic();
+}
 
 bool Dsse::CheckID(int id)
 {
@@ -43,24 +52,33 @@ bool Dsse::CheckID(int id)
 	return false;
 }
 
-int Dsse::RegisterNode(NodeBase* node, int id)
+int Dsse::AddNode(NodeBase* node, int id)
 {
 	// TODO null check?
 	if (node->m_id != 0) // TODO compare pointers
     {
-		m_logger->error("Node re-register attempt {}", node->m_id);
+		m_logger->error("Node re-register attempt! Current id = {}", node->m_id);
 		return 0;
     }
-	if (id >= NODECAP)
+    if (m_minfreeid == NODECAP-1)
     {
-		m_logger->error("RegisterNode(): requested index {} is out of range", id);
-		return 0;
+        m_logger->error("RegisterNode(): capacity reached");
+        return 0;
     }
-	if (m_minfreeid == NODECAP-1)
+
+    if (id == 0)
     {
-		m_logger->error("RegisterNode(): capacity reached");
-		return 0;
+        id = m_minfreeid;
     }
+    else
+    {
+        if (id >= NODECAP)
+        {
+            m_logger->error("RegisterNode(): requested index {} is out of range", id);
+            return 0;
+        }
+    }
+
 	// Check if vacant
 	if (m_nodereg[id-1] != nullptr)
 		return 0;
@@ -69,7 +87,7 @@ int Dsse::RegisterNode(NodeBase* node, int id)
 	m_nodecount++;
 
 	// Update counters/indices
-	if( id == m_minfreeid)
+	if (id == m_minfreeid)
     {
         if (m_minfreeid == m_maxid+1) // Pushed to end
         {
@@ -91,36 +109,7 @@ int Dsse::RegisterNode(NodeBase* node, int id)
 	// Init node
 	node->m_id = id;
 	//node->m_parent = &rootcontainer;
-	m_logger->info("Registered node \"{}\" with requested id {}", node->name, id);
-	return id;
-}
-int Dsse::RegisterNode(NodeBase* node)
-{
-	// TODO null check?
-	if (node->m_id != 0) // already registered!
-		return 0;
-	if (m_minfreeid == NODECAP-1) // Cap reached
-		return 0;
-	// Assign to slot
-	int id = m_minfreeid;
-	m_nodereg[m_minfreeid-1] = node;
-	m_nodecount++;
-	// Update counters/indices
-	if (m_minfreeid == m_maxid+1) // Pushed to end
-	{
-		m_minfreeid++;
-		m_maxid++;
-	}
-	else // find next free slot
-	{
-		for(int i=m_minfreeid+1; i<NODECAP; i++)
-			if (m_nodereg[i-1] != nullptr)
-				m_minfreeid = i;
-	}
-	// Init node
-	node->m_id = id;
-	//node->m_parent = &rootcontainer;
-	m_logger->info("Registered node \"{}\" with id {}", node->GetName(), id);
+	m_logger->info("Registered node \"{}\" to id {}", node->name, id);
 	return id;
 }
 
@@ -172,7 +161,7 @@ NodeBase* Dsse::GetNode(int nodeid)
 	}
 	return m_nodereg[nodeid-1];
 }
-void Dsse::MoveNode(int targetid, int destid)
+/*void Dsse::MoveNode(int targetid, int destid)
 {
 	if (!CheckID(targetid) || (targetid == 0))
 	{
@@ -193,12 +182,12 @@ void Dsse::MoveNode(int targetid, int destid)
 	NodeBase* dest = m_nodereg[destid-1];
 	// TODO parent-child swap case
 	//target.parent = dest; // TODO
-}
+}*/
 
-void Dsse::PrintNodes(std::ostream stream, bool recursive=false)
+void Dsse::PrintNodes(std::ostream stream, bool recursive)
 {
 	// Manually print root node and start from second node (prevents infinite recursion)
-	stream << "> " << rootcontainer.m_id << " = " << rootcontainer.GetName() << std::endl;
+	stream << "> " << rootcontainer->m_id << " = " << rootcontainer->GetName() << std::endl;
 	for (int i=1; i<m_maxid; i++)
 	{
 		NodeBase* node = m_nodereg[i-1];

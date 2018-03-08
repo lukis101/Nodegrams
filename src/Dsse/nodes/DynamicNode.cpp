@@ -4,8 +4,8 @@
 namespace dsse
 {
 
-DynamicNode::DynamicNode()
-	: NodeBase()
+DynamicNode::DynamicNode(Dsse* engine)
+	: NodeBase(engine)
 {
 	spdlog::get("dsse")->debug("DynamicNode() \"{}\" constr()", name);
 }

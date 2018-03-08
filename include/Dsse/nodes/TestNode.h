@@ -11,7 +11,7 @@ namespace dsse
 class DSSE_EXPORT TestNode : public StaticNode
 {
 public:
-    TestNode();
+    TestNode(Dsse*);
     ~TestNode();
 
 	void DoLogic();

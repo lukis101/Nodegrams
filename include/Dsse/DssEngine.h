@@ -38,23 +38,25 @@ class DSSE_EXPORT Dsse
 	//friend class NodeBase;
 public:
     TypeRegistry* typereg;
-    ContainerNode rootcontainer;
+    ContainerNode* rootcontainer;
 
 	Dsse(std::shared_ptr<spdlog::logger> logger);
 	Dsse();
 	~Dsse();
 	int Init();
 	int Shutdown();
+	void DoLogic(); // TEMPORARY
 
-	int RegisterNode(NodeBase* node); // allocate new id
-	NodeBase* ReleaseNode(int nodeid); // does not destroy, up to caller!
+    int AddNode(NodeBase* node, int nodeid=0);
 	void DeleteNode(int nodeid);
+	NodeBase* ReleaseNode(int nodeid); // does not destroy, up to caller!
+
 	NodeBase* GetNode(int nodeid);
-	void MoveNode(int nodeid, int destid);
+	//void MoveNode(int nodeid, int destid);
 
 	const std::vector<String> GetNodeList();
 	const std::vector<NodeBase*> GetNodes();
-	void PrintNodes(std::ostream stream, bool recursive);
+	void PrintNodes(std::ostream stream, bool recursive=false);
 
 protected:
 	const static int NODECAP = 100;

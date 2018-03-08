@@ -4,8 +4,9 @@
 namespace dsse
 {
 
-NodeBase::NodeBase()
+NodeBase::NodeBase(Dsse* engine)
 {
+    m_engine = engine;
     m_id = 0;
 	m_parent = 0;
 

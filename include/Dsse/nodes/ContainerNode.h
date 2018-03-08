@@ -11,7 +11,7 @@ namespace dsse
 class DSSE_EXPORT ContainerNode : public DynamicNode
 {
 public:
-	ContainerNode();
+	ContainerNode(Dsse*);
 	~ContainerNode();
 
     void DoLogic(void);

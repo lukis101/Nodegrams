@@ -5,6 +5,8 @@
 
 #include "Dsse/nodes/StaticNode.h"
 #include "Dsse/inoutlets/SimpleOutlet.h"
+#include "Dsse/datatypes/Float.h"
+#include "Dsse/datatypes/Double.h"
 
 namespace dsse
 {
@@ -12,13 +14,14 @@ namespace dsse
 class DSSE_EXPORT SysTimeNode : public StaticNode
 {
 public:
-    SysTimeNode();
+    SysTimeNode(Dsse*);
     ~SysTimeNode();
 
 	void DoLogic();
 protected:
-    DataBox* dout_ms;
-    DataBox* dout_sec;
+    // TODO use proper outlet data types
+    Double* dout_ms;
+    Float* dout_sec;
     SimpleOutlet* out_ms;
     SimpleOutlet* out_sec;
 };

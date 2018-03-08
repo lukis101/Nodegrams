@@ -4,8 +4,8 @@
 namespace dsse
 {
 
-TestNode::TestNode()
-	: StaticNode(2, 2)
+TestNode::TestNode(Dsse* engine)
+	: StaticNode(engine, 2, 2)
 {
 	name = "TestNode";
 	category = "TESTS";

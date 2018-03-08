@@ -4,8 +4,8 @@
 namespace dsse
 {
 
-StaticNode::StaticNode(int numinlets, int numoutlets)
-	: NodeBase()
+StaticNode::StaticNode(Dsse* engine, int numinlets, int numoutlets)
+	: NodeBase(engine)
 {
 	m_numinlets = numinlets;
 	m_numoutlets = numoutlets;
