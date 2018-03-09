@@ -28,7 +28,7 @@ String Float::ToString()
     return std::to_string(m_data);
 }
 
-DataWriteFunc_t Float::GetConversionFunc(String tname)
+DataWriteFunc Float::GetConversionFunc(String tname)
 {
     if (tname == "Float")        return &FloatToFloat;
     else if (tname == "Double")  return &FloatToDouble;

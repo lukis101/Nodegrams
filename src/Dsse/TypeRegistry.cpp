@@ -1,6 +1,6 @@
 
 #include "Dsse/TypeRegistry.h"
-#include "Dsse/datatypes/DataBox.h"
+//#include "Dsse/datatypes/DataBox.h"
 
 namespace dsse
 {
@@ -50,8 +50,8 @@ DataType TypeRegistry::RegisterDataType(DataBox*&& newdtype)
         newdtname, newdtype->m_datatype);
 
     // Update type conversion function mappings
-    auto newfmap = new std::unordered_map<DataType, DataWriteFunc_t>(m_typeids.size());
-    DataWriteFunc_t fconv;
+    auto newfmap = new std::unordered_map<DataType, DataWriteFunc>(m_typeids.size());
+    DataWriteFunc fconv;
     for (auto dtype : m_dtypes)
     {
         if (dtype == nullptr)
@@ -147,7 +147,7 @@ bool TypeRegistry::WriteSupported(DataBox* from, DataBox* to)
 void TypeRegistry::WriteData(DataBox* from, DataBox* to)
 {
     // TODO check ids
-    DataWriteFunc_t pwritefunc = (*m_conversions[from->GetTypeID()-1])[to->GetTypeID()-1];
+    DataWriteFunc pwritefunc = (*m_conversions[from->GetTypeID()-1])[to->GetTypeID()-1];
     pwritefunc(from, to);
 }
 

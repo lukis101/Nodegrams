@@ -28,7 +28,7 @@ String Double::ToString()
     return std::to_string(m_data);
 }
 
-DataWriteFunc_t Double::GetConversionFunc(String tname)
+DataWriteFunc Double::GetConversionFunc(String tname)
 {
     if (tname == "Double")         return &DoubleToDouble;
     else if (tname == "Float")     return &DoubleToFloat;

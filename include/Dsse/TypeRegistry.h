@@ -13,8 +13,9 @@
 
 namespace dsse
 {
-class Dsse;
+//class Dsse;
 class DataBox;
+typedef void (*DataWriteFunc)(DataBox*, DataBox*);
 
 class DSSE_EXPORT TypeRegistry
 {
@@ -41,7 +42,7 @@ protected:
     std::unordered_map<String, DataType> m_typeids;
 
     // Type conversion function mappings
-    std::unordered_map<DataType, std::unordered_map<DataType, void (*)(DataBox*,DataBox*)>*> m_conversions;
+    std::unordered_map<DataType, std::unordered_map<DataType, DataWriteFunc>*> m_conversions;
 };
 
 }
