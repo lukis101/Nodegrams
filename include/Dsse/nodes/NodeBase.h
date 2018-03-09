@@ -16,6 +16,8 @@ class ContainerNode;
 class DSSE_EXPORT NodeBase
 {
 	friend class Dsse;
+    //friend class OutletBase;
+    friend class SimpleOutlet;
 public:
 	String name;
 	String category;

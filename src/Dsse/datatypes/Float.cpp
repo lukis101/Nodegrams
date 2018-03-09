@@ -28,16 +28,38 @@ String Float::ToString()
     return std::to_string(m_data);
 }
 
-DataBox* Float::ConvertTo(DataType datatype)
+DataWriteFunc_t Float::GetConversionFunc(String tname)
 {
-    return nullptr;
+    if (tname == "Float")        return &FloatToFloat;
+    else if (tname == "Double")  return &FloatToDouble;
+    //else if (tname == "Boolean") return &FloatToBoolean;
+    //else if (tname == "Int32")   return &FloatToInt32;
+    else return nullptr;
 }
 
+void Float::FloatToFloat(DataBox* floatbox1, DataBox* floatbox2)
+{
+    Float* fbox1 = static_cast<Float*>(floatbox1);
+    Float* fbox2 = static_cast<Float*>(floatbox2);
+    fbox2->SetValue(fbox1->GetValue());
+}
 void Float::FloatToDouble(DataBox* floatbox, DataBox* doublebox)
 {
     Float* fbox = static_cast<Float*>(floatbox);
     Double* dbox = static_cast<Double*>(doublebox);
     dbox->SetValue(static_cast<double>(fbox->GetValue()));
+}
+void Float::FloatToBoolean(DataBox* floatbox, DataBox* boolbox)
+{
+    Float* fbox = static_cast<Float*>(floatbox);
+    //Bool* bbox = static_cast<Bool*>(boolbox);
+    //bbox->SetValue(dbox->GetValue() >= 1.0f);
+}
+void Float::FloatToInt32(DataBox* floatbox, DataBox* intbox)
+{
+    Float* fbox = static_cast<Float*>(floatbox);
+    //Int32* ibox = static_cast<Int32*>(intbox);
+    //ibox->SetValue(static_cast<int>(dbox->GetValue()));
 }
 
 }

@@ -21,8 +21,9 @@ public:
     float GetValue();
 
 	String ToString();
-    DataBox* ConvertTo(DataType datatype);
+    DataWriteFunc_t GetConversionFunc(String tname);
 
+    static void FloatToFloat(DataBox*, DataBox*);
     static void FloatToDouble(DataBox*, DataBox*);
     static void FloatToBoolean(DataBox*, DataBox*);
     static void FloatToInt32(DataBox*, DataBox*);

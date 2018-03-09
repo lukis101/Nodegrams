@@ -16,9 +16,9 @@ DynamicNode::~DynamicNode()
 
 InletBase* DynamicNode::GetInlet(String inletname)
 {
-	for(int i=0; i<GetInletCount(); i++)
+	for (int i=0; i<GetInletCount(); i++)
 	{
-		if(m_inlets[i]->name.compare(inletname))
+		if (inletname == m_inlets[i]->name)
 			return m_inlets[i];
 	}
 	spdlog::get("dsse")->error("{}.GetInlet({}) not found", this->name, inletname);
@@ -26,7 +26,7 @@ InletBase* DynamicNode::GetInlet(String inletname)
 }
 InletBase* DynamicNode::GetInlet(int index)
 {
-	if( index<0 || index>GetInletCount() )
+	if (index<0 || index>GetInletCount())
 	{
 		spdlog::get("dsse")->error("{}.GetInlet({}) index out of range", this->name, index);
 		return nullptr;
@@ -36,9 +36,9 @@ InletBase* DynamicNode::GetInlet(int index)
 
 OutletBase* DynamicNode::GetOutlet(String outletname)
 {
-	for(int i=0; i<GetOutletCount(); i++)
+	for (int i=0; i<GetOutletCount(); i++)
 	{
-		if(m_outlets[i]->name.compare(outletname))
+		if (outletname == m_outlets[i]->name)
 			return m_outlets[i];
 	}
 	spdlog::get("dsse")->error("{}.GetOutlet({}) not found", this->name, outletname);
@@ -46,7 +46,7 @@ OutletBase* DynamicNode::GetOutlet(String outletname)
 }
 OutletBase* DynamicNode::GetOutlet(int index)
 {
-	if( index<0 || index>GetOutletCount() )
+	if (index<0 || index>GetOutletCount())
 	{
 		spdlog::get("dsse")->error("{}.GetOutlet({}) index out of range", this->name, index);
 		return nullptr;

@@ -9,6 +9,9 @@
 namespace dsse
 {
 class Dsse;
+class DataBox;
+
+typedef void (*DataWriteFunc_t)(DataBox*, DataBox*);
 
 class DSSE_EXPORT DataBox
 {
@@ -24,7 +27,8 @@ public:
     String GetModule() { return m_module; }
 
 	virtual String ToString() = 0;
-    virtual DataBox* ConvertTo(DataType datatype) = 0;
+    virtual DataWriteFunc_t GetConversionFunc(String tname) = 0;
+    //virtual DataBox* ConvertTo(DataType datatype) = 0;
 
 protected:
     Dsse* m_engine;

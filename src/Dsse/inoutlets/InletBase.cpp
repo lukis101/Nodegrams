@@ -21,11 +21,11 @@ InletBase::InletBase(NodeBase* node, String name, String desc)
 	this->name = name;
 	this->description = desc;
 
-	spdlog::get("iolet")->debug("InletBase \"{}\" constr()", name);
+	spdlog::get("iolet")->debug("InletBase \"{}\" constr()", GetFullName());
 }
 InletBase::~InletBase()
 {
-	spdlog::get("iolet")->debug("InletBase \"{}\" destr()", name);
+	spdlog::get("iolet")->debug("InletBase \"{}\" destr()", GetFullName());
 }
 
 String InletBase::GetFullName()

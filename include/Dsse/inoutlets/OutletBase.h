@@ -23,13 +23,14 @@ public:
 	OutletBase(NodeBase* node, String name, String desc);
 	virtual ~OutletBase();
 
-	virtual bool ConnectTo(InletBase* inlet) = 0;
 	NodeBase* GetNode() { return m_node; }
 	bool IsDataReady() { return m_dataReady; }
 	String GetFullName();
 	virtual String GetDataString() = 0;
 	virtual void SendData() = 0; // Send data to all connected inlets
-	//virtual bool ConnectTo( InletBase* inlet )
+
+	virtual bool CanConnectTo(InletBase* inlet) = 0;
+	virtual bool ConnectTo(InletBase* inlet) = 0;
 	virtual bool Disconnect(InletBase* inlet);
 	bool IsConnectedTo(InletBase* inlet);
 	int GetNumConnections();

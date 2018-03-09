@@ -23,7 +23,6 @@ public:
 	void ReceiveData(DataBox* data);
     String GetDataString() { return m_data->ToString(); }
 protected:
-	DataBox* m_data;
 };
 
 }

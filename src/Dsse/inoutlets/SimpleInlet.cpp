@@ -12,12 +12,9 @@ SimpleInlet::SimpleInlet(NodeBase* node, DataBox* databox, String name, String d
 	: InletBase(node, name, desc)
 {
 	m_data = databox;
-
-	spdlog::get("iolet")->debug("Float \"{}\" constr()", GetFullName());
 }
 SimpleInlet::~SimpleInlet()
 {
-	spdlog::get("iolet")->debug("Float \"{}\" destr()", GetFullName());
 }
 
 bool SimpleInlet::Connect(OutletBase* outlet)
@@ -46,7 +43,7 @@ void SimpleInlet::ReceiveData(DataBox* data)
     // TODO
     m_dataChanged = true;
 	m_dataReady = true;
-    spdlog::get("iolet")->error("{} received {}", GetFullName(), data->ToString());
+    spdlog::get("iolet")->critical("{} received {}", GetFullName(), data->ToString());
 }
 
 } // namespace dsse

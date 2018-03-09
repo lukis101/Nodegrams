@@ -4,6 +4,8 @@
 #define DSSE_TESTNODE_H
 
 #include "Dsse/nodes/StaticNode.h"
+#include "Dsse/inoutlets/SimpleInlet.h"
+#include "Dsse/datatypes/Float.h"
 
 namespace dsse
 {
@@ -15,7 +17,9 @@ public:
     ~TestNode();
 
 	void DoLogic();
-//protected:
+protected:
+    Float* din_f;
+    SimpleInlet* in_f;
 };
 
 }

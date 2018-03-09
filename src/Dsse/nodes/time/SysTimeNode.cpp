@@ -26,6 +26,8 @@ SysTimeNode::~SysTimeNode()
 	spdlog::get("dsse")->debug("SysTimeNode[{}] destr()", this->m_id);
     delete out_ms;
     delete out_sec;
+    delete dout_ms;
+    delete dout_sec;
 }
 
 void SysTimeNode::DoLogic()

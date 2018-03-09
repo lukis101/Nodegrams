@@ -15,35 +15,41 @@ SimpleOutlet::SimpleOutlet(NodeBase* node, DataBox* databox, String name, String
 	: OutletBase(node, name, desc)
 {
     m_data = databox;
-
-	spdlog::get("iolet")->debug("SimpleOutlet \"{}\" constr()", GetFullName());
 }
 SimpleOutlet::~SimpleOutlet()
 {
-	spdlog::get("iolet")->debug("SimpleOutlet \"{}\" destr()", GetFullName());
 }
 
+bool SimpleOutlet::CanConnectTo(InletBase* inlet)
+{
+    if (inlet->IsConnected())
+        return false;
+
+    return m_node->m_engine->typereg->WriteSupported(m_data, inlet->GetData());
+}
 bool SimpleOutlet::ConnectTo(InletBase* inlet)
 {
-	if( IsConnectedTo(inlet) )
+    auto logger = spdlog::get("iolet");
+	if (!CanConnectTo(inlet))
 	{
-		spdlog::get("iolet")->error("Already connected: {}->{}",
-				GetFullName(), inlet->GetFullName());
+		logger->error("Can't connect {}->{}",
+            GetFullName(), inlet->GetFullName());
 		return false;
 	}
     bool status = inlet->Connect(this);
-	if(status)
+	if (!status)
 	{
-		connections.push_back(inlet);
-		// TODO: push current data?
-		spdlog::get("iolet")->info( "Connected {}->{}",
-            GetFullName(), inlet->GetFullName());
-		return true;
-	}
-	spdlog::get("iolet")->error("Failed to connect {}->{}",
+	    logger->error("Failed to connect {}->{}",
 			GetFullName(), inlet->GetFullName());
-	return false;
+	    return false;
+	}
+    connections.push_back(inlet);
+    // TODO: push current data
+    logger->info("Connected {}->{}",
+        GetFullName(), inlet->GetFullName());
+    return true;
 }
+
 void SimpleOutlet::SendData()
 {
 	if( !m_dataReady )

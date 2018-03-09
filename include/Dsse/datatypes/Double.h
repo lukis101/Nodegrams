@@ -21,8 +21,9 @@ public:
     double GetValue();
 
 	String ToString();
-    DataBox* ConvertTo(DataType datatype);
+    DataWriteFunc_t GetConversionFunc(String tname);
 
+    static void DoubleToDouble(DataBox*, DataBox*);
     static void DoubleToFloat(DataBox*, DataBox*);
     static void DoubleToBoolean(DataBox*, DataBox*);
     static void DoubleToInt32(DataBox*, DataBox*);

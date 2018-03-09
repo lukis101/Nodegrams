@@ -25,33 +25,38 @@
 #include "Dsse/nodes/time/SysTimeNode.h"
 #include "Dsse/datatypes/Float.h"
 #include "Dsse/datatypes/Double.h"
+#include "Dsse/inoutlets/InletBase.h"
 
 
 int main( int argc, char* argv[] )
 {
 	try
 	{
-        //spdlog::set_level(spdlog::level::debug);
+        spdlog::set_level(spdlog::level::debug);
 	    auto l_dsse = spdlog::stdout_logger_mt("dsse");
         //l_dsse->set_level(spdlog::level::debug);
         auto l_iolet = spdlog::stdout_logger_mt("iolet");
-        l_iolet->set_level(spdlog::level::debug);
+        //l_iolet->set_level(spdlog::level::debug);
 
         dsse::Dsse engine(l_dsse);
+	    engine.Init();
 
-	    int ret_init = engine.Init();
-        l_dsse->info("Dsse.Init() = {}", ret_init);
         engine.typereg->RegisterDataType(new dsse::Float(&engine));
         engine.typereg->RegisterDataType(new dsse::Double(&engine));
 
         int tnode = engine.AddNode(new dsse::TestNode(&engine));
         int stnode = engine.AddNode(new dsse::SysTimeNode(&engine));
+
+        dsse::OutletBase* outl = engine.GetNode(stnode)->GetOutlet("Seconds");
+        dsse::InletBase* inl = engine.GetNode(tnode)->GetInlet("in_float");
+        outl->ConnectTo(inl);
+        l_dsse->info("I-O connect = {}", outl->ConnectTo(inl));
+
         engine.DoLogic();
+
         engine.DeleteNode(tnode);
         engine.DeleteNode(stnode);
-
-	    int ret_deinit = engine.Shutdown();
-        l_dsse->info("Dsse.Shutdown() = {}", ret_deinit);
+	    engine.Shutdown();
 
 		/*
         auto l_console = spdlog::stdout_logger_mt("console");

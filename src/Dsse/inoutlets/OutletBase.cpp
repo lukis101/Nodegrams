@@ -14,17 +14,18 @@ namespace dsse
 
 OutletBase::OutletBase(NodeBase* node, String name, String desc)
 {
+	m_dataChanged = false;
 	m_dataReady = false;
 	m_dataSent = false;
 	m_node = node;
 	this->name = name;
 	this->description = desc;
 
-	spdlog::get("iolet")->debug("OutletBase \"{}\" constr()", name);
+	spdlog::get("iolet")->debug("OutletBase \"{}\" constr()", GetFullName());
 }
 OutletBase::~OutletBase()
 {
-	spdlog::get("iolet")->debug("OutletBase \"{}\" destr()", name);
+	spdlog::get("iolet")->debug("OutletBase \"{}\" destr()", GetFullName());
 }
 
 String OutletBase::GetFullName()
@@ -36,6 +37,7 @@ String OutletBase::GetFullName()
 	fname += name;
 	return fname;
 }
+
 bool OutletBase::Disconnect(InletBase* inlet)
 {
 	for(auto iter = connections.begin(); iter != connections.end(); ++iter)

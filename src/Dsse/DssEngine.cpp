@@ -11,7 +11,8 @@ Dsse::Dsse(std::shared_ptr<spdlog::logger> logger)
 	m_nodecount = 1;
 	m_maxid = 1;
 	m_minfreeid = 2;
-    typereg = new TypeRegistry(this);
+
+    typereg = new TypeRegistry(spdlog::stdout_logger_mt(logger->name() + ".treg"));
     rootcontainer = new ContainerNode(this);
 	rootcontainer->m_id = 1;
 	rootcontainer->m_parent = rootcontainer;

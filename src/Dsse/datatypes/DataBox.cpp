@@ -1,5 +1,7 @@
 
 #include "Dsse/datatypes/DataBox.h"
+#include "Dsse/DssEngine.h"
+#include "Dsse/TypeRegistry.h"
 
 namespace dsse
 {
@@ -7,10 +9,10 @@ namespace dsse
 DataBox::DataBox(Dsse* engine, String name, String descr, String module)
 {
     m_engine = engine;
-    m_datatype = 0;
     m_name = name;
     m_descr = descr;
     m_module = module;
+    m_datatype = engine->typereg->GetDataType(name);
 }
 
 DataBox::~DataBox()

@@ -17,7 +17,10 @@ public:
 	SimpleOutlet(NodeBase* node, DataBox* databox, String name, String desc);
 	~SimpleOutlet();
 	NodeBase* getNode();
+
+	bool CanConnectTo(InletBase* inlet);
 	bool ConnectTo(InletBase* inlet);
+
 	//void WriteData(float data);
     void DataChanged() { m_dataChanged = true; }
     void SendData();

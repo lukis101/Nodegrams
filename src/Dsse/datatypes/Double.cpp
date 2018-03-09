@@ -28,11 +28,21 @@ String Double::ToString()
     return std::to_string(m_data);
 }
 
-DataBox* Double::ConvertTo(DataType datatype)
+DataWriteFunc_t Double::GetConversionFunc(String tname)
 {
-    return nullptr;
+    if (tname == "Double")         return &DoubleToDouble;
+    else if (tname == "Float")     return &DoubleToFloat;
+    //else if (tname == "Boolean") return &DoubleToBoolean;
+    //else if (tname == "Int32")   return &DoubleToInt32;
+    else return nullptr;
 }
 
+void Double::DoubleToDouble(DataBox* doublebox1, DataBox* doublebox2)
+{
+    Double* dbox1 = static_cast<Double*>(doublebox1);
+    Double* dbox2 = static_cast<Double*>(doublebox2);
+    dbox2->SetValue(dbox1->GetValue());
+}
 void Double::DoubleToFloat(DataBox* doublebox, DataBox* floatbox)
 {
     Double* dbox = static_cast<Double*>(doublebox);
