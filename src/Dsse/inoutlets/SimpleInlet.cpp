@@ -10,6 +10,7 @@ namespace dsse
 SimpleInlet::SimpleInlet(NodeBase* node, DataBox* data, String name, String desc)
 	: InletBase(node, data, name, desc)
 {
+	m_connection = nullptr;
 }
 SimpleInlet::~SimpleInlet()
 {
@@ -17,7 +18,7 @@ SimpleInlet::~SimpleInlet()
 
 bool SimpleInlet::Connect(OutletBase* outlet)
 {
-	if( IsConnected() /*&& PARAMS["InletOverrideConnection"] == false*/ ) // TODO
+	if (!CanConnect() /*&& PARAMS["InletOverrideConnection"] == false*/) // TODO
 	{
 		spdlog::get("iolet")->error("{} Already connected!", GetFullName());
 		return false;
@@ -36,6 +37,21 @@ bool SimpleInlet::Connect(OutletBase* outlet)
 
 	return false;
 }
+
+bool SimpleInlet::Disconnect(OutletBase* outlet)
+{
+	if (outlet != m_connection)
+	{
+		if (m_connection == nullptr)
+			spdlog::get("iolet")->error("Can't disconnect {}: not connected", GetFullName());
+		else
+			spdlog::get("iolet")->error("Can't disconnect {}: wrong outlet", GetFullName());
+		return false;
+	}
+	m_connection = nullptr;
+	return true;
+}
+
 /*void SimpleInlet::ReceiveData(DataBox* data)
 {
     // TODO

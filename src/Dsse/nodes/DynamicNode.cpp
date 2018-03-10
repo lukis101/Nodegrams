@@ -18,6 +18,23 @@ DynamicNode::~DynamicNode()
 	spdlog::get("dsse")->debug("DynamicNode() \"{}\" destr()", name);
 }
 
+// Main logic
+void DynamicNode::Update()
+{
+    // TODO only when all inlets are ready
+    DoLogic();
+	for (int i=0; i<GetOutletCount(); i++)
+	{
+        OutletBase* outl = m_outlets[i];
+        if (outl->HasDataChanged())
+        {
+            outl->SendData();
+            outl->DataChangeHandled();
+        }
+    }
+}
+
+// In/Outlet management
 InletBase* DynamicNode::GetInlet(String inletname)
 {
 	for (int i=0; i<GetInletCount(); i++)

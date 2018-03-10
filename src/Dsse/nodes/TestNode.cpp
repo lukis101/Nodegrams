@@ -30,7 +30,11 @@ void TestNode::DoLogic()
 {
 	spdlog::get("dsse")->info("[{}:TestNode].DoLogic()", this->m_id);
     if (m_inlets[0]->HasDataChanged())
-	    spdlog::get("dsse")->info("[{}:TestNode].DChange: ", din_f->GetValue());
+	    spdlog::get("dsse")->info("[{}:TestNode] got float: {}",
+            this->m_id, din_f->GetValue());
+    /*if (m_inlets[1]->HasDataChanged())
+	    spdlog::get("dsse")->info("[{}:TestNode] got int: {}",
+            this->m_id, din_i->GetValue());*/
 }
 
 }

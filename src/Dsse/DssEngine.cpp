@@ -1,5 +1,6 @@
 
 #include <iterator>
+#include <sstream>
 #include "Dsse/DssEngine.h"
 #include "Dsse/TypeRegistry.h"
 #include "Dsse/nodes/ContainerNode.h"
@@ -18,6 +19,7 @@ Dsse::Dsse(std::shared_ptr<spdlog::logger> logger)
     rootcontainer = new ContainerNode(this);
 	rootcontainer->m_id = 1;
 	rootcontainer->m_parent = rootcontainer;
+    rootcontainer->name = "root";
 	m_nodereg[0] = rootcontainer;
 	for (int i=1; i < NODECAP; i++)
         m_nodereg[i] = nullptr;
@@ -41,12 +43,12 @@ int Dsse::Shutdown()
 	m_logger->info("Dsse shutting down..");
 	return 0;
 }
-void Dsse::DoLogic()
+void Dsse::Update()
 {
-	m_logger->info("Dsse.DoLogic()");
+	m_logger->info("Dsse.Update()");
 	for (int n=0; n <= m_maxid; n++)
         if (m_nodereg[n] != nullptr)
-            m_nodereg[n]->DoLogic();
+            m_nodereg[n]->Update();
 }
 
 bool Dsse::CheckID(int id)
@@ -188,25 +190,45 @@ NodeBase* Dsse::GetNode(int nodeid)
 	//target.parent = dest; // TODO
 }*/
 
-void Dsse::PrintNodes(std::ostream stream, bool recursive)
+void Dsse::PrintNodes(std::ostream& stream, bool recursive)
 {
-	// Manually print root node and start from second node (prevents infinite recursion)
-	stream << "> " << rootcontainer->m_id << " = " << rootcontainer->GetName() << std::endl;
-	for (int i=1; i<m_maxid; i++)
+	// Manually print root node and start from second to prevent infinite recursion
+	stream << "> [" << rootcontainer->m_id << "] " << rootcontainer->GetName() << std::endl;
+
+    int level = 1;
+	for (int i=2; i<=m_maxid; i++)
 	{
 		NodeBase* node = m_nodereg[i-1];
 		if (node == nullptr)
 			continue;
-		stream << "-> (" << node->m_id << ") "; // ID
+
+        for (int j=level; j>0; j--) // depth arrow
+            stream << '-';
+		stream << "> [" << node->m_id << "] \""; // ID
 		if (node->custnamed) // orig name in parentheses
-			stream << '\"' << node->custname << "\" (" << node->name << ')' <<std::endl;
+			stream << node->custname << "\" (" << node->name << ')';
 		else
-			stream << '\"' << node->name << '\"' <<std::endl;
-		if (recursive && node->IsContainer())
+			stream << node->name << '\"';
+		if (node->IsContainer())
 		{
-			stream << "--> TODO: recursive contents here" <<std::endl;
+		    if (recursive)
+            {
+                stream << " {" << std::endl;
+			    stream << "> TODO: recursive contents here" << std::endl;
+            }
+            else
+            {
+                stream << "{}" << std::endl;
+            }
 		}
+        else stream << std::endl;
 	}
+}
+String Dsse::PrintNodes(bool recursive)
+{
+    std::ostringstream oss;
+    PrintNodes(oss, recursive);
+    return oss.str();
 }
 
 } // namespace Dsse

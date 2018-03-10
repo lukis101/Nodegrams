@@ -44,7 +44,7 @@ public:
 	~Dsse();
 	int Init();
 	int Shutdown();
-	void DoLogic(); // TEMPORARY
+	void Update(); // TEMPORARY
 
     int AddNode(NodeBase* node, int nodeid=0);
 	void DeleteNode(int nodeid);
@@ -55,7 +55,8 @@ public:
 
 	const std::vector<String> GetNodeList();
 	const std::vector<NodeBase*> GetNodes();
-	void PrintNodes(std::ostream stream, bool recursive=false);
+	void PrintNodes(std::ostream& stream, bool recursive=false);
+	String PrintNodes(bool recursive=false);
 
 protected:
 	const static int NODECAP = 100;

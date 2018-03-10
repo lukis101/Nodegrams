@@ -10,6 +10,7 @@
 namespace dsse
 {
 class Dsse;
+class DataHolder;
 
 class DSSE_EXPORT DataBox
 {
@@ -25,13 +26,16 @@ public:
     String GetDescription() { return m_descr; }
     String GetModule() { return m_module; }
 
+    void SetHolder(DataHolder* holder) { m_holder = holder; }
+    void ValueChanged();
+
 	virtual String ToString() = 0;
     virtual DataWriteFunc GetConversionFunc(String tname) = 0;
 
 protected:
     Dsse* m_engine;
 	DataType m_datatype;
-    //DataHolder* m_holder;
+    DataHolder* m_holder;
 
     String m_name;
     String m_descr;

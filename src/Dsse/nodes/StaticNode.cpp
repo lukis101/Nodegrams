@@ -26,9 +26,26 @@ StaticNode::~StaticNode()
 	delete[] m_outlets;
 }
 
+// Main logic
+void StaticNode::Update()
+{
+    // TODO only when all inlets are ready
+    DoLogic();
+	for (int i=0; i<GetOutletCount(); i++)
+	{
+        OutletBase* outl = m_outlets[i];
+        if (outl->HasDataChanged())
+        {
+            outl->SendData();
+            outl->DataChangeHandled();
+        }
+    }
+}
+
+// In/Outlet management
 InletBase* StaticNode::GetInlet(String inletname)
 {
-	for(int i=0; i<GetInletCount(); i++)
+	for (int i=0; i<GetInletCount(); i++)
 	{
 		if (inletname == m_inlets[i]->name)
 			return m_inlets[i];
@@ -38,7 +55,7 @@ InletBase* StaticNode::GetInlet(String inletname)
 }
 InletBase* StaticNode::GetInlet(int index)
 {
-	if( index<0 || index>GetInletCount() )
+	if (index<0 || index>GetInletCount())
 	{
 		spdlog::get("dsse")->error("{}.GetInlet({}) index out of range", this->name, index);
 		return nullptr;
@@ -48,7 +65,7 @@ InletBase* StaticNode::GetInlet(int index)
 
 OutletBase* StaticNode::GetOutlet(String outletname)
 {
-	for(int i=0; i<GetOutletCount(); i++)
+	for (int i=0; i<GetOutletCount(); i++)
 	{
 		if (outletname == m_outlets[i]->name)
 			return m_outlets[i];
@@ -58,7 +75,7 @@ OutletBase* StaticNode::GetOutlet(String outletname)
 }
 OutletBase* StaticNode::GetOutlet(int index)
 {
-	if( index<0 || index>GetOutletCount() )
+	if (index<0 || index>GetOutletCount())
 	{
 		spdlog::get("dsse")->error("{}.GetOutlet({}) index out of range", this->name, index);
 		return nullptr;

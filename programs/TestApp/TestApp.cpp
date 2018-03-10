@@ -36,7 +36,7 @@ int main( int argc, char* argv[] )
 {
 	try
 	{
-        spdlog::set_level(spdlog::level::debug);
+        //spdlog::set_level(spdlog::level::debug);
 	    auto l_dsse = spdlog::stdout_logger_mt("dsse");
         //l_dsse->set_level(spdlog::level::debug);
         auto l_iolet = spdlog::stdout_logger_mt("iolet");
@@ -51,12 +51,18 @@ int main( int argc, char* argv[] )
         int tnode = engine.AddNode(new dsse::TestNode(&engine));
         int stnode = engine.AddNode(new dsse::SysTimeNode(&engine));
 
+        l_dsse->info("PrintNodes: \n{}", engine.PrintNodes(true));
+
         dsse::OutletBase* outl = engine.GetNode(stnode)->GetOutlet("Seconds");
         dsse::InletBase* inl = engine.GetNode(tnode)->GetInlet("in_float");
-        outl->ConnectTo(inl);
-        l_dsse->info("I-O connect = {}", outl->ConnectTo(inl));
 
-        engine.DoLogic();
+        l_dsse->info("I-O connect 1 = {}", outl->ConnectTo(inl));
+        l_dsse->info("I-O connect 2 = {}", outl->ConnectTo(inl));
+
+        engine.Update();
+        engine.Update();
+
+        // TODO disconnect inoutlets
 
         engine.DeleteNode(tnode);
         engine.DeleteNode(stnode);

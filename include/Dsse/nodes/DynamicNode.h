@@ -18,6 +18,9 @@ public:
 	bool IsStatic() { return false; };
 	virtual bool IsContainer() { return false; };
 
+	virtual void DoLogic() = 0; // logic
+	virtual void Update(); // logic + io
+
 	int GetInletCount() { return static_cast<int>(m_inlets.size()); };
 	InletBase* GetInlet(String name);
 	InletBase* GetInlet(int index);

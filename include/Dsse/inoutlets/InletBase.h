@@ -28,13 +28,13 @@ public:
 	//void SetDataReady(bool ready) { m_dataReady = ready; }
 	//bool DataReady() { return m_dataReady; }
 
-	virtual bool Connect(OutletBase* outlet) = 0; // only called by Outlet
-	virtual bool Disconnect(OutletBase* outlet); // only called by Outlet
-	bool IsConnected() { return m_connection != nullptr; }
+	virtual bool Connect(OutletBase* outlet)    = 0; // only called by Outlet
+	virtual bool Disconnect(OutletBase* outlet) = 0; // only called by Outlet
+	//bool IsConnected() { return m_connection != nullptr; }
+    virtual bool CanConnect() = 0;
 
 protected:
 	NodeBase* m_node;
-	OutletBase* m_connection;
 	//bool m_dataReady;
 };
 

@@ -10,7 +10,6 @@ namespace dsse
 InletBase::InletBase(NodeBase* node, DataBox* data, String name, String desc)
     : DataHolder(data)
 {
-	m_connection = nullptr;
 	m_node = node;
 	this->name = name;
 	this->description = desc;
@@ -30,19 +29,6 @@ String InletBase::GetFullName()
 	fname += ":in:";
 	fname += name;
 	return fname;
-}
-bool InletBase::Disconnect(OutletBase* outlet)
-{
-	if( outlet != m_connection )
-	{
-		if( IsConnected() )
-			spdlog::get("iolet")->error("Can't disconnect {}: wrong outlet", GetFullName());
-		else
-			spdlog::get("iolet")->error("Can't disconnect {}: not connected", GetFullName());
-		return false;
-	}
-	m_connection = nullptr;
-	return true;
 }
 
 } // namespace dsse

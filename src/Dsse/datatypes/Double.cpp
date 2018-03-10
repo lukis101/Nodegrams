@@ -17,6 +17,7 @@ Double::~Double()
 void Double::SetValue(double value)
 {
     m_data = value;
+    ValueChanged();
 }
 double Double::GetValue()
 {

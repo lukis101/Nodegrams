@@ -17,6 +17,7 @@ Float::~Float()
 void Float::SetValue(float value)
 {
     m_data = value;
+    ValueChanged();
 }
 float Float::GetValue()
 {

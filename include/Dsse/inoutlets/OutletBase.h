@@ -18,27 +18,26 @@ class DSSE_EXPORT OutletBase : public DataHolder
 public:
 	String name;
 	String description;
-	std::vector<InletBase*> connections;
 
 	OutletBase(NodeBase* node, DataBox* data, String name, String desc);
 	virtual ~OutletBase();
 
 	NodeBase* GetNode() { return m_node; }
 	String GetFullName();
-	//bool IsDataReady() { return m_dataReady; }
-	//virtual void SendData() = 0; // Send data to all connected inlets
+	virtual void SendData() = 0; // Send data to all connected inlets
 
 	virtual bool CanConnectTo(InletBase* inlet) = 0;
 	virtual bool ConnectTo(InletBase* inlet) = 0;
 	virtual bool Disconnect(InletBase* inlet);
 	bool IsConnectedTo(InletBase* inlet);
 	int GetNumConnections();
-	//void WriteData(data_type data); // Syntax for child classes
+
 protected:
 	NodeBase* m_node;
+	std::vector<InletBase*> connections;
 	//bool m_dataReady;
 	//bool m_dataSent;
 };
 
-} // namespace dsse
+}
 #endif // ifndef DSSE_OUTLETBASE_H

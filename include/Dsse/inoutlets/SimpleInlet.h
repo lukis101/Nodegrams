@@ -17,9 +17,12 @@ public:
 	SimpleInlet(NodeBase* node, DataBox* data, String name, String desc);
 	~SimpleInlet();
 
-	bool Connect(OutletBase* outlet); // only called by Outlet
-	//void ReceiveData(DataBox* data);
+	bool Connect(OutletBase* outlet);    // only called by Outlet
+	bool Disconnect(OutletBase* outlet); // only called by Outlet
+    bool CanConnect() { return m_connection == nullptr; }
+
 protected:
+	OutletBase* m_connection;
 };
 
 }

@@ -16,7 +16,9 @@ public:
 
 	bool IsStatic() { return true; };
 	bool IsContainer() { return false; }; // can containers be static?
-	virtual void DoLogic() = 0;
+
+	virtual void DoLogic() = 0; // logic
+	virtual void Update(); // logic + io
 
     int GetInletCount() { return m_numinlets; };
 	//int GetInletIndex(String name);

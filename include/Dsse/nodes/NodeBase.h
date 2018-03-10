@@ -30,8 +30,10 @@ public:
 
 	virtual bool IsStatic() = 0;
 	virtual bool IsContainer() = 0;
-	virtual void DoLogic() = 0;
 	int GetID() { return m_id; }
+
+	virtual void DoLogic() = 0; // logic
+	virtual void Update()  = 0; // logic + io
 
 	virtual int GetInletCount() = 0;
 	virtual InletBase* GetInlet(String name) = 0;

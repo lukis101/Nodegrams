@@ -13,15 +13,20 @@ namespace dsse
 class DSSE_EXPORT DataHolder
 {
 public:
-	DataHolder(DataBox* data) { m_data = data; }
+	DataHolder(DataBox* data)
+    {
+        m_data = data;
+        data->SetHolder(this);
+    }
 	virtual ~DataHolder() {};
 
 	DataBox* GetData() { return m_data; }
 	bool HasDataChanged() { return m_dataChanged; }
 	void DataChanged() { m_dataChanged = true; }
 	void DataChangeHandled() { m_dataChanged = false; }
-	//virtual void ReceiveData(DataBox* data) = 0;
+
     String GetDataString() { return m_data->ToString(); }
+	virtual String GetFullName() = 0;
 
 protected:
 	DataBox* m_data;

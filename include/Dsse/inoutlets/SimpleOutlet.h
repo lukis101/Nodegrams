@@ -18,11 +18,11 @@ public:
 	~SimpleOutlet();
 	NodeBase* getNode();
 
+    void SendData();
+
 	bool CanConnectTo(InletBase* inlet);
 	bool ConnectTo(InletBase* inlet);
 
-	//void WriteData(float data);
-    void SendData();
 protected:
 };
 
