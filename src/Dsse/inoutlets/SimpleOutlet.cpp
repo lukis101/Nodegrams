@@ -1,20 +1,18 @@
 
-//#include <iostream>
-
 #include "spdlog/spdlog.h"
 
 #include "Dsse/inoutlets/SimpleOutlet.h"
-
-//#include "Dsse/DataTypes.h"
-//#include "Dsse/DssEngine.h"
+#include "Dsse/inoutlets/SimpleInlet.h"
+#include "Dsse/DssEngine.h"
+#include "Dsse/TypeRegistry.h"
+#include "Dsse/nodes/NodeBase.h"
 
 namespace dsse
 {
 
-SimpleOutlet::SimpleOutlet(NodeBase* node, DataBox* databox, String name, String desc)
-	: OutletBase(node, name, desc)
+SimpleOutlet::SimpleOutlet(NodeBase* node, DataBox* data, String name, String desc)
+	: OutletBase(node, data, name, desc)
 {
-    m_data = databox;
 }
 SimpleOutlet::~SimpleOutlet()
 {
@@ -52,7 +50,7 @@ bool SimpleOutlet::ConnectTo(InletBase* inlet)
 
 void SimpleOutlet::SendData()
 {
-	if( !m_dataReady )
+	/*if( !m_dataReady )
 	{
 		spdlog::get("iolet")->critical("{} not ready to send!", GetFullName());
 	}
@@ -64,7 +62,7 @@ void SimpleOutlet::SendData()
 		}
 		m_dataReady = false;
 		m_dataSent = true;
-	}
+	}*/
 }
 
 } // namespace dsse

@@ -15,7 +15,6 @@
 
 namespace dsse
 {
-    using std::shared_ptr;
     //
     // All strings are UTF-8 for Unicode. This is backwards compatible with ASCII.
     // See: http://www.utf8everywhere.org
@@ -24,6 +23,7 @@ namespace dsse
     typedef char            UnicodeChar;    // TODO - deal with multibyte UTF8 chars.
 
     typedef int DataType;
+    //using std::shared_ptr;
 
     struct DSSE_EXPORT Point
     {

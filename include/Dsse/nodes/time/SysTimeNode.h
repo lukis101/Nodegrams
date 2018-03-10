@@ -5,11 +5,11 @@
 
 #include "Dsse/nodes/StaticNode.h"
 #include "Dsse/inoutlets/SimpleOutlet.h"
-#include "Dsse/datatypes/Float.h"
-#include "Dsse/datatypes/Double.h"
 
 namespace dsse
 {
+class Float;
+class Double;
 
 class DSSE_EXPORT SysTimeNode : public StaticNode
 {
@@ -19,7 +19,7 @@ public:
 
 	void DoLogic();
 protected:
-    // TODO use proper outlet data types
+    // TODO use integer types
     Double* dout_ms;
     Float* dout_sec;
     SimpleOutlet* out_ms;

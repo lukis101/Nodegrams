@@ -1,5 +1,5 @@
  /*
-	Copyright 2017 Lukas Jonyla
+	Copyright 2018 Lukas Jonyla
 
 	Licensed under the Apache License, Version 2.0 (the "License");
 	you may not use this file except in compliance with the License.
@@ -26,12 +26,11 @@
 #include "Dsse/DataTypes.h"
 #include "Dsse/Config.h"
 
-#include "Dsse/TypeRegistry.h"
-#include "Dsse/nodes/ContainerNode.h"
-
 namespace dsse
 {
 class TypeRegistry;
+class NodeBase;
+class ContainerNode;
 
 class DSSE_EXPORT Dsse
 {

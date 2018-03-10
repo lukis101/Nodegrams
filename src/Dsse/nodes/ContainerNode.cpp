@@ -1,5 +1,7 @@
 
-#include "Dsse/DssEngine.h"
+#include "spdlog/spdlog.h"
+
+#include "Dsse/nodes/ContainerNode.h"
 
 namespace dsse
 {

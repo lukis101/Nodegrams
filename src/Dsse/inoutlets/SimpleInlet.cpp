@@ -1,17 +1,15 @@
 
-//#include <iostream>
-
 #include "spdlog/spdlog.h"
 
 #include "Dsse/inoutlets/SimpleInlet.h"
+#include "Dsse/inoutlets/SimpleOutlet.h"
 
 namespace dsse
 {
 
-SimpleInlet::SimpleInlet(NodeBase* node, DataBox* databox, String name, String desc)
-	: InletBase(node, name, desc)
+SimpleInlet::SimpleInlet(NodeBase* node, DataBox* data, String name, String desc)
+	: InletBase(node, data, name, desc)
 {
-	m_data = databox;
 }
 SimpleInlet::~SimpleInlet()
 {
@@ -28,7 +26,7 @@ bool SimpleInlet::Connect(OutletBase* outlet)
     if (SimpleOutlet* so = dynamic_cast<SimpleOutlet*>(outlet))
     {
 	    m_connection = outlet;
-		spdlog::get("iolet")->info("Connected {} to {}", GetFullName(), outlet->GetFullName());
+		spdlog::get("iolet")->info("Connected {}<-{}", GetFullName(), outlet->GetFullName());
 	    return true;
     }
     else
@@ -38,12 +36,12 @@ bool SimpleInlet::Connect(OutletBase* outlet)
 
 	return false;
 }
-void SimpleInlet::ReceiveData(DataBox* data)
+/*void SimpleInlet::ReceiveData(DataBox* data)
 {
     // TODO
     m_dataChanged = true;
 	m_dataReady = true;
     spdlog::get("iolet")->critical("{} received {}", GetFullName(), data->ToString());
-}
+}*/
 
 } // namespace dsse

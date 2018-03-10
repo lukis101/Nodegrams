@@ -1,5 +1,9 @@
 
+#include "spdlog/spdlog.h"
+
 #include "Dsse/nodes/StaticNode.h"
+#include "Dsse/inoutlets/InletBase.h"
+#include "Dsse/inoutlets/OutletBase.h"
 
 namespace dsse
 {
@@ -61,6 +65,5 @@ OutletBase* StaticNode::GetOutlet(int index)
 	}
 	return m_outlets[index];
 }
-
 
 }

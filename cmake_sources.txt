@@ -24,8 +24,6 @@ set(DSSE_HEADERS
     include/Dsse/inoutlets/OutletBase.h
     include/Dsse/inoutlets/SimpleInlet.h
     include/Dsse/inoutlets/SimpleOutlet.h
-    # include/Dsse/inoutlets/FloatInlet.h
-    # include/Dsse/inoutlets/FloatOutlet.h
 )
 
 set(DSSE_SOURCES
@@ -49,8 +47,6 @@ set(DSSE_SOURCES
     src/Dsse/inoutlets/OutletBase.cpp
     src/Dsse/inoutlets/SimpleInlet.cpp
     src/Dsse/inoutlets/SimpleOutlet.cpp
-    # src/Dsse/inoutlets/FloatInlet.cpp
-    # src/Dsse/inoutlets/FloatOutlet.cpp
 )
 
 # header folder groups

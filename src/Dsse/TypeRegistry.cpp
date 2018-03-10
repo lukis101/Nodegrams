@@ -1,6 +1,6 @@
 
 #include "Dsse/TypeRegistry.h"
-//#include "Dsse/datatypes/DataBox.h"
+#include "Dsse/datatypes/DataBox.h"
 
 namespace dsse
 {

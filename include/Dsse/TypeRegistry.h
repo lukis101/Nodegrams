@@ -3,19 +3,18 @@
 #ifndef DSSE_TYPEREGISTRY_H
 #define DSSE_TYPEREGISTRY_H
 
+#include "spdlog/spdlog.h"
+
 #include <memory>
 #include <vector>
 #include <unordered_map>
-#include "Dsse/DssEngine.h"
-//#include "Dsse/Config.h"
-//#include "Dsse/DataTypes.h"
-#include "Dsse/datatypes/DataBox.h"
+#include "Dsse/Config.h"
+#include "Dsse/DataTypes.h"
+#include "Dsse/datatypes/DataWriteFunc.h"
 
 namespace dsse
 {
-//class Dsse;
-class DataBox;
-typedef void (*DataWriteFunc)(DataBox*, DataBox*);
+//class DataBox;
 
 class DSSE_EXPORT TypeRegistry
 {

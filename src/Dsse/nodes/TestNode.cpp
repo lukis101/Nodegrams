@@ -1,5 +1,9 @@
 
+#include "spdlog/spdlog.h"
+
 #include "Dsse/nodes/TestNode.h"
+#include "Dsse/inoutlets/SimpleInlet.h"
+#include "Dsse/datatypes/Float.h"
 
 namespace dsse
 {
@@ -25,7 +29,7 @@ TestNode::~TestNode()
 void TestNode::DoLogic()
 {
 	spdlog::get("dsse")->info("[{}:TestNode].DoLogic()", this->m_id);
-    if (m_inlets[0]->DataChanged())
+    if (m_inlets[0]->HasDataChanged())
 	    spdlog::get("dsse")->info("[{}:TestNode].DChange: ", din_f->GetValue());
 }
 

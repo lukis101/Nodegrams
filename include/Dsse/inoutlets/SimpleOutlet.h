@@ -3,13 +3,13 @@
 #ifndef DSSE_FLOATOUTLET_H
 #define DSSE_FLOATOUTLET_H
 
-#include "Dsse/DssEngine.h"
-//#include "Dsse/nodes/NodeBase.h"
-#include "Dsse/datatypes/DataBox.h"
-#include "Dsse/inoutlets/SimpleInlet.h"
+#include "Dsse/inoutlets/OutletBase.h"
 
 namespace dsse
 {
+class NodeBase;
+class DataBox;
+class InletBase;
 
 class DSSE_EXPORT SimpleOutlet : public OutletBase
 {
@@ -22,11 +22,8 @@ public:
 	bool ConnectTo(InletBase* inlet);
 
 	//void WriteData(float data);
-    void DataChanged() { m_dataChanged = true; }
     void SendData();
-    String GetDataString() { return m_data->ToString(); }
 protected:
-	DataBox* m_data;
 };
 
 }

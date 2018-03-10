@@ -1,21 +1,15 @@
 
-//#include <iostream>
-
 #include "spdlog/spdlog.h"
 
 #include "Dsse/inoutlets/InletBase.h"
 #include "Dsse/nodes/NodeBase.h"
 
-//#include "Dsse/DataTypes.h"
-//#include "Dsse/DssEngine.h"
-
 namespace dsse
 {
 
-InletBase::InletBase(NodeBase* node, String name, String desc)
+InletBase::InletBase(NodeBase* node, DataBox* data, String name, String desc)
+    : DataHolder(data)
 {
-	m_dataReady = false;
-	m_dataChanged = false;
 	m_connection = nullptr;
 	m_node = node;
 	this->name = name;
@@ -49,10 +43,6 @@ bool InletBase::Disconnect(OutletBase* outlet)
 	}
 	m_connection = nullptr;
 	return true;
-}
-bool InletBase::IsConnected()
-{
-	return m_connection != nullptr;
 }
 
 } // namespace dsse

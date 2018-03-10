@@ -16,17 +16,21 @@
 	limitations under the License.
 */
 
-#include "spdlog/spdlog.h"
-
 #include <memory>
 #include <iostream>
+#include "spdlog/spdlog.h"
+
 #include "Dsse/DssEngine.h"
+#include "Dsse/TypeRegistry.h"
+#include "Dsse/inoutlets/InletBase.h"
+#include "Dsse/inoutlets/OutletBase.h"
+
 #include "Dsse/nodes/TestNode.h"
 #include "Dsse/nodes/time/SysTimeNode.h"
 #include "Dsse/datatypes/Float.h"
 #include "Dsse/datatypes/Double.h"
 #include "Dsse/inoutlets/InletBase.h"
-
+#include "Dsse/inoutlets/OutletBase.h"
 
 int main( int argc, char* argv[] )
 {

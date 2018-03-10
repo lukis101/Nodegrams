@@ -1,10 +1,12 @@
 
-#include "Dsse/DssEngine.h"
-
 #include <iterator>
+#include "Dsse/DssEngine.h"
+#include "Dsse/TypeRegistry.h"
+#include "Dsse/nodes/ContainerNode.h"
 
 namespace dsse
 {
+
 Dsse::Dsse(std::shared_ptr<spdlog::logger> logger)
 {
 	m_logger = logger;
@@ -20,7 +22,8 @@ Dsse::Dsse(std::shared_ptr<spdlog::logger> logger)
 	for (int i=1; i < NODECAP; i++)
         m_nodereg[i] = nullptr;
 }
-Dsse::Dsse() : Dsse::Dsse(spdlog::stdout_logger_mt("dsse"))
+Dsse::Dsse()
+    : Dsse::Dsse(spdlog::stdout_logger_mt("dsse"))
 {
 }
 Dsse::~Dsse()

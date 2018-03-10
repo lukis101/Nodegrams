@@ -3,14 +3,14 @@
 #ifndef DSSE_NODEBASE_H
 #define DSSE_NODEBASE_H
 
-//#include <memory>
-
-#include "Dsse/DssEngine.h"
-#include "Dsse/inoutlets/InletBase.h"
-#include "Dsse/inoutlets/OutletBase.h"
+#include "Dsse/Config.h"
+#include "Dsse/DataTypes.h"
 
 namespace dsse
 {
+class Dsse;
+class InletBase;
+class OutletBase;
 class ContainerNode;
 
 class DSSE_EXPORT NodeBase
@@ -24,7 +24,6 @@ public:
 	String custname; // custom(user defined) name
 	bool custnamed;
 	bool processed; // inner logic and data exchange complete
-	//shared_ptr<ContainerNode> m_parent;
 
 	NodeBase(Dsse*);
     virtual ~NodeBase();
@@ -48,6 +47,7 @@ public:
 protected:
     Dsse* m_engine;
 	ContainerNode* m_parent;
+	//shared_ptr<ContainerNode> m_parent;
 	int m_id;
 };
 

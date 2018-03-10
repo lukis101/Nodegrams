@@ -1,5 +1,9 @@
 
-#include "Dsse/DssEngine.h"
+#include "spdlog/spdlog.h"
+
+#include "Dsse/nodes/DynamicNode.h"
+#include "Dsse/inoutlets/InletBase.h"
+#include "Dsse/inoutlets/OutletBase.h"
 
 namespace dsse
 {
@@ -53,6 +57,5 @@ OutletBase* DynamicNode::GetOutlet(int index)
 	}
 	return m_outlets[index];
 }
-
 
 }

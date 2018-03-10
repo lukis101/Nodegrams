@@ -3,8 +3,7 @@
 #ifndef DSSE_STATICNODE_H
 #define DSSE_STATICNODE_H
 
-//#include "Dsse/nodes/NodeBase.h"
-#include "Dsse/DssEngine.h"
+#include "Dsse/nodes/NodeBase.h"
 
 namespace dsse
 {

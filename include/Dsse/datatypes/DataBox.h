@@ -3,20 +3,18 @@
 #ifndef DSSE_DT_DATABOX_H
 #define DSSE_DT_DATABOX_H
 
-#include "Dsse/DssEngine.h"
-//#include "Dsse/TypeRegistry.h"
+#include "Dsse/Config.h"
+#include "Dsse/DataTypes.h"
+#include "Dsse/datatypes/DataWriteFunc.h"
 
 namespace dsse
 {
 class Dsse;
-class DataBox;
-typedef void (*DataWriteFunc)(DataBox*, DataBox*);
 
 class DSSE_EXPORT DataBox
 {
-    //friend class TypeRegistry;
+    friend class TypeRegistry;
 public:
-	DataType m_datatype;
 
 	DataBox(Dsse* engine, String name, String descr, String module);
     virtual ~DataBox();
@@ -29,14 +27,15 @@ public:
 
 	virtual String ToString() = 0;
     virtual DataWriteFunc GetConversionFunc(String tname) = 0;
-    //virtual DataBox* ConvertTo(DataType datatype) = 0;
 
 protected:
     Dsse* m_engine;
+	DataType m_datatype;
+    //DataHolder* m_holder;
 
-    String m_name = "UnnamedType";
-    String m_descr = "";
-    String m_module = "Core";
+    String m_name;
+    String m_descr;
+    String m_module;
 };
 
 }

@@ -1,6 +1,7 @@
 
 #include "Dsse/datatypes/DataBox.h"
-//#include "Dsse/DssEngine.h"
+#include "Dsse/DssEngine.h"
+#include "Dsse/TypeRegistry.h"
 
 namespace dsse
 {

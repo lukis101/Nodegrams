@@ -4,12 +4,10 @@
 #define DSSE_DYNAMICNODE_H
 
 #include <vector>
-
 #include "Dsse/nodes/NodeBase.h"
 
 namespace dsse
 {
-class NodeBase;
 
 class DSSE_EXPORT DynamicNode : public NodeBase
 {

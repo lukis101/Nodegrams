@@ -1,6 +1,10 @@
 
+#include "spdlog/spdlog.h"
+
 #include <chrono>
 #include "Dsse/nodes/time/SysTimeNode.h"
+#include "Dsse/datatypes/Float.h"
+#include "Dsse/datatypes/Double.h"
 
 namespace dsse
 {

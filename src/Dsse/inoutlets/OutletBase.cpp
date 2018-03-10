@@ -1,22 +1,16 @@
 
-//#include <iostream>
-
 #include "spdlog/spdlog.h"
 
 #include "Dsse/inoutlets/OutletBase.h"
+#include "Dsse/inoutlets/InletBase.h"
 #include "Dsse/nodes/NodeBase.h"
-
-//#include "Dsse/DataTypes.h"
-//#include "Dsse/DssEngine.h"
 
 namespace dsse
 {
 
-OutletBase::OutletBase(NodeBase* node, String name, String desc)
+OutletBase::OutletBase(NodeBase* node, DataBox* data, String name, String desc)
+    : DataHolder(data)
 {
-	m_dataChanged = false;
-	m_dataReady = false;
-	m_dataSent = false;
 	m_node = node;
 	this->name = name;
 	this->description = desc;

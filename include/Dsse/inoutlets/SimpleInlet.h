@@ -3,25 +3,22 @@
 #ifndef DSSE_FLOATINLET_H
 #define DSSE_FLOATINLET_H
 
-#include "Dsse/DssEngine.h"
-//#include "Dsse/nodes/NodeBase.h"
-#include "Dsse/datatypes/DataBox.h"
-#include "Dsse/inoutlets/SimpleOutlet.h"
+#include "Dsse/inoutlets/InletBase.h"
 
 namespace dsse
 {
+class NodeBase;
+class DataBox;
+class OutletBase;
 
 class DSSE_EXPORT SimpleInlet : public InletBase
 {
 public:
-
-	SimpleInlet(NodeBase* node, DataBox* databox, String name, String desc);
+	SimpleInlet(NodeBase* node, DataBox* data, String name, String desc);
 	~SimpleInlet();
-	//NodeBase* getNode();
+
 	bool Connect(OutletBase* outlet); // only called by Outlet
-	DataBox* GetData() { return m_data; }
-	void ReceiveData(DataBox* data);
-    String GetDataString() { return m_data->ToString(); }
+	//void ReceiveData(DataBox* data);
 protected:
 };
 

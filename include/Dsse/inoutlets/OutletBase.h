@@ -4,30 +4,29 @@
 #define DSSE_OUTLETBASE_H
 
 #include <vector>
-
-#include "Dsse/DssEngine.h"
+#include "Dsse/Config.h"
+#include "Dsse/DataTypes.h"
+#include "Dsse/inoutlets/DataHolder.h"
 
 namespace dsse
 {
 class NodeBase;
 class InletBase;
 
-class DSSE_EXPORT OutletBase
+class DSSE_EXPORT OutletBase : public DataHolder
 {
 public:
 	String name;
 	String description;
 	std::vector<InletBase*> connections;
-	//DataType outdata;
 
-	OutletBase(NodeBase* node, String name, String desc);
+	OutletBase(NodeBase* node, DataBox* data, String name, String desc);
 	virtual ~OutletBase();
 
 	NodeBase* GetNode() { return m_node; }
-	bool IsDataReady() { return m_dataReady; }
 	String GetFullName();
-	virtual String GetDataString() = 0;
-	virtual void SendData() = 0; // Send data to all connected inlets
+	//bool IsDataReady() { return m_dataReady; }
+	//virtual void SendData() = 0; // Send data to all connected inlets
 
 	virtual bool CanConnectTo(InletBase* inlet) = 0;
 	virtual bool ConnectTo(InletBase* inlet) = 0;
@@ -37,9 +36,8 @@ public:
 	//void WriteData(data_type data); // Syntax for child classes
 protected:
 	NodeBase* m_node;
-    bool m_dataChanged;
-	bool m_dataReady;
-	bool m_dataSent;
+	//bool m_dataReady;
+	//bool m_dataSent;
 };
 
 } // namespace dsse
