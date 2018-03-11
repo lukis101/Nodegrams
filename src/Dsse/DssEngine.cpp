@@ -66,7 +66,7 @@ int Dsse::AddNode(NodeBase* node, int id)
 		m_logger->error("Node re-register attempt! Current id = {}", node->m_id);
 		return 0;
     }
-    if (m_minfreeid == NODECAP-1)
+    if (m_minfreeid == NODECAP)
     {
         m_logger->error("RegisterNode(): capacity reached");
         return 0;
@@ -95,22 +95,26 @@ int Dsse::AddNode(NodeBase* node, int id)
 	// Update counters/indices
 	if (id == m_minfreeid)
     {
-        if (m_minfreeid == m_maxid+1) // Pushed to end
+        if (m_minfreeid == (m_maxid+1)) // Pushed to end
         {
             m_minfreeid++;
-            m_maxid++;
         }
-        else // find next free slot
+        else // middle, find next free slot
         {
-            for (int i=m_minfreeid+1; i<NODECAP; i++)
+            m_minfreeid = m_maxid+1;
+            for (int i=id+1; i<NODECAP; i++)
             {
-                if (m_nodereg[i-1] != nullptr)
+                if (m_nodereg[i-1] == nullptr)
                 {
                     m_minfreeid = i;
                     break;
                 }
             }
         }
+    }
+    if (id >= m_maxid) // == covers "first node" case
+    {
+        m_maxid = id;
     }
 	// Init node
 	node->m_id = id;
@@ -121,21 +125,23 @@ int Dsse::AddNode(NodeBase* node, int id)
 
 NodeBase* Dsse::ReleaseNode(int nodeid)
 {
-	if (!CheckID(nodeid) || (nodeid == 0))
+	if (!CheckID(nodeid))
 	{
 		m_logger->error("Dsse.ReleaseNode: invalid id {}", nodeid);
 		return nullptr;
 	}
 	NodeBase* node = m_nodereg[nodeid-1];
 	node->m_id = 0;
-	//node->m_parent = nullptr;
-
 	m_nodereg[nodeid-1] = nullptr;
+
+    // Update helper vars
 	m_nodecount--;
-	if (nodeid == m_maxid) // Popped from end
-		m_maxid--;
-	if (nodeid < m_minfreeid)
-		m_minfreeid = nodeid;
+    if (nodeid < m_minfreeid)
+        m_minfreeid = nodeid;
+    if (nodeid == m_maxid)
+        while (m_maxid > 0)
+            if (m_nodereg[--m_maxid] != nullptr)
+                break; // found new end
 
 	m_logger->info("Released node \"{}\" from id {}", node->GetName(), nodeid);
 	return node;
@@ -143,20 +149,12 @@ NodeBase* Dsse::ReleaseNode(int nodeid)
 // For unsafe allocated memory
 void Dsse::DeleteNode(int nodeid)
 {
-	if (!CheckID(nodeid) || (nodeid == 0))
+    NodeBase* node = ReleaseNode(nodeid);
+	if (node != nullptr)
 	{
-		m_logger->error("Dsse.DeleteNode: invalid id {}", nodeid);
-		return;
+	    delete node;
+	    m_logger->info("Deleted node {}", nodeid);
 	}
-	delete m_nodereg[nodeid-1];
-
-	m_nodereg[nodeid-1] = nullptr;
-	m_nodecount--;
-	if (nodeid == m_maxid) // Popped from end
-		m_maxid--;
-	if (nodeid < m_minfreeid)
-		m_minfreeid = nodeid;
-	m_logger->info("Deleted node {}", nodeid);
 }
 NodeBase* Dsse::GetNode(int nodeid)
 {

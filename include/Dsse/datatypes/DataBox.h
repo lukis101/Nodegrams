@@ -15,8 +15,8 @@ class DataHolder;
 class DSSE_EXPORT DataBox
 {
     friend class TypeRegistry;
-public:
 
+public:
 	DataBox(Dsse* engine, String name, String descr, String module);
     virtual ~DataBox();
 

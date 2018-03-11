@@ -6,10 +6,14 @@ namespace dsse
 {
 
 TypeRegistry::TypeRegistry(std::shared_ptr<spdlog::logger> logger)
-    : m_dtypes(10), m_typeids(10)
+    : m_typeids(10)
 {
     m_logger = logger;
-    m_freeid = 0;
+	m_typecount = 0;
+	m_maxid = 0;
+	m_minfreeid = 0;
+	for (int i=0; i < TYPECAP; i++)
+        m_dtypes[i] = nullptr;
 }
 TypeRegistry::~TypeRegistry()
 {
@@ -33,17 +37,32 @@ DataType TypeRegistry::RegisterDataType(DataBox*&& newdtype)
         delete newdtype;
 	    return 0;
     }
-
-    DataType newid = m_freeid;
-    newdtype->m_datatype = newid+1; // External indexing starts at '1'
-    // find next free slot
-    m_freeid = static_cast<DataType>(m_dtypes.size());
-    for (int i=newid+1; i<m_dtypes.size(); i++)
+    if (m_minfreeid == TYPECAP)
     {
-        if (m_dtypes[i] == nullptr)
+        m_logger->error("RegisterDataType(): capacity reached");
+        delete newdtype;
+        return 0;
+    }
+
+    DataType newid = m_minfreeid;
+    newdtype->m_datatype = newid+1; // External indexing starts at '1'
+	m_typecount++;
+    // find next free slot
+    if (m_minfreeid == (m_maxid+1)) // Pushed to end
+    {
+        m_maxid = m_minfreeid;
+        m_minfreeid++;
+    }
+    else // middle, find next free slot
+    {
+        m_minfreeid = m_maxid+1;
+        for (int i=newid+1; i<TYPECAP; i++)
         {
-            m_freeid = i;
-            break;
+            if (m_dtypes[i] == nullptr)
+            {
+                m_minfreeid = i;
+                break;
+            }
         }
     }
     m_logger->info("RegisterDataType \"{}\" -> {}",
@@ -63,7 +82,7 @@ DataType TypeRegistry::RegisterDataType(DataBox*&& newdtype)
         if (fconv != nullptr)
         {
             (*m_conversions[tid])[newid] = fconv;
-            m_logger->info("Adding type map: \"{}\"({}) -> \"{}\"({})",
+            m_logger->debug("Adding type map: \"{}\"({}) -> \"{}\"({})",
                 tname, tid+1, newdtname, newdtype->m_datatype);
         }
         // New -> Existing
@@ -71,7 +90,7 @@ DataType TypeRegistry::RegisterDataType(DataBox*&& newdtype)
         if (fconv != nullptr)
         {
             (*newfmap)[tid] = fconv;
-            m_logger->info("Adding type map: \"{}\"({}) -> \"{}\"({})",
+            m_logger->debug("Adding type map: \"{}\"({}) -> \"{}\"({})",
                 newdtname, newdtype->m_datatype, tname, tid+1);
         }
     }
@@ -81,11 +100,8 @@ DataType TypeRegistry::RegisterDataType(DataBox*&& newdtype)
         assert(false); // Same-type function not provided
     m_conversions[newid] = newfmap;
 
-    // Push to object vector
-    if (newid < m_dtypes.size())
-        m_dtypes[newid] = newdtype;
-    else
-        m_dtypes.push_back(newdtype);
+    // Add to object array
+    m_dtypes[newid] = newdtype;
     // Add to name<->id map
     m_typeids.emplace(newdtname, newid);
 
@@ -93,7 +109,7 @@ DataType TypeRegistry::RegisterDataType(DataBox*&& newdtype)
 }
 void TypeRegistry::DeregisterDataType(DataType dtype)
 {
-    if ((dtype > 0) && (dtype < m_dtypes.size()))
+    if ((dtype > 0) && (dtype <= m_maxid))
     {
         dtype--;
         if (m_dtypes[dtype] != nullptr)
@@ -106,9 +122,16 @@ void TypeRegistry::DeregisterDataType(DataType dtype)
                 funcmap.second->erase(dtype);
             delete m_conversions[dtype]; // Target -> Remaining
             m_conversions.erase(dtype);
-            // Release ID
-            if (dtype < m_freeid)
-                m_freeid = dtype;
+
+            // Update helper vars
+            m_typecount--;
+            if (dtype < m_minfreeid)
+                m_minfreeid = dtype;
+            if (dtype == m_maxid)
+                while (m_maxid > 0)
+                    if (m_dtypes[--m_maxid] != nullptr)
+                        break; // found new end
+
             delete box;
             m_logger->info("DeregisterDataType({})", dtype);
             // TODO make engine re-evaluate connections
@@ -134,7 +157,7 @@ bool TypeRegistry::WriteSupported(DataBox* from, DataBox* to)
         auto it2 = mp->find(to->GetTypeID()-1);
         if (it2 != mp->end()) // conversion supported
         {
-            m_logger->info("WriteSupported({} -> {}) = true",
+            m_logger->debug("WriteSupported({} -> {}) = true",
                 from->GetTypeID(), to->GetTypeID());
             return true;
         }

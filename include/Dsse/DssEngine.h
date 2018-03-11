@@ -35,6 +35,7 @@ class ContainerNode;
 class DSSE_EXPORT Dsse
 {
 	//friend class NodeBase;
+
 public:
     TypeRegistry* typereg;
     ContainerNode* rootcontainer;
@@ -53,21 +54,24 @@ public:
 	NodeBase* GetNode(int nodeid);
 	//void MoveNode(int nodeid, int destid);
 
-	const std::vector<String> GetNodeList();
-	const std::vector<NodeBase*> GetNodes();
+	//const std::vector<String> GetNodeList();
+	//const std::vector<NodeBase*> GetNodes();
 	void PrintNodes(std::ostream& stream, bool recursive=false);
 	String PrintNodes(bool recursive=false);
 
 protected:
+    // TODO use proper storage model
 	const static int NODECAP = 100;
-	NodeBase* m_nodereg[NODECAP]; // !!! TODO
+	NodeBase* m_nodereg[NODECAP];
 	int m_nodecount;
 	int m_maxid; // highest registry index
 	int m_minfreeid; // first(lowest) free index
+
 	String m_version = "0.1.0";
 	std::shared_ptr<spdlog::logger> m_logger;
 
 	int RegisterNode(NodeBase* node, int id); // known id (eg. from remote)
+
 private:
     bool CheckID(int id);
 };

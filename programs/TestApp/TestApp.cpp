@@ -41,6 +41,8 @@ int main( int argc, char* argv[] )
         //spdlog::set_level(spdlog::level::debug);
 	    auto l_dsse = spdlog::stdout_logger_mt("dsse");
         //l_dsse->set_level(spdlog::level::debug);
+	    auto l_dssedat = spdlog::stdout_logger_mt("dsse.data");
+        //l_dssedat->set_level(spdlog::level::debug);
         auto l_iolet = spdlog::stdout_logger_mt("iolet");
         //l_iolet->set_level(spdlog::level::debug);
 

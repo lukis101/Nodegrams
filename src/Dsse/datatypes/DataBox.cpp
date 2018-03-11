@@ -26,7 +26,7 @@ void DataBox::ValueChanged()
 {
     if (m_holder != nullptr)
     {
-        spdlog::get("dsse")->info("Dbox.ValueChanged @ \"{}\"",
+        spdlog::get("dsse.data")->debug("Dbox.ValueChanged @ \"{}\"",
             m_holder->GetFullName());
         m_holder->DataChanged();
     }

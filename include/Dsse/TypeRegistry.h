@@ -36,10 +36,15 @@ public:
 protected:
     //Dsse m_engine;
 	std::shared_ptr<spdlog::logger> m_logger;
-    DataType m_freeid;
-    std::vector<DataBox*> m_dtypes;
-    std::unordered_map<String, DataType> m_typeids;
 
+    // TODO use proper storage model
+	const static int TYPECAP = 20;
+	DataBox* m_dtypes[TYPECAP];
+	int m_typecount;
+	DataType m_maxid; // highest registry index
+	DataType m_minfreeid; // first(lowest) free index
+
+    std::unordered_map<String, DataType> m_typeids;
     // Type conversion function mappings
     std::unordered_map<DataType, std::unordered_map<DataType, DataWriteFunc>*> m_conversions;
 };
