@@ -2,6 +2,8 @@
 #include "Dsse/datatypes/Boolean.h"
 #include "Dsse/datatypes/Float.h"
 #include "Dsse/datatypes/Double.h"
+#include "Dsse/datatypes/Int32.h"
+#include "Dsse/datatypes/Int64.h"
 
 namespace dsse
 {
@@ -35,7 +37,8 @@ DataWriteFunc Boolean::GetConversionFunc(String tname)
     if (tname == "Boolean")      return &BooleanToBoolean;
     else if (tname == "Float")   return &BooleanToFloat;
     else if (tname == "Double")  return &BooleanToDouble;
-    //else if (tname == "Int32")   return &BooleanToInt32;
+    else if (tname == "Int32")   return &BooleanToInt32;
+    else if (tname == "Int64")   return &BooleanToInt64;
     else return nullptr;
 }
 
@@ -60,8 +63,14 @@ void Boolean::BooleanToDouble(DataBox* boolbox, DataBox* doublebox)
 void Boolean::BooleanToInt32(DataBox* boolbox, DataBox* intbox)
 {
     Boolean* bbox = static_cast<Boolean*>(boolbox);
-    //Int32* ibox = static_cast<Int32*>(intbox);
-    //ibox->SetValue(static_cast<int>(dbox->GetValue()));
+    Int32* ibox = static_cast<Int32*>(intbox);
+    ibox->SetValue(bbox->GetValue() ? 1 : 0);
+}
+void Boolean::BooleanToInt64(DataBox* boolbox, DataBox* intbox)
+{
+    Boolean* bbox = static_cast<Boolean*>(boolbox);
+    Int64* ibox = static_cast<Int64*>(intbox);
+    ibox->SetValue(bbox->GetValue() ? 1 : 0);
 }
 
 }

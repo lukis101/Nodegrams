@@ -11,6 +11,8 @@ set(DSSE_HEADERS
     include/Dsse/datatypes/Boolean.h
     include/Dsse/datatypes/Float.h
     include/Dsse/datatypes/Double.h
+    include/Dsse/datatypes/Int32.h
+    include/Dsse/datatypes/Int64.h
 
     include/Dsse/nodes/NodeBase.h
     include/Dsse/nodes/StaticNode.h
@@ -34,6 +36,8 @@ set(DSSE_SOURCES
     src/Dsse/datatypes/Boolean.cpp
     src/Dsse/datatypes/Float.cpp
     src/Dsse/datatypes/Double.cpp
+    src/Dsse/datatypes/Int32.cpp
+    src/Dsse/datatypes/Int64.cpp
 
     src/Dsse/nodes/NodeBase.cpp
     src/Dsse/nodes/StaticNode.cpp

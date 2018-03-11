@@ -27,6 +27,7 @@ public:
     static void DoubleToFloat(DataBox*, DataBox*);
     static void DoubleToBoolean(DataBox*, DataBox*);
     static void DoubleToInt32(DataBox*, DataBox*);
+    static void DoubleToInt64(DataBox*, DataBox*);
 
 protected:
     Dsse* m_engine;

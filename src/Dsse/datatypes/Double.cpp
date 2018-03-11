@@ -2,6 +2,8 @@
 #include "Dsse/datatypes/Double.h"
 #include "Dsse/datatypes/Float.h"
 #include "Dsse/datatypes/Boolean.h"
+#include "Dsse/datatypes/Int32.h"
+#include "Dsse/datatypes/Int64.h"
 
 namespace dsse
 {
@@ -35,7 +37,7 @@ DataWriteFunc Double::GetConversionFunc(String tname)
     if (tname == "Double")       return &DoubleToDouble;
     else if (tname == "Float")   return &DoubleToFloat;
     else if (tname == "Boolean") return &DoubleToBoolean;
-    //else if (tname == "Int32")   return &DoubleToInt32;
+    else if (tname == "Int32")   return &DoubleToInt32;
     else return nullptr;
 }
 
@@ -55,13 +57,19 @@ void Double::DoubleToBoolean(DataBox* doublebox, DataBox* boolbox)
 {
     Double* dbox = static_cast<Double*>(doublebox);
     Boolean* bbox = static_cast<Boolean*>(boolbox);
-    bbox->SetValue(dbox->GetValue() >= 0.5);
+    bbox->SetValue(dbox->GetValue() >= 0.5); // TODO check negative side?
 }
 void Double::DoubleToInt32(DataBox* doublebox, DataBox* intbox)
 {
     Double* dbox = static_cast<Double*>(doublebox);
-    //Int32* ibox = static_cast<Int32*>(intbox);
-    //ibox->SetValue(static_cast<int>(dbox->GetValue()));
+    Int32* ibox = static_cast<Int32*>(intbox);
+    ibox->SetValue(static_cast<int32_t>(dbox->GetValue()));
+}
+void Double::DoubleToInt64(DataBox* doublebox, DataBox* intbox)
+{
+    Double* dbox = static_cast<Double*>(doublebox);
+    Int64* ibox = static_cast<Int64*>(intbox);
+    ibox->SetValue(static_cast<int64_t>(dbox->GetValue()));
 }
 
 }
