@@ -8,8 +8,8 @@
 
 namespace dsse
 {
-class Float;
-class Double;
+class Int32;
+class Int64;
 
 class DSSE_EXPORT SysTimeNode : public StaticNode
 {
@@ -19,9 +19,8 @@ public:
 
 	void DoLogic();
 protected:
-    // TODO use integer types
-    Double* dout_ms;
-    Float* dout_sec;
+    Int64* dout_ms;
+    Int32* dout_sec;
     SimpleOutlet* out_ms;
     SimpleOutlet* out_sec;
 };

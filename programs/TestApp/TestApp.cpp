@@ -25,12 +25,14 @@
 #include "Dsse/inoutlets/InletBase.h"
 #include "Dsse/inoutlets/OutletBase.h"
 
-#include "Dsse/nodes/TestNode.h"
-#include "Dsse/nodes/time/SysTimeNode.h"
+#include "Dsse/datatypes/Boolean.h"
 #include "Dsse/datatypes/Float.h"
 #include "Dsse/datatypes/Double.h"
-#include "Dsse/inoutlets/InletBase.h"
-#include "Dsse/inoutlets/OutletBase.h"
+#include "Dsse/datatypes/Int32.h"
+#include "Dsse/datatypes/Int64.h"
+
+#include "Dsse/nodes/TestNode.h"
+#include "Dsse/nodes/time/SysTimeNode.h"
 
 int main( int argc, char* argv[] )
 {
@@ -45,19 +47,24 @@ int main( int argc, char* argv[] )
         dsse::Dsse engine(l_dsse);
 	    engine.Init();
 
+        engine.typereg->RegisterDataType(new dsse::Boolean(&engine));
         engine.typereg->RegisterDataType(new dsse::Float(&engine));
         engine.typereg->RegisterDataType(new dsse::Double(&engine));
+        engine.typereg->RegisterDataType(new dsse::Int32(&engine));
+        engine.typereg->RegisterDataType(new dsse::Int64(&engine));
 
         int tnode = engine.AddNode(new dsse::TestNode(&engine));
         int stnode = engine.AddNode(new dsse::SysTimeNode(&engine));
 
         l_dsse->info("PrintNodes: \n{}", engine.PrintNodes(true));
 
-        dsse::OutletBase* outl = engine.GetNode(stnode)->GetOutlet("Seconds");
-        dsse::InletBase* inl = engine.GetNode(tnode)->GetInlet("in_float");
+        dsse::OutletBase* outl_s32 = engine.GetNode(stnode)->GetOutlet("Seconds");
+        dsse::OutletBase* outl_s64 = engine.GetNode(stnode)->GetOutlet("Milliseconds");
+        dsse::InletBase* inl_f = engine.GetNode(tnode)->GetInlet("in_float");
+        dsse::InletBase* inl_s64 = engine.GetNode(tnode)->GetInlet("in_int64");
 
-        l_dsse->info("I-O connect 1 = {}", outl->ConnectTo(inl));
-        l_dsse->info("I-O connect 2 = {}", outl->ConnectTo(inl));
+        l_dsse->info("I-O connect 1 = {}", outl_s32->ConnectTo(inl_f));
+        l_dsse->info("I-O connect 2 = {}", outl_s64->ConnectTo(inl_s64));
 
         engine.Update();
         engine.Update();

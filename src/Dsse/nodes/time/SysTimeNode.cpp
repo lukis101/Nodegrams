@@ -3,8 +3,8 @@
 
 #include <chrono>
 #include "Dsse/nodes/time/SysTimeNode.h"
-#include "Dsse/datatypes/Float.h"
-#include "Dsse/datatypes/Double.h"
+#include "Dsse/datatypes/Int32.h"
+#include "Dsse/datatypes/Int64.h"
 
 namespace dsse
 {
@@ -20,8 +20,8 @@ SysTimeNode::SysTimeNode(Dsse* engine)
 	name = NODE_NAME;
 	category = NODE_CATEGORY;
 
-    dout_ms = new Double(m_engine);
-    dout_sec = new Float(m_engine);
+    dout_ms = new Int64(m_engine);
+    dout_sec = new Int32(m_engine);
     m_outlets[0] = out_ms = new SimpleOutlet(this, dout_ms, "Milliseconds", "UNIX time in milliseconds");
     m_outlets[1] = out_sec = new SimpleOutlet(this, dout_sec, "Seconds", "UNIX time in seconds");
 }
@@ -43,8 +43,8 @@ void SysTimeNode::DoLogic()
     (system_clock::now().time_since_epoch()).count();
     uint32_t sec = static_cast<uint32_t>(ms/1000);
 
-    dout_ms->SetValue(static_cast<double>(ms));
-    dout_sec->SetValue(static_cast<float>(sec));
+    dout_ms->SetValue(ms);
+    dout_sec->SetValue(sec);
 }
 
 }

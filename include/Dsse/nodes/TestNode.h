@@ -9,6 +9,7 @@ namespace dsse
 {
 class SimpleInlet;
 class Float;
+class Int64;
 
 class DSSE_EXPORT TestNode : public StaticNode
 {
@@ -19,7 +20,9 @@ public:
 	void DoLogic();
 protected:
     Float* din_f;
+    Int64* din_s64;
     SimpleInlet* in_f;
+    SimpleInlet* in_s64;
 };
 
 }
