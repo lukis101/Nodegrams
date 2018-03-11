@@ -8,6 +8,7 @@ set(DSSE_HEADERS
     include/Dsse/TypeRegistry.h
 
     include/Dsse/datatypes/DataBox.h
+    include/Dsse/datatypes/Boolean.h
     include/Dsse/datatypes/Float.h
     include/Dsse/datatypes/Double.h
 
@@ -17,7 +18,6 @@ set(DSSE_HEADERS
 
     include/Dsse/nodes/ContainerNode.h
     include/Dsse/nodes/TestNode.h
-    # include/Dsse/nodes/LuaNode.h
     include/Dsse/nodes/time/SysTimeNode.h
 
     include/Dsse/inoutlets/InletBase.h
@@ -31,6 +31,7 @@ set(DSSE_SOURCES
     src/Dsse/TypeRegistry.cpp
 
     src/Dsse/datatypes/DataBox.cpp
+    src/Dsse/datatypes/Boolean.cpp
     src/Dsse/datatypes/Float.cpp
     src/Dsse/datatypes/Double.cpp
 

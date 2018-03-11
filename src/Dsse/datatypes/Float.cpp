@@ -1,6 +1,7 @@
 
 #include "Dsse/datatypes/Float.h"
 #include "Dsse/datatypes/Double.h"
+#include "Dsse/datatypes/Boolean.h"
 
 namespace dsse
 {
@@ -33,7 +34,7 @@ DataWriteFunc Float::GetConversionFunc(String tname)
 {
     if (tname == "Float")        return &FloatToFloat;
     else if (tname == "Double")  return &FloatToDouble;
-    //else if (tname == "Boolean") return &FloatToBoolean;
+    else if (tname == "Boolean") return &FloatToBoolean;
     //else if (tname == "Int32")   return &FloatToInt32;
     else return nullptr;
 }
@@ -53,8 +54,8 @@ void Float::FloatToDouble(DataBox* floatbox, DataBox* doublebox)
 void Float::FloatToBoolean(DataBox* floatbox, DataBox* boolbox)
 {
     Float* fbox = static_cast<Float*>(floatbox);
-    //Bool* bbox = static_cast<Bool*>(boolbox);
-    //bbox->SetValue(dbox->GetValue() >= 1.0f);
+    Boolean* bbox = static_cast<Boolean*>(boolbox);
+    bbox->SetValue(fbox->GetValue() >= 0.5f);
 }
 void Float::FloatToInt32(DataBox* floatbox, DataBox* intbox)
 {
