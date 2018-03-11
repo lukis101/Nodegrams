@@ -19,6 +19,7 @@ public:
 
 	bool Connect(OutletBase* outlet);    // only called by Outlet
 	bool Disconnect(OutletBase* outlet); // only called by Outlet
+	bool IsConnected() { return m_connection != nullptr; }
     bool CanConnect() { return m_connection == nullptr; }
 
 protected:

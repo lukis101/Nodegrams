@@ -15,7 +15,9 @@ class OutletBase;
 
 class DSSE_EXPORT InletBase : public DataHolder
 {
+    friend class Dsse; // TEMP to access parent node
 	//friend class OutletBase;
+
 public:
 	String name;
 	String description;
@@ -30,7 +32,7 @@ public:
 
 	virtual bool Connect(OutletBase* outlet)    = 0; // only called by Outlet
 	virtual bool Disconnect(OutletBase* outlet) = 0; // only called by Outlet
-	//bool IsConnected() { return m_connection != nullptr; }
+	virtual bool IsConnected() = 0;
     virtual bool CanConnect() = 0;
 
 protected:

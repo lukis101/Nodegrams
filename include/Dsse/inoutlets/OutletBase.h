@@ -15,6 +15,8 @@ class InletBase;
 
 class DSSE_EXPORT OutletBase : public DataHolder
 {
+    friend class Dsse; // TEMP to access connections
+
 public:
 	String name;
 	String description;
@@ -30,6 +32,8 @@ public:
 	virtual bool ConnectTo(InletBase* inlet) = 0;
 	virtual bool Disconnect(InletBase* inlet);
 	bool IsConnectedTo(InletBase* inlet);
+
+	// TODO Iterator of connection
 	int GetNumConnections();
 
 protected:

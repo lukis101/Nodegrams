@@ -54,6 +54,13 @@ InletBase* DynamicNode::GetInlet(int index)
 	}
 	return m_inlets[index];
 }
+bool DynamicNode::HasConnectedInlets()
+{
+    for (auto& inl : m_inlets)
+        if (inl->IsConnected())
+            return true;
+    return false;
+}
 
 OutletBase* DynamicNode::GetOutlet(String outletname)
 {

@@ -4,6 +4,8 @@
 #include "Dsse/DssEngine.h"
 #include "Dsse/TypeRegistry.h"
 #include "Dsse/nodes/ContainerNode.h"
+#include "Dsse/inoutlets/OutletBase.h"
+#include "Dsse/inoutlets/InletBase.h"
 
 namespace dsse
 {
@@ -46,9 +48,52 @@ int Dsse::Shutdown()
 void Dsse::Update()
 {
 	m_logger->info("Dsse.Update()");
-	for (int n=0; n <= m_maxid; n++)
+
+    // Mark all the vertices as not visited
+    bool* visited = new bool[m_maxid+1];
+    for (int i=0; i <= m_maxid; i++)
+        visited[i] = false;
+    // Create a queue for BFS
+    std::list<int> queue;
+
+    // Mark source nodes as visited and enqueue them
+	for (int n=1; n <= m_maxid; n++)
         if (m_nodereg[n] != nullptr)
-            m_nodereg[n]->Update();
+        if (!m_nodereg[n]->HasConnectedInlets())
+        {
+	        m_logger->info("UPD: Found source: {}", n+1);
+            visited[n] = true;
+            queue.push_back(n);
+            //m_nodereg[n]->Update();
+        }
+    // TODO Enqueue from detached looping graphs
+
+    while (!queue.empty())
+    {
+        // Dequeue a vertex from queue and print it
+        int n = queue.front();
+        queue.pop_front();
+        m_logger->info("UPD: Processing {}", n+1);
+
+        // Get all adjacent vertices of the dequeued
+        // vertex n. If an adjacent has not been visited,
+        // then mark it visited and enqueue it
+        for (int ol = m_nodereg[n]->GetOutletCount()-1; 0 <= ol; ol--)
+        {
+            // TODO use outlet iterators
+            std::vector<InletBase*> conns = m_nodereg[n]->GetOutlet(ol)->connections;
+            for (auto& inl : conns)
+            {
+                int adjid = inl->m_node->GetID()-1;
+                if (!visited[adjid])
+                {
+	                m_logger->info("UPD: Found branch: {}", adjid+1);
+                    visited[adjid] = true;
+                    queue.push_back(adjid);
+                }
+            }
+        }
+    }
 }
 
 bool Dsse::CheckID(int id)

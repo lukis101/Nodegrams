@@ -24,6 +24,7 @@ public:
 	//int GetInletIndex(String name);
 	InletBase* GetInlet(String name);
 	InletBase* GetInlet(int index);
+    bool HasConnectedInlets();
 
     int GetOutletCount() { return m_numoutlets; };
 	//int GetOutletIndex(String name);

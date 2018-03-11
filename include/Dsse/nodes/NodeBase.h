@@ -38,6 +38,9 @@ public:
 	virtual int GetInletCount() = 0;
 	virtual InletBase* GetInlet(String name) = 0;
 	virtual InletBase* GetInlet(int index) = 0;
+    virtual bool HasConnectedInlets() = 0;
+
+    // TODO Provide in/outlet iterators
 
 	virtual int GetOutletCount() = 0;
 	virtual OutletBase* GetOutlet(String name) = 0;

@@ -25,6 +25,7 @@ public:
 	InletBase* GetInlet(String name);
 	InletBase* GetInlet(int index);
 	void RemoveInlet(String name);
+    bool HasConnectedInlets();
 
 	int GetOutletCount() { return static_cast<int>(m_outlets.size()); };
 	OutletBase* GetOutlet(String name);

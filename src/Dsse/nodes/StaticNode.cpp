@@ -62,6 +62,16 @@ InletBase* StaticNode::GetInlet(int index)
 	}
 	return m_inlets[index];
 }
+bool StaticNode::HasConnectedInlets()
+{
+    int inls = GetInletCount()-1;
+    while (inls >= 0)
+    {
+        if (m_inlets[inls]->IsConnected())
+            return true;
+    }
+    return false;
+}
 
 OutletBase* StaticNode::GetOutlet(String outletname)
 {
