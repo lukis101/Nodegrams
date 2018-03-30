@@ -1,6 +1,7 @@
 
 #include <iterator>
 #include <sstream>
+#include <utility>
 #include "Dsse/DssEngine.h"
 #include "Dsse/TypeRegistry.h"
 #include "Dsse/nodes/ContainerNode.h"
@@ -13,18 +14,13 @@ namespace dsse
 Dsse::Dsse(std::shared_ptr<spdlog::logger> logger)
 {
 	m_logger = logger;
-	m_nodecount = 1;
-	m_maxid = 1;
-	m_minfreeid = 2;
 
     typereg = new TypeRegistry(spdlog::stdout_logger_mt(logger->name() + ".treg"));
     rootcontainer = new ContainerNode(this);
 	rootcontainer->m_id = 1;
 	rootcontainer->m_parent = rootcontainer;
     rootcontainer->name = "root";
-	m_nodereg[0] = rootcontainer;
-	for (int i=1; i < NODECAP; i++)
-        m_nodereg[i] = nullptr;
+	m_nodes.Add(std::move(rootcontainer));
 }
 Dsse::Dsse()
     : Dsse::Dsse(spdlog::stdout_logger_mt("dsse"))
@@ -50,38 +46,42 @@ void Dsse::Update()
 	m_logger->info("Dsse.Update()");
 
     // Mark all the vertices as not visited
-    bool* visited = new bool[m_maxid+1];
-    for (int i=0; i <= m_maxid; i++)
+    int numnodes = m_nodes.capacity;
+    bool* visited = new bool[numnodes];
+    for (int i=0; i < numnodes; i++)
         visited[i] = false;
     // Create a queue for BFS
     std::list<int> queue;
 
     // Mark source nodes as visited and enqueue them
-	for (int n=1; n <= m_maxid; n++)
-        if (m_nodereg[n] != nullptr)
-        if (!m_nodereg[n]->HasConnectedInlets())
-        {
-	        m_logger->info("UPD: Found source: {}", n+1);
-            visited[n] = true;
-            queue.push_back(n);
-            //m_nodereg[n]->Update();
-        }
+	for (int n=0; n < numnodes; n++)
+    {
+        NodeBase* node = m_nodes.Get(n);
+        if (node != nullptr)
+            if (!node->HasConnectedInlets())
+            {
+                m_logger->info("UPD: Found source: {}", n+1);
+                visited[n] = true;
+                queue.push_back(n);
+                //node->Update();
+            }
+    }
     // TODO Enqueue from detached looping graphs
 
     while (!queue.empty())
     {
         // Dequeue a vertex from queue and print it
-        int n = queue.front();
+        NodeBase* node = m_nodes.Get(queue.front());
         queue.pop_front();
-        m_logger->info("UPD: Processing {}", n+1);
+        m_logger->info("UPD: Processing {}", node->GetID());
 
         // Get all adjacent vertices of the dequeued
         // vertex n. If an adjacent has not been visited,
         // then mark it visited and enqueue it
-        for (int ol = m_nodereg[n]->GetOutletCount()-1; 0 <= ol; ol--)
+        for (int ol = node->GetOutletCount()-1; 0 <= ol; ol--)
         {
             // TODO use outlet iterators
-            std::vector<InletBase*> conns = m_nodereg[n]->GetOutlet(ol)->connections;
+            std::vector<InletBase*> conns = node->GetOutlet(ol)->connections;
             for (auto& inl : conns)
             {
                 int adjid = inl->m_node->GetID()-1;
@@ -98,9 +98,7 @@ void Dsse::Update()
 
 bool Dsse::CheckID(int id)
 {
-	if ((id > 0) && (id <= m_maxid))
-		return (m_nodereg[id-1] != nullptr);
-	return false;
+	return m_nodes.IsSet(id);
 }
 
 int Dsse::AddNode(NodeBase* node, int id)
@@ -111,56 +109,32 @@ int Dsse::AddNode(NodeBase* node, int id)
 		m_logger->error("Node re-register attempt! Current id = {}", node->m_id);
 		return 0;
     }
-    if (m_minfreeid == NODECAP)
-    {
-        m_logger->error("RegisterNode(): capacity reached");
-        return 0;
-    }
 
     if (id == 0)
     {
-        id = m_minfreeid;
+        if (m_nodes.count == m_nodes.capacity)
+        {
+            m_logger->error("RegisterNode(): capacity reached");
+            return 0;
+        }
+        id = m_nodes.Add(node) + 1;
     }
     else
     {
-        if (id >= NODECAP)
+        int zid = id - 1;
+        if (zid >= m_nodes.capacity)
         {
             m_logger->error("RegisterNode(): requested index {} is out of range", id);
             return 0;
         }
-    }
-
-	// Check if vacant
-	if (m_nodereg[id-1] != nullptr)
-		return 0;
-
-	m_nodereg[id-1] = node;
-	m_nodecount++;
-
-	// Update counters/indices
-	if (id == m_minfreeid)
-    {
-        if (m_minfreeid == (m_maxid+1)) // Pushed to end
+        if (m_nodes.IsSet(zid))
         {
-            m_minfreeid++;
+            m_logger->error("RegisterNode(): attempt to override existing at {}", id);
+            return 0;
         }
-        else // middle, find next free slot
-        {
-            m_minfreeid = m_maxid+1;
-            for (int i=id+1; i<NODECAP; i++)
-            {
-                if (m_nodereg[i-1] == nullptr)
-                {
-                    m_minfreeid = i;
-                    break;
-                }
-            }
-        }
+        m_nodes.Set(zid, node);
     }
-    if (id >= m_maxid) // == covers "first node" case
-    {
-        m_maxid = id;
-    }
+
 	// Init node
 	node->m_id = id;
 	//node->m_parent = &rootcontainer;
@@ -170,28 +144,19 @@ int Dsse::AddNode(NodeBase* node, int id)
 
 NodeBase* Dsse::ReleaseNode(int nodeid)
 {
-	if (!CheckID(nodeid))
+    int zid = nodeid-1;
+	if (!m_nodes.IsSet(zid))
 	{
 		m_logger->error("Dsse.ReleaseNode: invalid id {}", nodeid);
 		return nullptr;
 	}
-	NodeBase* node = m_nodereg[nodeid-1];
+	NodeBase* node = m_nodes.Remove(zid);
 	node->m_id = 0;
-	m_nodereg[nodeid-1] = nullptr;
-
-    // Update helper vars
-	m_nodecount--;
-    if (nodeid < m_minfreeid)
-        m_minfreeid = nodeid;
-    if (nodeid == m_maxid)
-        while (m_maxid > 0)
-            if (m_nodereg[--m_maxid] != nullptr)
-                break; // found new end
 
 	m_logger->info("Released node \"{}\" from id {}", node->GetName(), nodeid);
 	return node;
 }
-// For unsafe allocated memory
+// For allocated memory
 void Dsse::DeleteNode(int nodeid)
 {
     NodeBase* node = ReleaseNode(nodeid);
@@ -203,12 +168,12 @@ void Dsse::DeleteNode(int nodeid)
 }
 NodeBase* Dsse::GetNode(int nodeid)
 {
-	if (!CheckID(nodeid))
+	if (!m_nodes.IsSet(nodeid-1))
 	{
 		m_logger->error("Dsse.GetNode: invalid id {}", nodeid);
 		return nullptr;
 	}
-	return m_nodereg[nodeid-1];
+	return m_nodes.Get(nodeid-1);
 }
 /*void Dsse::MoveNode(int targetid, int destid)
 {
@@ -239,9 +204,9 @@ void Dsse::PrintNodes(std::ostream& stream, bool recursive)
 	stream << "> [" << rootcontainer->m_id << "] " << rootcontainer->GetName() << std::endl;
 
     int level = 1;
-	for (int i=2; i<=m_maxid; i++)
+	for (int i=2; i<=m_nodes.capacity; i++)
 	{
-		NodeBase* node = m_nodereg[i-1];
+		NodeBase* node = m_nodes.Get(i-1);
 		if (node == nullptr)
 			continue;
 

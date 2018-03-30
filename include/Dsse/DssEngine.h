@@ -25,6 +25,8 @@
 
 #include "Dsse/DataTypes.h"
 #include "Dsse/Config.h"
+#include "Dsse/SparseArray.h"
+#include "Dsse/SparseArrayIterator.h"
 
 namespace dsse
 {
@@ -60,12 +62,8 @@ public:
 	String PrintNodes(bool recursive=false);
 
 protected:
-    // TODO use proper storage model
 	const static int NODECAP = 100;
-	NodeBase* m_nodereg[NODECAP];
-	int m_nodecount;
-	int m_maxid; // highest registry index
-	int m_minfreeid; // first(lowest) free index
+    SparseArray<NodeBase, NODECAP> m_nodes;
 
 	String m_version = "0.1.0";
 	std::shared_ptr<spdlog::logger> m_logger;
