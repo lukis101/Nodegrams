@@ -1,65 +1,67 @@
 # CMake build instructions for Dreamshows engine
 
 # configure cmake
-cmake_minimum_required(VERSION 3.1)
+cmake_minimum_required(VERSION 3.6)
 
-# we require C++11 - this set appropriate flags for compilers, which may not be portable
-set(CMAKE_CXX_STANDARD 11)
+project(DssEngine VERSION 0.1 LANGUAGES CXX)
+message("Dss engine version: ${PROJECT_VERSION}")
 
-project(Dreamshows-engine)
+find_package(spdlog CONFIG REQUIRED)
+#find_package(Threads REQUIRED)
 
-# Version
-set(DSSE_VERSION_MAJOR 0)
-set(DSSE_VERSION_MINOR 1)
-set(DSSE_VERSION_PATCH 0)
-set(DSSE_VERSION_STR "${DSSE_VERSION_MAJOR}.${DSSE_VERSION_MINOR}.${DSSE_VERSION_PATCH}")
-message("Library version: ${DSSE_VERSION_STR}")
+# Create target
+add_library(${PROJECT_NAME} STATIC "")
+add_library(${PROJECT_NAME}::${PROJECT_NAME} ALIAS ${PROJECT_NAME})
 
-set(DSSE_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR})
-set(DSSE_HEADER_FOLDER "include")
-set(DSSE_SOURCE_FOLDER "src")
+# Assign source files
+include(Dsse_files.cmake)
 
-# some build options
-set(CMAKE_FIND_FRAMEWORK LAST)
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${DSSE_SOURCE_DIR}/cmake/modules/")
-set_property(GLOBAL PROPERTY USE_FOLDERS ON)
-             
-# output directory
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${DSSE_SOURCE_DIR}/bin) # exe
-set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${DSSE_SOURCE_DIR}/bin) # .dylib
-set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${DSSE_SOURCE_DIR}/lib) # .a
-make_directory(${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
-make_directory(${CMAKE_LIBRARY_OUTPUT_DIRECTORY})
+# Compiler requirements
+target_compile_features(${PROJECT_NAME}
+    PUBLIC cxx_std_11
+    # PUBLIC cxx_auto_type
+    # PRIVATE cxx_variadic_templates
+)
+set_target_properties(${PROJECT_NAME} PROPERTIES CXX_EXTENSIONS OFF)
 
-# configure projects
-include(${DSSE_SOURCE_DIR}/cmake/Config.cmake)
-
-include_directories(
-    ${DSSE_SOURCE_DIR}/include
+# Link used libraries
+target_link_libraries(${PROJECT_NAME}
+    PRIVATE
+        spdlog::spdlog
 )
 
-include(cmake_sources.txt)
+# Define headers
+target_include_directories(${PROJECT_NAME}
+    PUBLIC
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+        $<INSTALL_INTERFACE:$<INSTALL_PREFIX>/include>
+    PRIVATE
+        src
+)
 
-add_library(Dsse STATIC ${DSSE_HEADERS} ${DSSE_SOURCES})
+# 'make install' to the correct locations (provided by GNUInstallDirs).
+install(TARGETS ${PROJECT_NAME} EXPORT DsseTargets
+    ARCHIVE  DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    LIBRARY  DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    RUNTIME  DESTINATION ${CMAKE_INSTALL_BINDIR}  # This is for Windows
+    INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+)
+#install(DIRECTORY include/ DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
 
-install(DIRECTORY ${DSSE_SOURCE_DIR}/include
-        DESTINATION include)
+# This makes the project importable from the install directory
+# Put config file in per-project dir (name MUST match)
+#install(EXPORT DsseTargets
+#    FILE DsseTargets.cmake
+#    NAMESPACE ${PROJECT_NAME}::
+#    DESTINATION share/${PROJECT_NAME}/cmake
+#)
+# This makes the project importable from the build directory
+#export(TARGETS ${PROJECT_NAME} FILE DsseTargets.cmake)
 
-install(TARGETS Dsse
-        RUNTIME DESTINATION bin
-        LIBRARY DESTINATION lib
-        ARCHIVE DESTINATION lib)
-
-# SpdLog lib
-include_directories(${DSSE_SOURCE_DIR}/external/spdlog/include)
-install(DIRECTORY ${DSSE_SOURCE_DIR}/external/spdlog/include
-        DESTINATION include)
-# GLM lib
-# include_directories(${DSSE_SOURCE_DIR}/external/glm)
-# install(DIRECTORY ${DSSE_SOURCE_DIR}/external/glm
-        # DESTINATION include)
-
-# add our projects
-add_subdirectory(doc)
-add_subdirectory(programs)
-
+# Tests
+# enable_testing()
+# add_executable(testlib
+#     test/testlib.cpp)
+# target_link_libraries(testlib
+#     lib)
+# add_test(testlib testlib)
