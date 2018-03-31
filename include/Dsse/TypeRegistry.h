@@ -10,6 +10,7 @@
 #include <unordered_map>
 #include "Dsse/Config.h"
 #include "Dsse/DataTypes.h"
+#include "Dsse/SparseArray.h"
 #include "Dsse/datatypes/DataWriteFunc.h"
 
 namespace dsse
@@ -37,14 +38,10 @@ protected:
     //Dsse m_engine;
 	std::shared_ptr<spdlog::logger> m_logger;
 
-    // TODO use proper storage model
 	const static int TYPECAP = 20;
-	DataBox* m_dtypes[TYPECAP];
-	int m_typecount;
-	DataType m_maxid; // highest registry index
-	DataType m_minfreeid; // first(lowest) free index
-
+    SparseArray<DataBox*, TYPECAP> m_dtypes;
     std::unordered_map<String, DataType> m_typeids;
+
     // Type conversion function mappings
     std::unordered_map<DataType, std::unordered_map<DataType, DataWriteFunc>*> m_conversions;
 };

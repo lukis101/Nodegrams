@@ -4,104 +4,74 @@
 #define DSSE_SPARSEARRAYITERATOR_H
 
 #include <iterator>
+#include "Dsse/SparseArray.h"
 
 namespace dsse
 {
 
-template<typename arrDataType>
-class SparseArrayIterator : public std::iterator<std::random_access_iterator_tag,
+template<typename arrDataType, int arrCapacity>
+class SparseArray;
+
+template<typename arrDataType, int arrCapacity>
+class SparseArrayIterator : public std::iterator<std::bidirectional_iterator_tag,
                                            arrDataType, ptrdiff_t, arrDataType*, arrDataType&>
 {
 public:
-    SparseArrayIterator(arrDataType* ptr, arrDataType* last)
+    SparseArrayIterator(SparseArray<arrDataType, arrCapacity>* sarr, int index)
     {
-        m_ptr = ptr;
-        m_last = last;
+        m_sarr = sarr;
+        m_index = index;
     }
-    SparseArrayIterator(const SparseArrayIterator<arrDataType>& rawIterator) = default;
+    SparseArrayIterator(const SparseArrayIterator<arrDataType, arrCapacity>& rawIterator) = default;
     ~SparseArrayIterator() {}
 
-    SparseArrayIterator<arrDataType>& operator=(const SparseArrayIterator<arrDataType>& rawIterator) = default;
-    SparseArrayIterator<arrDataType>& operator=(arrDataType* ptr) { m_ptr = ptr; return (*this); }
+    SparseArrayIterator<arrDataType, arrCapacity>& operator=(const SparseArrayIterator<arrDataType, arrCapacity>& rawIterator) = default;
 
-    operator bool() const { return (m_ptr) ? true : false; }
+    operator bool() const { return *(m_sarr->Get(m_index)) ? true : false; }
 
-    bool operator==(const SparseArrayIterator<arrDataType>& rawIterator) const
+    bool operator==(const SparseArrayIterator<arrDataType, arrCapacity>& rawIterator) const
     {
-        return (m_ptr == rawIterator.getConstPtr());
+        return ((m_sarr == rawIterator.m_sarr) && (m_index == rawIterator.m_index));
     }
-    bool operator!=(const SparseArrayIterator<arrDataType>& rawIterator) const
+    bool operator!=(const SparseArrayIterator<arrDataType, arrCapacity>& rawIterator) const
     {
-        return (m_ptr != rawIterator.getConstPtr());
+        return ((m_sarr != rawIterator.m_sarr) || (m_index != rawIterator.m_index));
     }
 
-    /*SparseArrayIterator<arrDataType>& operator+=(const ptrdiff_t& movement)
+    SparseArrayIterator<arrDataType, arrCapacity>& operator++()
     {
-        m_ptr += movement;
+        do { ++m_index; }
+        while ((m_index <= m_sarr->capacity) && (m_sarr->m_array[m_index] == nullptr));
         return (*this);
     }
-    SparseArrayIterator<arrDataType>& operator-=(const ptrdiff_t& movement)
+    SparseArrayIterator<arrDataType, arrCapacity>& operator--()
     {
-        m_ptr -= movement;
-        return (*this);
-    }*/
-    SparseArrayIterator<arrDataType>& operator++()
-    {
-        do { ++m_ptr; }
-        while((m_ptr < m_last) && (m_ptr != nullptr));
-        return (*this);
-    }
-    SparseArrayIterator<arrDataType>& operator--()
-    {
-        do { --m_ptr; }
-        while((m_ptr < m_last) && (m_ptr != nullptr));
+        do { --m_index; }
+        while ((m_index > m_sarr->m_first) && (m_sarr->m_array[m_index] == nullptr));
         return (*this);
     }
 
-    SparseArrayIterator<arrDataType>  operator++(int)
+    SparseArrayIterator<arrDataType, arrCapacity>  operator++(int)
     {
         auto temp(*this);
-        ++m_ptr;
+        ++this;
         return temp;
     }
-    SparseArrayIterator<arrDataType>  operator--(int)
+    SparseArrayIterator<arrDataType, arrCapacity>  operator--(int)
     {
         auto temp(*this);
-        --m_ptr;
-        return temp;
-    }
-    SparseArrayIterator<arrDataType>  operator+(const ptrdiff_t& movement)
-    {
-        auto oldPtr = m_ptr;
-        m_ptr+=movement;
-        auto temp(*this);
-        m_ptr = oldPtr;
-        return temp;
-    }
-    SparseArrayIterator<arrDataType>  operator-(const ptrdiff_t& movement)
-    {
-        auto oldPtr = m_ptr;
-        m_ptr-=movement;
-        auto temp(*this);
-        m_ptr = oldPtr;
+        --this;
         return temp;
     }
 
-    ptrdiff_t                        operator-(const SparseArrayIterator<arrDataType>& rawIterator)
-    {
-        return std::distance(rawIterator.getPtr(), this->getPtr());
-    }
-
-    arrDataType&        operator*()         { return *m_ptr; }
-    const arrDataType&  operator*() const   { return *m_ptr; }
-    arrDataType*        operator->()        { return m_ptr; }
-
-    arrDataType*        getPtr()      const { return m_ptr; }
-    const arrDataType*  getConstPtr() const { return m_ptr; }
+          arrDataType& operator*()        { return m_sarr->m_array[m_index]; }
+    const arrDataType& operator*()  const { return m_sarr->m_array[m_index]; }
+          arrDataType  operator->()       { return m_sarr->m_array[m_index]; }
+    const arrDataType  operator->() const { return m_sarr->m_array[m_index]; }
 
 protected:
-    arrDataType* m_ptr;
-    arrDataType* m_last;
+    SparseArray<arrDataType, arrCapacity>* m_sarr;
+    int m_index;
 };
 
 }

@@ -69,6 +69,7 @@ bool StaticNode::HasConnectedInlets()
     {
         if (m_inlets[inls]->IsConnected())
             return true;
+        --inls;
     }
     return false;
 }

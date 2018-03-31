@@ -12,6 +12,8 @@ namespace dsse
 template<typename arrDataType, int arrCapacity>
 class SparseArray
 {
+    //friend class SparseArrayIterator<arrDataType>;
+    friend class SparseArrayIterator<arrDataType, arrCapacity>;
 public:
     const int capacity = arrCapacity;
     int count;
@@ -20,61 +22,80 @@ public:
     {
         count = 0;
         m_minfree = 0;
-        m_last = 0;
-        for (int i=0; i < capacity; i++)
+        m_first = capacity;
+        m_last = capacity;
+        for (int i=0; i < capacity; ++i)
             m_array[i] = nullptr;
     }
     ~SparseArray() {}
 
-    arrDataType* Remove(int index)
+    arrDataType Remove(int index)
     {
         assert(m_array[index] != nullptr);
 
-        arrDataType* element = m_array[index];
+        arrDataType element = m_array[index];
         m_array[index] = nullptr;
-        --count;
+	    // Update helper indices
+        if (--count > 0)
+        {
+            if (index == m_first)
+                while (m_first < (capacity-1))
+                    if (m_array[++m_first] != nullptr)
+                        break; // found new start
+            if (index == m_last)
+                while (m_last > 0)
+                    if (m_array[--m_last] != nullptr)
+                        break; // found new end
+        }
+        else
+        {
+            // Now empty
+            m_first = capacity;
+            m_last = capacity;
+        }
         if (index < m_minfree)
             m_minfree = index;
-        if (index == m_last)
-            while (m_last > 0)
-                if (m_array[--m_last] != nullptr)
-                    break; // found new end
         return element;
     }
-    arrDataType* Get(int id) { return m_array[id]; }
-    void Set(int index, arrDataType* element)
+
+    arrDataType Get(int index)
     {
-        assert((index >= 0) && (index < arrCapacity)); // Bounds
+        assert((index >= 0) && (index < capacity)); // Bounds
+        return m_array[index];
+    }
+
+    void Set(int index, arrDataType element)
+    {
+        assert((index >= 0) && (index < capacity)); // Bounds
         assert(m_array[index] == nullptr); // Replacement
 
         m_array[index] = element;
-        ++count;
 	    // Update helper indices
-        if (index == m_minfree)
+        if (++count > 1)
         {
-            if (m_minfree == (m_last+1)) // Placed at end
-            {
-                m_minfree++;
-            }
-            else // middle, find next free slot
-            {
-                m_minfree = m_last+1;
-                for (int i=index+1; i<arrCapacity; i++)
-                {
-                    if (m_array[i-1] == nullptr)
-                    {
-                        m_minfree = i;
-                        break;
-                    }
-                }
-            }
+            if (index > m_last) // == covers "first element" case
+                m_last = index;
+            else if (index < m_first)
+                m_first = index;
         }
-        if (index >= m_last) // == covers "first element" case
+        else
         {
+            // No longer empty
+            m_first = index;
             m_last = index;
         }
+        if (index == m_minfree)
+        {
+            // Find next free slot
+            ++m_minfree;
+            while (m_minfree < capacity)
+                if (m_array[m_minfree] == nullptr)
+                    break; // found
+                else
+                    ++m_minfree;
+        }
     }
-    int Add(arrDataType* element)
+    int Add(arrDataType element)
     {
         int index = m_minfree;
         Set(m_minfree, element);
@@ -88,17 +109,18 @@ public:
         return false;
     }
 
-    typedef SparseArrayIterator<arrDataType>       iterator;
-    typedef SparseArrayIterator<const arrDataType> const_iterator;
+    typedef SparseArrayIterator<arrDataType, arrCapacity>       iterator;
+    typedef SparseArrayIterator<const arrDataType, arrCapacity> const_iterator;
 
-    iterator       begin()  { return iterator(m_array[0], m_array[arrCapacity]); }
-    iterator       end()    { return iterator(m_array[m_last], m_array[arrCapacity]); }
-    const_iterator cbegin() { return const_iterator(m_array[0], m_array[arrCapacity]); }
-    const_iterator cend()   { return const_iterator(m_array[m_last], m_array[arrCapacity]); }
+    iterator       begin()  { return iterator(this, m_first); }
+    iterator       end()    { return iterator(this, capacity); }
+    const_iterator cbegin() { return const_iterator(this, m_first); }
+    const_iterator cend()   { return const_iterator(this, capacity); }
 
 protected:
-    arrDataType* m_array[arrCapacity];
+    arrDataType m_array[arrCapacity];
     int m_minfree;
+    int m_first;
     int m_last;
 };
 

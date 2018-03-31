@@ -41,6 +41,8 @@ class DSSE_EXPORT Dsse
 public:
     TypeRegistry* typereg;
     ContainerNode* rootcontainer;
+    const static int NODECAP = 100;
+    SparseArray<NodeBase*, NODECAP> m_nodes;
 
 	Dsse(std::shared_ptr<spdlog::logger> logger);
 	Dsse();
@@ -62,15 +64,10 @@ public:
 	String PrintNodes(bool recursive=false);
 
 protected:
-	const static int NODECAP = 100;
-    SparseArray<NodeBase, NODECAP> m_nodes;
-
 	String m_version = "0.1.0";
 	std::shared_ptr<spdlog::logger> m_logger;
 
 	int RegisterNode(NodeBase* node, int id); // known id (eg. from remote)
-
-private:
     bool CheckID(int id);
 };
 

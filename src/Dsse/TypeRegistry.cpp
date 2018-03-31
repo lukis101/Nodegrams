@@ -6,20 +6,14 @@ namespace dsse
 {
 
 TypeRegistry::TypeRegistry(std::shared_ptr<spdlog::logger> logger)
-    : m_typeids(10)
+    : m_typeids(10), m_conversions()
 {
     m_logger = logger;
-	m_typecount = 0;
-	m_maxid = 0;
-	m_minfreeid = 0;
-	for (int i=0; i < TYPECAP; i++)
-        m_dtypes[i] = nullptr;
 }
 TypeRegistry::~TypeRegistry()
 {
-    for (auto dt : m_dtypes)
-        if (dt != nullptr)
-            delete dt;
+    for (auto& dtbox : m_dtypes)
+        delete dtbox;
     for (auto& funcmap : m_conversions)
         delete funcmap.second;
 }
@@ -33,55 +27,37 @@ DataType TypeRegistry::RegisterDataType(DataBox*&& newdtype)
     {
         m_logger->error("RegisterDataType({}) already registered to {}",
             newdtname, idt->second);
-        assert(newdtname == m_dtypes[idt->second]->GetName());
+        assert(newdtname == m_dtypes.Get(idt->second)->GetName());
         delete newdtype;
 	    return 0;
     }
-    if (m_minfreeid == TYPECAP)
+    if (m_dtypes.count == m_dtypes.capacity)
     {
-        m_logger->error("RegisterDataType(): capacity reached");
+        m_logger->error("RegisterDataType({}): capacity reached", newdtname);
         delete newdtype;
         return 0;
     }
 
-    DataType newid = m_minfreeid;
+    DataType newid = m_dtypes.Add(newdtype);
     newdtype->m_datatype = newid+1; // External indexing starts at '1'
-	m_typecount++;
-    // find next free slot
-    if (m_minfreeid == (m_maxid+1)) // Pushed to end
-    {
-        m_maxid = m_minfreeid;
-        m_minfreeid++;
-    }
-    else // middle, find next free slot
-    {
-        m_minfreeid = m_maxid+1;
-        for (int i=newid+1; i<TYPECAP; i++)
-        {
-            if (m_dtypes[i] == nullptr)
-            {
-                m_minfreeid = i;
-                break;
-            }
-        }
-    }
     m_logger->info("RegisterDataType \"{}\" -> {}",
         newdtname, newdtype->m_datatype);
 
     // Update type conversion function mappings
     auto newfmap = new std::unordered_map<DataType, DataWriteFunc>(m_typeids.size());
-    DataWriteFunc fconv;
-    for (auto dtype : m_dtypes)
+    for (auto& dtype : m_dtypes)
     {
-        if (dtype == nullptr)
+        if (dtype == newdtype)
             continue;
+
         DataType tid = dtype->GetTypeID()-1;
         String tname = dtype->GetName();
         // Existing -> New
-        fconv = dtype->GetConversionFunc(newdtname);
+        DataWriteFunc fconv = dtype->GetConversionFunc(newdtname);
         if (fconv != nullptr)
         {
-            (*m_conversions[tid])[newid] = fconv;
+            auto tmapp = m_conversions[tid];
+            (*tmapp)[newid] = fconv;
             m_logger->debug("Adding type map: \"{}\"({}) -> \"{}\"({})",
                 tname, tid+1, newdtname, newdtype->m_datatype);
         }
@@ -94,14 +70,12 @@ DataType TypeRegistry::RegisterDataType(DataBox*&& newdtype)
                 newdtname, newdtype->m_datatype, tname, tid+1);
         }
     }
-    fconv = newdtype->GetConversionFunc(newdtname); // Same-type transfer
+    DataWriteFunc fconv = newdtype->GetConversionFunc(newdtname); // Same-type transfer
     (*newfmap)[newid] = fconv;
     if (fconv == nullptr)
         assert(false); // Same-type function not provided
     m_conversions[newid] = newfmap;
 
-    // Add to object array
-    m_dtypes[newid] = newdtype;
     // Add to name<->id map
     m_typeids.emplace(newdtname, newid);
 
@@ -109,42 +83,31 @@ DataType TypeRegistry::RegisterDataType(DataBox*&& newdtype)
 }
 void TypeRegistry::DeregisterDataType(DataType dtype)
 {
-    if ((dtype > 0) && (dtype <= m_maxid))
+    if (m_dtypes.IsSet(dtype-1))
     {
-        dtype--;
-        if (m_dtypes[dtype] != nullptr)
-        {
-            DataBox* box = m_dtypes[dtype];
-            m_typeids.erase(m_dtypes[dtype]->GetName());
-            m_dtypes[dtype] = nullptr;
-            // Clear conversion mappings
-            for (auto& funcmap : m_conversions) // Remaining -> Target
-                funcmap.second->erase(dtype);
-            delete m_conversions[dtype]; // Target -> Remaining
-            m_conversions.erase(dtype);
+        DataBox* box = m_dtypes.Remove(dtype-1);
+        // Clear conversion mappings
+        for (auto& funcmap : m_conversions) // Remaining -> Target
+            funcmap.second->erase(dtype);
+        delete m_conversions[dtype]; // Target -> Remaining
+        m_conversions.erase(dtype);
+        delete box;
 
-            // Update helper vars
-            m_typecount--;
-            if (dtype < m_minfreeid)
-                m_minfreeid = dtype;
-            if (dtype == m_maxid)
-                while (m_maxid > 0)
-                    if (m_dtypes[--m_maxid] != nullptr)
-                        break; // found new end
-
-            delete box;
-            m_logger->info("DeregisterDataType({})", dtype);
-            // TODO make engine re-evaluate connections
-        }
+        m_logger->info("Deregistered data type {}", dtype);
+        // TODO make engine re-evaluate connections
     }
+    else
+        m_logger->info("Attempt to deregister ivalid data type {}",
+            dtype);
 }
 
 DataType TypeRegistry::GetDataType(String name)
 {
     for (auto& dt : m_dtypes)
-        if (dt != nullptr)
-            if (dt->GetName() == name)
-                return dt->GetTypeID();
+    {
+        if (dt->GetName() == name)
+            return dt->GetTypeID();
+    }
     return 0; // Not registered yet
 }
 

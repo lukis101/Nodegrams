@@ -20,7 +20,7 @@ Dsse::Dsse(std::shared_ptr<spdlog::logger> logger)
 	rootcontainer->m_id = 1;
 	rootcontainer->m_parent = rootcontainer;
     rootcontainer->name = "root";
-	m_nodes.Add(std::move(rootcontainer));
+	m_nodes.Add(rootcontainer);
 }
 Dsse::Dsse()
     : Dsse::Dsse(spdlog::stdout_logger_mt("dsse"))
@@ -54,17 +54,16 @@ void Dsse::Update()
     std::list<int> queue;
 
     // Mark source nodes as visited and enqueue them
-	for (int n=0; n < numnodes; n++)
+    for (auto& node : m_nodes)
     {
-        NodeBase* node = m_nodes.Get(n);
-        if (node != nullptr)
-            if (!node->HasConnectedInlets())
-            {
-                m_logger->info("UPD: Found source: {}", n+1);
-                visited[n] = true;
-                queue.push_back(n);
-                //node->Update();
-            }
+        if (!node->HasConnectedInlets())
+        {
+            int id = node->GetID();
+            m_logger->info("UPD: Found source: {}", id);
+            visited[id-1] = true;
+            queue.push_back(id-1);
+            //node->Update();
+        }
     }
     // TODO Enqueue from detached looping graphs
 
@@ -204,11 +203,10 @@ void Dsse::PrintNodes(std::ostream& stream, bool recursive)
 	stream << "> [" << rootcontainer->m_id << "] " << rootcontainer->GetName() << std::endl;
 
     int level = 1;
-	for (int i=2; i<=m_nodes.capacity; i++)
+    for (auto& node : m_nodes)
 	{
-		NodeBase* node = m_nodes.Get(i-1);
-		if (node == nullptr)
-			continue;
+        if (node == rootcontainer)
+            continue;
 
         for (int j=level; j>0; j--) // depth arrow
             stream << '-';
