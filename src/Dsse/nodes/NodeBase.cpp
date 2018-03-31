@@ -6,11 +6,11 @@
 namespace dsse
 {
 
-NodeBase::NodeBase(Dsse* engine)
+NodeBase::NodeBase(Dsse* engine, ContainerNode* parent)
 {
     m_engine = engine;
+    m_parent = parent;
     m_id = 0;
-	m_parent = 0;
 
 	name = "UnnamedNode";
 	category = "NONE";

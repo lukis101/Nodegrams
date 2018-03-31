@@ -49,7 +49,7 @@ public:
 	~Dsse();
 	int Init();
 	int Shutdown();
-	void Update(); // TEMPORARY
+	void Update();
 
     int AddNode(NodeBase* node, int nodeid=0);
 	void DeleteNode(int nodeid);
@@ -58,14 +58,18 @@ public:
 	NodeBase* GetNode(int nodeid);
 	//void MoveNode(int nodeid, int destid);
 
+    //bool ConnectNodes(int source, int outlet, int sink, int inlet);
+
 	//const std::vector<String> GetNodeList();
-	//const std::vector<NodeBase*> GetNodes();
 	void PrintNodes(std::ostream& stream, bool recursive=false);
 	String PrintNodes(bool recursive=false);
+
+    void RebuildUpdateSequence();
 
 protected:
 	String m_version = "0.1.0";
 	std::shared_ptr<spdlog::logger> m_logger;
+    std::list<int> updateSequence;
 
 	int RegisterNode(NodeBase* node, int id); // known id (eg. from remote)
     bool CheckID(int id);

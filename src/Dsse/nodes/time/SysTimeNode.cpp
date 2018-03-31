@@ -12,8 +12,8 @@ static const String NODE_NAME = "SysTimeNode";
 static const String NODE_CATEGORY = "TIME";
 static const String NODE_DESCR = "";
 
-SysTimeNode::SysTimeNode(Dsse* engine)
-	: StaticNode(engine, 0, 2)
+SysTimeNode::SysTimeNode(Dsse* engine, ContainerNode* parent)
+	: StaticNode(engine, parent, 0, 2)
 {
 	spdlog::get("dsse")->debug("SysTimeNode[{}] constr()", this->m_id);
 
@@ -36,7 +36,6 @@ SysTimeNode::~SysTimeNode()
 
 void SysTimeNode::DoLogic()
 {
-	spdlog::get("dsse")->info("[{}:SysTimeNode].DoLogic()", this->m_id);
     using namespace std::chrono;
 
     int64_t ms = duration_cast<milliseconds>

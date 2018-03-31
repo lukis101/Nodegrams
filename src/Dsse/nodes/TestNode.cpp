@@ -9,8 +9,8 @@
 namespace dsse
 {
 
-TestNode::TestNode(Dsse* engine)
-	: StaticNode(engine, 2, 0)
+TestNode::TestNode(Dsse* engine, ContainerNode* parent)
+	: StaticNode(engine, parent, 2, 0)
 {
 	name = "TestNode";
 	category = "TESTS";
@@ -33,13 +33,13 @@ TestNode::~TestNode()
 
 void TestNode::DoLogic()
 {
-	spdlog::get("dsse")->info("[{}:TestNode].DoLogic()", this->m_id);
+	/*spdlog::get("dsse")->info("[{}:TestNode].DoLogic()", this->m_id);
     if (m_inlets[0]->HasDataChanged())
 	    spdlog::get("dsse")->info("[{}:TestNode] got float: {}",
             this->m_id, din_f->GetValue());
     if (m_inlets[1]->HasDataChanged())
 	    spdlog::get("dsse")->info("[{}:TestNode] got int64: {}",
-            this->m_id, din_s64->GetValue());
+            this->m_id, din_s64->GetValue());*/
 }
 
 }

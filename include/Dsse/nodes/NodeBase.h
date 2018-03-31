@@ -18,6 +18,7 @@ class DSSE_EXPORT NodeBase
 	friend class Dsse;
     //friend class OutletBase;
     friend class SimpleOutlet;
+
 public:
 	String name;
 	String category;
@@ -25,7 +26,7 @@ public:
 	bool custnamed;
 	bool processed; // inner logic and data exchange complete
 
-	NodeBase(Dsse*);
+	NodeBase(Dsse*, ContainerNode*);
     virtual ~NodeBase();
 
 	virtual bool IsStatic() = 0;

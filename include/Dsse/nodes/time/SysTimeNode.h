@@ -14,7 +14,7 @@ class Int64;
 class DSSE_EXPORT SysTimeNode : public StaticNode
 {
 public:
-    SysTimeNode(Dsse*);
+    SysTimeNode(Dsse*, ContainerNode*);
     ~SysTimeNode();
 
 	void DoLogic();

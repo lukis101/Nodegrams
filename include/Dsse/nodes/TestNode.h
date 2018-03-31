@@ -14,7 +14,7 @@ class Int64;
 class DSSE_EXPORT TestNode : public StaticNode
 {
 public:
-    TestNode(Dsse*);
+    TestNode(Dsse*, ContainerNode*);
     ~TestNode();
 
 	void DoLogic();

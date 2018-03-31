@@ -5,7 +5,7 @@
 #include "Dsse/inoutlets/SimpleInlet.h"
 #include "Dsse/DssEngine.h"
 #include "Dsse/TypeRegistry.h"
-#include "Dsse/nodes/NodeBase.h"
+#include "Dsse/nodes/ContainerNode.h"
 
 namespace dsse
 {
@@ -46,6 +46,8 @@ bool SimpleOutlet::ConnectTo(InletBase* inlet)
 
     logger->info("Connected {}->{}",
         GetFullName(), inlet->GetFullName());
+
+    m_node->m_parent->RebuildUpdateSequence();
     return true;
 }
 

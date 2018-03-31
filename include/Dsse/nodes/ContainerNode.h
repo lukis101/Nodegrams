@@ -4,6 +4,7 @@
 #define DSSE_CONTAINERNODE_H
 
 #include "Dsse/nodes/DynamicNode.h"
+#include "Dsse/DssEngine.h"
 
 namespace dsse
 {
@@ -11,7 +12,7 @@ namespace dsse
 class DSSE_EXPORT ContainerNode : public DynamicNode
 {
 public:
-	ContainerNode(Dsse*);
+	ContainerNode(Dsse*, ContainerNode*);
 	~ContainerNode();
 
     void DoLogic(void);
@@ -20,6 +21,11 @@ public:
 	NodeBase* getNode(int id);
 	void AssignNode(int id);
 	//void AssignNode(NodeBase* node);
+
+    // TODO implement child updating here
+    void RebuildUpdateSequence()
+    { m_engine->RebuildUpdateSequence(); }
+
 protected:
 	std::vector<NodeBase*> m_nodes;
 };

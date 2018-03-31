@@ -34,12 +34,12 @@ public:
     bool WriteSupported(DataBox* from, DataBox* to);
     void WriteData(DataBox* from, DataBox* to);
 
+	const static int TYPECAP = 20;
+    SparseArray<DataBox*, TYPECAP> m_dtypes;
 protected:
     //Dsse m_engine;
 	std::shared_ptr<spdlog::logger> m_logger;
 
-	const static int TYPECAP = 20;
-    SparseArray<DataBox*, TYPECAP> m_dtypes;
     std::unordered_map<String, DataType> m_typeids;
 
     // Type conversion function mappings

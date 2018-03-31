@@ -12,7 +12,7 @@ namespace dsse
 class DSSE_EXPORT DynamicNode : public NodeBase
 {
 public:
-    DynamicNode(Dsse*);
+    DynamicNode(Dsse*, ContainerNode*);
     virtual ~DynamicNode();
 
 	bool IsStatic() { return false; };

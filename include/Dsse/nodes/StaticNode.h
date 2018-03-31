@@ -11,7 +11,7 @@ namespace dsse
 class DSSE_EXPORT StaticNode : public NodeBase
 {
 public:
-    StaticNode(Dsse*, int numinlets, int numoutlets);
+    StaticNode(Dsse*, ContainerNode*, int numinlets, int numoutlets);
     virtual ~StaticNode();
 
 	bool IsStatic() { return true; };

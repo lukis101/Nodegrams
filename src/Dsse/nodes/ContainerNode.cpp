@@ -6,8 +6,8 @@
 namespace dsse
 {
 
-ContainerNode::ContainerNode(Dsse* engine)
-	: DynamicNode(engine)
+ContainerNode::ContainerNode(Dsse* engine, ContainerNode* parent)
+	: DynamicNode(engine, parent)
 {
 	spdlog::get("dsse")->debug("ContainerNode() \"{}\" constr()", name);
 }

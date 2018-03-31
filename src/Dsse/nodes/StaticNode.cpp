@@ -8,8 +8,8 @@
 namespace dsse
 {
 
-StaticNode::StaticNode(Dsse* engine, int numinlets, int numoutlets)
-	: NodeBase(engine)
+StaticNode::StaticNode(Dsse* engine, ContainerNode* parent, int numinlets, int numoutlets)
+	: NodeBase(engine, parent)
 {
 	m_numinlets = numinlets;
 	m_numoutlets = numoutlets;

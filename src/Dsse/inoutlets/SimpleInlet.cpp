@@ -30,11 +30,8 @@ bool SimpleInlet::Connect(OutletBase* outlet)
 		spdlog::get("iolet")->info("Connected {}<-{}", GetFullName(), outlet->GetFullName());
 	    return true;
     }
-    else
-    {
-		spdlog::get("iolet")->error("Failed to connect {} to {}", GetFullName(), outlet->GetFullName());
-    }
 
+	spdlog::get("iolet")->error("Failed to connect {} to {}", GetFullName(), outlet->GetFullName());
 	return false;
 }
 

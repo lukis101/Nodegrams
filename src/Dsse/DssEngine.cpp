@@ -16,9 +16,9 @@ Dsse::Dsse(std::shared_ptr<spdlog::logger> logger)
 	m_logger = logger;
 
     typereg = new TypeRegistry(spdlog::stdout_logger_mt(logger->name() + ".treg"));
-    rootcontainer = new ContainerNode(this);
-	rootcontainer->m_id = 1;
+    rootcontainer = new ContainerNode(this, nullptr);
 	rootcontainer->m_parent = rootcontainer;
+	rootcontainer->m_id = 1;
     rootcontainer->name = "root";
 	m_nodes.Add(rootcontainer);
 }
@@ -41,63 +41,81 @@ int Dsse::Shutdown()
 	m_logger->info("Dsse shutting down..");
 	return 0;
 }
-void Dsse::Update()
-{
-	m_logger->info("Dsse.Update()");
 
-    // Mark all the vertices as not visited
+void Dsse::RebuildUpdateSequence()
+{
+	m_logger->info("Dsse.RebuildQueue()");
+    updateSequence.clear();
+
+    // Mark all nodes as not visited
     int numnodes = m_nodes.capacity;
     bool* visited = new bool[numnodes];
     for (int i=0; i < numnodes; i++)
         visited[i] = false;
-    // Create a queue for BFS
-    std::list<int> queue;
 
-    // Mark source nodes as visited and enqueue them
+    std::list<int> queue;
+    // Start from source nodes
     for (auto& node : m_nodes)
     {
+        int id = node->GetID();
         if (!node->HasConnectedInlets())
         {
-            int id = node->GetID();
-            m_logger->info("UPD: Found source: {}", id);
+            m_logger->info("> Found source: {}", id);
             visited[id-1] = true;
-            queue.push_back(id-1);
-            //node->Update();
+            queue.push_back(id);
         }
+        else m_logger->info("> Not source: {}", id);
     }
     // TODO Enqueue from detached looping graphs
 
     while (!queue.empty())
     {
-        // Dequeue a vertex from queue and print it
-        NodeBase* node = m_nodes.Get(queue.front());
+        // Dequeue node and add to sequence
+        NodeBase* node = m_nodes.Get(queue.front()-1);
         queue.pop_front();
-        m_logger->info("UPD: Processing {}", node->GetID());
+
+        updateSequence.push_back(node->GetID());
+        m_logger->info("> Processing: {}", node->GetID());
 
         // Get all adjacent vertices of the dequeued
         // vertex n. If an adjacent has not been visited,
         // then mark it visited and enqueue it
-        for (int ol = node->GetOutletCount()-1; 0 <= ol; ol--)
+        for (int ol = node->GetOutletCount()-1; 0 <= ol; ol--) // TODO use range loop
         {
-            // TODO use outlet iterators
             std::vector<InletBase*> conns = node->GetOutlet(ol)->connections;
             for (auto& inl : conns)
             {
-                int adjid = inl->m_node->GetID()-1;
-                if (!visited[adjid])
+                int brid = inl->m_node->GetID();
+                if (!visited[brid-1])
                 {
-	                m_logger->info("UPD: Found branch: {}", adjid+1);
-                    visited[adjid] = true;
-                    queue.push_back(adjid);
+                    m_logger->info("> Found branch: {}", brid);
+                    visited[brid-1] = true;
+                    queue.push_back(brid);
                 }
             }
         }
+    }
+    // Print final sequence
+    std::stringstream ss;
+    ss << "Calculated sequence:";
+    for (auto& id : updateSequence)
+        ss << ' ' << id;
+    m_logger->info(ss.str());
+}
+
+void Dsse::Update()
+{
+    for (auto& id : updateSequence)
+    {
+        NodeBase* node = m_nodes.Get(id-1);
+        // TODO only if outputs changed
+        node->Update();
     }
 }
 
 bool Dsse::CheckID(int id)
 {
-	return m_nodes.IsSet(id);
+	return m_nodes.IsSet(id-1);
 }
 
 int Dsse::AddNode(NodeBase* node, int id)
@@ -138,6 +156,7 @@ int Dsse::AddNode(NodeBase* node, int id)
 	node->m_id = id;
 	//node->m_parent = &rootcontainer;
 	m_logger->info("Registered node \"{}\" to id {}", node->name, id);
+    RebuildUpdateSequence();
 	return id;
 }
 
@@ -153,6 +172,7 @@ NodeBase* Dsse::ReleaseNode(int nodeid)
 	node->m_id = 0;
 
 	m_logger->info("Released node \"{}\" from id {}", node->GetName(), nodeid);
+    RebuildUpdateSequence();
 	return node;
 }
 // For allocated memory
