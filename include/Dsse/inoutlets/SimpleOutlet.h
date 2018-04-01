@@ -13,6 +13,8 @@ class InletBase;
 
 class DSSE_EXPORT SimpleOutlet : public OutletBase
 {
+    friend class Dsse;
+
 public:
 	SimpleOutlet(NodeBase* node, DataBox* databox, String name, String desc);
 	~SimpleOutlet();
@@ -21,9 +23,9 @@ public:
     void SendData();
 
 	bool CanConnectTo(InletBase* inlet);
-	bool ConnectTo(InletBase* inlet);
 
 protected:
+	bool ConnectTo(InletBase* inlet);
 };
 
 }

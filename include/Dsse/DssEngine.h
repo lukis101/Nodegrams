@@ -54,13 +54,14 @@ public:
     int AddNode(NodeBase* node, int nodeid=0);
 	void DeleteNode(int nodeid);
 	NodeBase* ReleaseNode(int nodeid); // does not destroy, up to caller!
-
 	NodeBase* GetNode(int nodeid);
-	//void MoveNode(int nodeid, int destid);
 
-    //bool ConnectNodes(int source, int outlet, int sink, int inlet);
+	//void MoveNode(int node, int container);
+    bool ConnectInoutlets(int source, int outlet, int sink, int inlet);
+    bool DisconnectInoutlets(int source, int outlet, int sink, int inlet);
+    bool ClearInletConnections(int node, int inlet);
+    bool ClearOutletConnections(int node, int outlet);
 
-	//const std::vector<String> GetNodeList();
 	void PrintNodes(std::ostream& stream, bool recursive=false);
 	String PrintNodes(bool recursive=false);
 

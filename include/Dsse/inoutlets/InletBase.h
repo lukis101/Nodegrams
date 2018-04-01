@@ -15,8 +15,9 @@ class OutletBase;
 
 class DSSE_EXPORT InletBase : public DataHolder
 {
-    friend class Dsse; // TEMP to access parent node
-	//friend class OutletBase;
+    friend class Dsse;
+	friend class OutletBase;
+	friend class SimpleOutlet;
 
 public:
 	String name;
@@ -30,14 +31,19 @@ public:
 	//void SetDataReady(bool ready) { m_dataReady = ready; }
 	//bool DataReady() { return m_dataReady; }
 
-	virtual bool Connect(OutletBase* outlet)    = 0; // only called by Outlet
-	virtual bool Disconnect(OutletBase* outlet) = 0; // only called by Outlet
-	virtual bool IsConnected() = 0;
-    virtual bool CanConnect() = 0;
+	virtual bool CanConnectTo(OutletBase* outlet)  = 0;
+	virtual bool IsConnectedTo(OutletBase* outlet) = 0;
+
+	// TODO Iterator of connections
+	virtual int GetNumConnections() = 0;
 
 protected:
 	NodeBase* m_node;
 	//bool m_dataReady;
+
+	virtual bool Connect(OutletBase* outlet)    = 0; // only called by Outlet
+	virtual bool Disconnect(OutletBase* outlet) = 0; // only called by Outlet
+    virtual void DisconnectAll() = 0;
 };
 
 }

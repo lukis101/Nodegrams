@@ -1,4 +1,5 @@
 
+#include <algorithm>
 #include "spdlog/spdlog.h"
 
 #include "Dsse/inoutlets/OutletBase.h"
@@ -34,23 +35,36 @@ String OutletBase::GetFullName()
 
 bool OutletBase::Disconnect(InletBase* inlet)
 {
-	for(auto iter = connections.begin(); iter != connections.end(); ++iter)
-	{
-		if( *iter == inlet )
-		{
-			connections.erase(iter);
-			if( inlet->Disconnect(this) )
-			{
-				spdlog::get("iolet")->info("Disconnected {}->{}", GetFullName(), inlet->GetFullName());
-				return true;
-			}
-			spdlog::get("iolet")->critical("Broken connection! {} to {}", GetFullName(), inlet->GetFullName());
-			return false;
-		}
-	}
-	spdlog::get("iolet")->error( "Can't disconnect: {}-/->{}", GetFullName(), inlet->GetFullName());
+    assert(inlet != nullptr);
+    auto connit = std::find(std::begin(connections), std::end(connections), inlet);
+    if (connit != std::end(connections))
+    {
+        connections.erase(connit); // TODO swap and pop
+        if (inlet->Disconnect(this))
+        {
+            spdlog::get("iolet")->info("Disconnected {}->{}", GetFullName(), inlet->GetFullName());
+            return true;
+        }
+        spdlog::get("iolet")->critical("Broken connection! {}-><-/-{}", GetFullName(), inlet->GetFullName());
+        return false;
+    }
+	spdlog::get("iolet")->error( "Not connected: {}-/->{}", GetFullName(), inlet->GetFullName());
 	return false;
 }
+
+void OutletBase::DisconnectAll()
+{
+    while (!connections.empty())
+    {
+        auto inlet = connections.back();
+        connections.pop_back();
+        if (inlet->Disconnect(this))
+            spdlog::get("iolet")->info("Disconnected {}->{}", GetFullName(), inlet->GetFullName());
+        else
+            spdlog::get("iolet")->critical("Broken connection! {}-><-/-{}", GetFullName(), inlet->GetFullName());
+    }
+}
+
 bool OutletBase::IsConnectedTo(InletBase* inlet)
 {
 	for(auto iter = connections.begin(); iter != connections.end(); ++iter)
@@ -59,10 +73,6 @@ bool OutletBase::IsConnectedTo(InletBase* inlet)
 			return true;
 	}
 	return false;
-}
-int OutletBase::GetNumConnections()
-{
-	return static_cast<int>(connections.size());
 }
 
 } // namespace dsse

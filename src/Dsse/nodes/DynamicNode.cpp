@@ -57,7 +57,7 @@ InletBase* DynamicNode::GetInlet(int index)
 bool DynamicNode::HasConnectedInlets()
 {
     for (auto& inl : m_inlets)
-        if (inl->IsConnected())
+        if (inl->GetNumConnections())
             return true;
     return false;
 }

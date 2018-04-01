@@ -115,6 +115,8 @@ void Dsse::Update()
 
 bool Dsse::CheckID(int id)
 {
+    if ((id < 1) || (id > m_nodes.capacity))
+        return false;
 	return m_nodes.IsSet(id-1);
 }
 
@@ -162,12 +164,12 @@ int Dsse::AddNode(NodeBase* node, int id)
 
 NodeBase* Dsse::ReleaseNode(int nodeid)
 {
-    int zid = nodeid-1;
-	if (!m_nodes.IsSet(zid))
+	if (!CheckID(nodeid))
 	{
 		m_logger->error("Dsse.ReleaseNode: invalid id {}", nodeid);
 		return nullptr;
 	}
+    int zid = nodeid-1;
 	NodeBase* node = m_nodes.Remove(zid);
 	node->m_id = 0;
 
@@ -187,7 +189,7 @@ void Dsse::DeleteNode(int nodeid)
 }
 NodeBase* Dsse::GetNode(int nodeid)
 {
-	if (!m_nodes.IsSet(nodeid-1))
+	if (!CheckID(nodeid))
 	{
 		m_logger->error("Dsse.GetNode: invalid id {}", nodeid);
 		return nullptr;
@@ -216,6 +218,116 @@ NodeBase* Dsse::GetNode(int nodeid)
 	// TODO parent-child swap case
 	//target.parent = dest; // TODO
 }*/
+
+bool Dsse::ConnectInoutlets(int source, int outlet, int sink, int inlet)
+{
+	if (!CheckID(source))
+	{
+		m_logger->error("Dsse.ConnectInoutlets: invalid source node id {}", source);
+		return false;
+	}
+	if (!CheckID(sink))
+	{
+		m_logger->error("Dsse.ConnectInoutlets: invalid sink node id {}", sink);
+		return false;
+	}
+
+    OutletBase* olet = m_nodes.Get(source-1)->GetOutlet(outlet);
+	if (olet == nullptr)
+	{
+		m_logger->error("Dsse.ConnectInoutlets: invalid outlet index {}", outlet);
+		return false;
+	}
+    InletBase*  ilet = m_nodes.Get(sink-1)->GetInlet(inlet);
+	if (ilet == nullptr)
+	{
+		m_logger->error("Dsse.ConnectInoutlets: invalid inlet index {}", inlet);
+		return false;
+	}
+
+    if (olet->ConnectTo(ilet))
+    {
+        RebuildUpdateSequence();
+        return true;
+    }
+    return false;
+}
+bool Dsse::DisconnectInoutlets(int source, int outlet, int sink, int inlet)
+{
+	if (!CheckID(source))
+	{
+		m_logger->error("Dsse.DisconnectInoutlets: invalid source node id {}", source);
+		return false;
+	}
+	if (!CheckID(sink))
+	{
+		m_logger->error("Dsse.DisconnectInoutlets: invalid sink node id {}", sink);
+		return false;
+	}
+
+    OutletBase* olet = m_nodes.Get(source-1)->GetOutlet(outlet);
+	if (olet == nullptr)
+	{
+		m_logger->error("Dsse.ConnectInoutlets: invalid outlet index {}", outlet);
+		return false;
+	}
+    InletBase*  ilet = m_nodes.Get(sink-1)->GetInlet(inlet);
+	if (ilet == nullptr)
+	{
+		m_logger->error("Dsse.ConnectInoutlets: invalid inlet index {}", inlet);
+		return false;
+	}
+
+    if (olet->Disconnect(ilet))
+    {
+        RebuildUpdateSequence();
+        return true;
+    }
+    return false;
+}
+
+bool Dsse::ClearInletConnections(int node, int inlet)
+{
+	if (!CheckID(node))
+	{
+		m_logger->error("Dsse.ClearInletConnections: invalid node id {}", node);
+		return false;
+	}
+    NodeBase* nd = m_nodes.Get(node-1);
+    InletBase* inl = nd->GetInlet(inlet);
+    if (inl == nullptr)
+	{
+		m_logger->error("Dsse.ClearInletConnections: invalid inlet index {}", inlet);
+		return false;
+	}
+    if (inl->GetNumConnections())
+    {
+        inl->DisconnectAll();
+        RebuildUpdateSequence();
+    }
+    return true;
+}
+bool Dsse::ClearOutletConnections(int node, int outlet)
+{
+	if (!CheckID(node))
+	{
+		m_logger->error("Dsse.ClearOutletConnections: invalid node id {}", node);
+		return false;
+	}
+    NodeBase* nd = m_nodes.Get(node-1);
+    OutletBase* outl = nd->GetOutlet(outlet);
+    if (outl == nullptr)
+	{
+		m_logger->error("Dsse.ClearInletConnections: invalid outlet index {}", outlet);
+		return false;
+	}
+    if (outl->GetNumConnections())
+    {
+        outl->DisconnectAll();
+        RebuildUpdateSequence();
+    }
+    return true;
+}
 
 void Dsse::PrintNodes(std::ostream& stream, bool recursive)
 {

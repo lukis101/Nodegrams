@@ -20,15 +20,16 @@ SimpleOutlet::~SimpleOutlet()
 
 bool SimpleOutlet::CanConnectTo(InletBase* inlet)
 {
-    if (!inlet->CanConnect())
+    if (!inlet->CanConnectTo(this))
         return false;
 
     return m_node->m_engine->typereg->WriteSupported(m_data, inlet->GetData());
 }
+
 bool SimpleOutlet::ConnectTo(InletBase* inlet)
 {
     auto logger = spdlog::get("iolet");
-    if (!inlet->CanConnect())
+    if (!inlet->CanConnectTo(this))
 	{
 		logger->error("Can't connect {}->{}, refused by inlet",
             GetFullName(), inlet->GetFullName());
@@ -40,14 +41,17 @@ bool SimpleOutlet::ConnectTo(InletBase* inlet)
 			GetFullName(), inlet->GetFullName());
 	    return false;
 	}
-    inlet->Connect(this);
+    if (!inlet->Connect(this))
+	{
+		logger->error("Connect failed {}->{}",
+            GetFullName(), inlet->GetFullName());
+	    return false;
+    }
     connections.push_back(inlet);
     m_data->ValueChanged(); // Force send on next logic cycle
 
     logger->info("Connected {}->{}",
         GetFullName(), inlet->GetFullName());
-
-    m_node->m_parent->RebuildUpdateSequence();
     return true;
 }
 

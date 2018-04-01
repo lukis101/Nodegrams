@@ -67,7 +67,7 @@ bool StaticNode::HasConnectedInlets()
     int inls = GetInletCount()-1;
     while (inls >= 0)
     {
-        if (m_inlets[inls]->IsConnected())
+        if (m_inlets[inls]->GetNumConnections())
             return true;
         --inls;
     }

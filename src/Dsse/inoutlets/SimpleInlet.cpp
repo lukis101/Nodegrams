@@ -18,21 +18,20 @@ SimpleInlet::~SimpleInlet()
 
 bool SimpleInlet::Connect(OutletBase* outlet)
 {
-	if (!CanConnect() /*&& PARAMS["InletOverrideConnection"] == false*/) // TODO
+    if (m_connection != nullptr)
 	{
 		spdlog::get("iolet")->error("{} Already connected!", GetFullName());
 		return false;
 	}
+	if (!CanConnectTo(outlet))
+	{
+		spdlog::get("iolet")->error("{} Invalid connection!", GetFullName());
+		return false;
+	}
 
-    if (SimpleOutlet* so = dynamic_cast<SimpleOutlet*>(outlet))
-    {
-	    m_connection = outlet;
-		spdlog::get("iolet")->info("Connected {}<-{}", GetFullName(), outlet->GetFullName());
-	    return true;
-    }
-
-	spdlog::get("iolet")->error("Failed to connect {} to {}", GetFullName(), outlet->GetFullName());
-	return false;
+    m_connection = outlet;
+    spdlog::get("iolet")->info("Connected {}<-{}", GetFullName(), outlet->GetFullName());
+    return true;
 }
 
 bool SimpleInlet::Disconnect(OutletBase* outlet)
@@ -46,7 +45,22 @@ bool SimpleInlet::Disconnect(OutletBase* outlet)
 		return false;
 	}
 	m_connection = nullptr;
+    spdlog::get("iolet")->info("Disconnected {}<-{}", GetFullName(), outlet->GetFullName());
 	return true;
+}
+
+void SimpleInlet::DisconnectAll()
+{
+    if (m_connection != nullptr)
+    {
+        spdlog::get("iolet")->info("Disconnected {}<-{}", GetFullName(), m_connection->GetFullName());
+        m_connection = nullptr;
+    }
+}
+
+bool SimpleInlet::CanConnectTo(OutletBase* outlet)
+{
+    return (dynamic_cast<SimpleOutlet*>(outlet) != nullptr) && (m_connection == nullptr);
 }
 
 /*void SimpleInlet::ReceiveData(DataBox* data)
