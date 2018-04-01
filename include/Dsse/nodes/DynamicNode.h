@@ -30,9 +30,12 @@ public:
 	int GetOutletCount() { return static_cast<int>(m_outlets.size()); };
 	OutletBase* GetOutlet(String name);
 	OutletBase* GetOutlet(int index);
+
 protected:
 	std::vector<InletBase*> m_inlets;
 	std::vector<OutletBase*> m_outlets;
+
+    virtual NodeBase* CreateInstance(Dsse*, ContainerNode*) = 0;
 };
 
 }

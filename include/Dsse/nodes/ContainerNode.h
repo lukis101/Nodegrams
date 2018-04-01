@@ -20,14 +20,12 @@ public:
 
 	NodeBase* getNode(int id);
 	void AssignNode(int id);
-	//void AssignNode(NodeBase* node);
-
-    // TODO implement child updating here
-    void RebuildUpdateSequence()
-    { m_engine->RebuildUpdateSequence(); }
+	//void AssignNode(NodeBase* node); // TODO
 
 protected:
 	std::vector<NodeBase*> m_nodes;
+
+    virtual NodeBase* CreateInstance(Dsse*, ContainerNode*);
 };
 
 }

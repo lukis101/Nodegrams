@@ -20,4 +20,9 @@ void ContainerNode::DoLogic()
 {
 }
 
+NodeBase* ContainerNode::CreateInstance(Dsse* engine, ContainerNode* parent)
+{
+    return new ContainerNode(engine, parent);
+}
+
 }

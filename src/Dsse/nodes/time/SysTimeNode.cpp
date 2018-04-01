@@ -46,4 +46,9 @@ void SysTimeNode::DoLogic()
     dout_sec->SetValue(sec);
 }
 
+NodeBase* SysTimeNode::CreateInstance(Dsse* engine, ContainerNode* parent)
+{
+    return new SysTimeNode(engine, parent);
+}
+
 }

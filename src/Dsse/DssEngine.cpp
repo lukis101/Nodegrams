@@ -12,6 +12,7 @@ namespace dsse
 {
 
 Dsse::Dsse(std::shared_ptr<spdlog::logger> logger)
+    : noderegistry(20)
 {
 	m_logger = logger;
 
@@ -20,7 +21,7 @@ Dsse::Dsse(std::shared_ptr<spdlog::logger> logger)
 	rootcontainer->m_parent = rootcontainer;
 	rootcontainer->m_id = 1;
     rootcontainer->name = "root";
-	m_nodes.Add(rootcontainer);
+	m_nodes.Set(0, rootcontainer);
 }
 Dsse::Dsse()
     : Dsse::Dsse(spdlog::stdout_logger_mt("dsse"))
@@ -120,44 +121,69 @@ bool Dsse::CheckID(int id)
 	return m_nodes.IsSet(id-1);
 }
 
-int Dsse::AddNode(NodeBase* node, int id)
+int Dsse::AddNode(String fullname, int parent, int id)
 {
-	// TODO null check?
-	if (node->m_id != 0) // TODO compare pointers
+    if (m_nodes.count == m_nodes.capacity)
     {
-		m_logger->error("Node re-register attempt! Current id = {}", node->m_id);
-		return 0;
+        m_logger->error("AddNode(): capacity reached");
+        return 0;
     }
 
-    if (id == 0)
+    // Verify parent
+    ContainerNode* container;
+    if (parent == 1)
     {
-        if (m_nodes.count == m_nodes.capacity)
-        {
-            m_logger->error("RegisterNode(): capacity reached");
-            return 0;
-        }
-        id = m_nodes.Add(node) + 1;
+        container = rootcontainer;
     }
     else
     {
-        int zid = id - 1;
-        if (zid >= m_nodes.capacity)
+        if (!m_nodes.IsSet(parent-1))
         {
-            m_logger->error("RegisterNode(): requested index {} is out of range", id);
+            m_logger->error("AddNode(): ivalid parent id {}", parent);
             return 0;
         }
-        if (m_nodes.IsSet(zid))
+        auto parnode = m_nodes.Get(parent-1);
+        if (!parnode->IsContainer())
         {
-            m_logger->error("RegisterNode(): attempt to override existing at {}", id);
+            m_logger->error("AddNode(): specified parent {} not a container", parent);
             return 0;
         }
-        m_nodes.Set(zid, node);
+        container = static_cast<ContainerNode*>(parnode);
+    }
+    // Verify/get id
+    if (id == 0)
+    {
+        id = m_nodes.GetFreeSlot() + 1;
+    }
+    else
+    {
+        if ((id <= 0) || (id > m_nodes.capacity))
+        {
+            m_logger->error("AddNode(): requested id {} out of range", id);
+            return 0;
+        }
+        if (m_nodes.IsSet(id-1))
+        {
+            m_logger->error("AddNode(): attempt to override existing at {}", id);
+            return 0;
+        }
     }
 
-	// Init node
-	node->m_id = id;
-	//node->m_parent = &rootcontainer;
-	m_logger->info("Registered node \"{}\" to id {}", node->name, id);
+    // Lookup name in registry
+    auto it = noderegistry.find(fullname);
+    if (it == noderegistry.end())
+    {
+        m_logger->error("AddNode(): \"{}\" not found", fullname);
+	    return 0;
+    }
+
+    // Build and init
+    NodeBase* node = it->second->CreateInstance(this, container);
+    m_nodes.Set(id-1, node);
+    node->m_id = id;
+	//container->AssignNode(node); // TODO
+
+	m_logger->info("Added node \"{}\" with id {}", node->name, id);
     RebuildUpdateSequence();
 	return id;
 }

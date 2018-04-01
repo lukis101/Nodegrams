@@ -35,6 +35,8 @@ protected:
 	int m_numoutlets;
 	InletBase** m_inlets;
 	OutletBase** m_outlets;
+
+    virtual NodeBase* CreateInstance(Dsse*, ContainerNode*) = 0;
 };
 
 }

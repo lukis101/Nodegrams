@@ -18,11 +18,14 @@ public:
     ~SysTimeNode();
 
 	void DoLogic();
+
 protected:
     Int64* dout_ms;
     Int32* dout_sec;
     SimpleOutlet* out_ms;
     SimpleOutlet* out_sec;
+
+    NodeBase* CreateInstance(Dsse* engine, ContainerNode* parent);
 };
 
 }

@@ -61,6 +61,7 @@ public:
     arrDataType Get(int index)
     {
         assert((index >= 0) && (index < capacity)); // Bounds
+        assert(m_array[index] != nullptr); // Invalid index
         return m_array[index];
     }
 
@@ -101,6 +102,8 @@ public:
         Set(m_minfree, element);
         return index;
     }
+
+    int GetFreeSlot() { return m_minfree; }
 
     bool IsSet(int id)
     {

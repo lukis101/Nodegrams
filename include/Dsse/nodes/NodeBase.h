@@ -55,6 +55,8 @@ protected:
 	ContainerNode* m_parent;
 	//shared_ptr<ContainerNode> m_parent;
 	int m_id;
+
+    virtual NodeBase* CreateInstance(Dsse*, ContainerNode*) = 0;
 };
 
 }

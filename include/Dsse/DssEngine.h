@@ -20,6 +20,7 @@
 
 #include <ostream>
 #include <vector>
+#include <unordered_map>
 
 #include "spdlog/spdlog.h"
 
@@ -43,6 +44,7 @@ public:
     ContainerNode* rootcontainer;
     const static int NODECAP = 100;
     SparseArray<NodeBase*, NODECAP> m_nodes;
+    std::unordered_map<String, NodeBase*> noderegistry;
 
 	Dsse(std::shared_ptr<spdlog::logger> logger);
 	Dsse();
@@ -51,7 +53,7 @@ public:
 	int Shutdown();
 	void Update();
 
-    int AddNode(NodeBase* node, int nodeid=0);
+    int AddNode(String fullName, int parent=1, int nodeid=0);
 	void DeleteNode(int nodeid);
 	NodeBase* ReleaseNode(int nodeid); // does not destroy, up to caller!
 	NodeBase* GetNode(int nodeid);

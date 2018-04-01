@@ -42,4 +42,9 @@ void TestNode::DoLogic()
             this->m_id, din_s64->GetValue());*/
 }
 
+NodeBase* TestNode::CreateInstance(Dsse* engine, ContainerNode* parent)
+{
+    return new TestNode(engine, parent);
+}
+
 }
