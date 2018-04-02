@@ -81,24 +81,25 @@ DataType TypeRegistry::RegisterDataType(DataBox*&& newdtype)
 
     return newdtype->m_datatype;
 }
-void TypeRegistry::DeregisterDataType(DataType dtype)
+bool TypeRegistry::DeregisterDataType(DataType dtype)
 {
-    if (m_dtypes.IsSet(dtype-1))
+    if (!m_dtypes.IsSet(dtype-1))
     {
-        DataBox* box = m_dtypes.Remove(dtype-1);
-        // Clear conversion mappings
-        for (auto& funcmap : m_conversions) // Remaining -> Target
-            funcmap.second->erase(dtype);
-        delete m_conversions[dtype]; // Target -> Remaining
-        m_conversions.erase(dtype);
-        delete box;
-
-        m_logger->info("Deregistered data type {}", dtype);
-        // TODO make engine re-evaluate connections
-    }
-    else
         m_logger->info("Attempt to deregister ivalid data type {}",
             dtype);
+        return false;
+    }
+    DataBox* box = m_dtypes.Remove(dtype-1);
+    // Clear conversion mappings
+    for (auto& funcmap : m_conversions) // Remaining -> Target
+        funcmap.second->erase(dtype);
+    delete m_conversions[dtype]; // Target -> Remaining
+    m_conversions.erase(dtype);
+    delete box;
+
+    m_logger->info("Deregistered data type {}", dtype);
+    // TODO make engine re-evaluate connections
+    return true;
 }
 
 DataType TypeRegistry::GetDataType(String name)

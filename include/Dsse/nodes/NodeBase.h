@@ -16,18 +16,14 @@ class ContainerNode;
 class DSSE_EXPORT NodeBase
 {
 	friend class Dsse;
-    //friend class OutletBase;
+    friend class OutletBase;
+    friend class InletBase;
     friend class SimpleOutlet;
 
 public:
-	String name;
-	String category;
-	String custname; // custom(user defined) name
-	bool custnamed;
-	bool processed; // inner logic and data exchange complete
 
-	NodeBase(Dsse*, ContainerNode*);
-    virtual ~NodeBase();
+    bool custnamed;
+	//bool processed; // inner logic and data exchange complete
 
 	virtual bool IsStatic() = 0;
 	virtual bool IsContainer() = 0;
@@ -47,14 +43,26 @@ public:
 	virtual OutletBase* GetOutlet(String name) = 0;
 	virtual OutletBase* GetOutlet(int index) = 0;
 
-	void setCustomName(String name);
-	String GetName();
+	void SetCustomName(String thename);
+	String GetName() { return custnamed ? custname : name; }
+    String GetRealName() { return name; }
+    String GetFullName() { return category + ':' + name; }
+    String GetCategory() { return category; }
+    String GetDescription() { return description; }
 
 protected:
+	String name;
+    String custname;
+    String category;
+    String description;
+
     Dsse* m_engine;
 	ContainerNode* m_parent;
-	//shared_ptr<ContainerNode> m_parent;
-	int m_id;
+    int m_id;
+    String registryName;
+
+    NodeBase(Dsse*, ContainerNode*);
+    virtual ~NodeBase();
 
     virtual NodeBase* CreateInstance(Dsse*, ContainerNode*) = 0;
 };

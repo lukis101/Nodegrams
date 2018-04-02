@@ -53,10 +53,11 @@ public:
 	int Shutdown();
 	void Update();
 
+    bool RegisterNode(NodeBase*&& node);
+    bool DeregisterNode(String fullname);
     int AddNode(String fullName, int parent=1, int nodeid=0);
-	void DeleteNode(int nodeid);
-	NodeBase* ReleaseNode(int nodeid); // does not destroy, up to caller!
-	NodeBase* GetNode(int nodeid);
+	bool RemoveNode(int nodeid);
+	//NodeBase* GetNode(int nodeid);
 
 	//void MoveNode(int node, int container);
     bool ConnectInoutlets(int source, int outlet, int sink, int inlet);

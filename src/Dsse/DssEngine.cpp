@@ -20,7 +20,7 @@ Dsse::Dsse(std::shared_ptr<spdlog::logger> logger)
     rootcontainer = new ContainerNode(this, nullptr);
 	rootcontainer->m_parent = rootcontainer;
 	rootcontainer->m_id = 1;
-    rootcontainer->name = "root";
+    rootcontainer->SetCustomName("root");
 	m_nodes.Set(0, rootcontainer);
 }
 Dsse::Dsse()
@@ -29,6 +29,10 @@ Dsse::Dsse()
 }
 Dsse::~Dsse()
 {
+    for (auto& node : m_nodes)
+        delete node;
+    for (auto& node : noderegistry)
+        delete node.second;
     delete typereg;
 }
 
@@ -121,6 +125,52 @@ bool Dsse::CheckID(int id)
 	return m_nodes.IsSet(id-1);
 }
 
+
+bool Dsse::RegisterNode(NodeBase*&& node)
+{
+    String registryName = node->GetFullName();
+
+    auto it = noderegistry.find(registryName);
+    if (it != noderegistry.end())
+    {
+        m_logger->error("RegisterNode: \"{}\" already registered", registryName);
+        assert(registryName == it->second->registryName);
+        delete node;
+	    return false;
+    }
+
+    if (noderegistry.insert({registryName, node}).second)
+    {
+        m_logger->info("Registered node \"{}\"", registryName);
+        return true;
+    }
+    else
+    {
+        m_logger->error("RegisterNode: failed to insert \"{}\"", registryName);
+        delete node;
+        return false;
+    }
+}
+
+bool Dsse::DeregisterNode(String registryName)
+{
+    auto it = noderegistry.find(registryName);
+    if (it == noderegistry.end())
+    {
+        m_logger->error("DeregisterNode: \"{}\" not registered", registryName);
+	    return false;
+    }
+
+    // Invalidate nodes of this type
+    for (auto& node : m_nodes)
+        if (node->registryName == registryName) // URGENT TODO use fullname
+            RemoveNode(node->m_id);
+
+    noderegistry.erase(it);
+    m_logger->error("Deregistered node \"{}\"", registryName);
+    return true;
+}
+
 int Dsse::AddNode(String fullname, int parent, int id)
 {
     if (m_nodes.count == m_nodes.capacity)
@@ -137,7 +187,7 @@ int Dsse::AddNode(String fullname, int parent, int id)
     }
     else
     {
-        if (!m_nodes.IsSet(parent-1))
+        if (!CheckID(parent))
         {
             m_logger->error("AddNode(): ivalid parent id {}", parent);
             return 0;
@@ -188,32 +238,22 @@ int Dsse::AddNode(String fullname, int parent, int id)
 	return id;
 }
 
-NodeBase* Dsse::ReleaseNode(int nodeid)
+bool Dsse::RemoveNode(int nodeid)
 {
 	if (!CheckID(nodeid))
 	{
-		m_logger->error("Dsse.ReleaseNode: invalid id {}", nodeid);
-		return nullptr;
+		m_logger->error("Dsse.RemoveNode: invalid id {}", nodeid);
+		return false;
 	}
     int zid = nodeid-1;
 	NodeBase* node = m_nodes.Remove(zid);
-	node->m_id = 0;
+    delete node;
 
-	m_logger->info("Released node \"{}\" from id {}", node->GetName(), nodeid);
+	m_logger->info("Removed node \"{}\" from id {}", node->GetName(), nodeid);
     RebuildUpdateSequence();
-	return node;
+	return true;
 }
-// For allocated memory
-void Dsse::DeleteNode(int nodeid)
-{
-    NodeBase* node = ReleaseNode(nodeid);
-	if (node != nullptr)
-	{
-	    delete node;
-	    m_logger->info("Deleted node {}", nodeid);
-	}
-}
-NodeBase* Dsse::GetNode(int nodeid)
+/*NodeBase* Dsse::GetNode(int nodeid)
 {
 	if (!CheckID(nodeid))
 	{
@@ -221,7 +261,7 @@ NodeBase* Dsse::GetNode(int nodeid)
 		return nullptr;
 	}
 	return m_nodes.Get(nodeid-1);
-}
+}*/
 /*void Dsse::MoveNode(int targetid, int destid)
 {
 	if (!CheckID(targetid) || (targetid == 0))

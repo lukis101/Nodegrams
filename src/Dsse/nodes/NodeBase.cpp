@@ -16,7 +16,7 @@ NodeBase::NodeBase(Dsse* engine, ContainerNode* parent)
 	category = "NONE";
 	custname = "";
 	custnamed = false;
-	processed = false;
+	//processed = false;
 
 	spdlog::get("dsse")->debug("NodeBase() \"{}\" constr()", name);
 }
@@ -26,7 +26,7 @@ NodeBase::~NodeBase()
 	spdlog::get("dsse")->debug("NodeBase() \"{}\" destr()", name);
 }
 
-void NodeBase::setCustomName(String thename)
+void NodeBase::SetCustomName(String thename)
 {
 	if (thename.empty() )
 	{
@@ -35,15 +35,6 @@ void NodeBase::setCustomName(String thename)
 	}
 	custname = thename;
 	custnamed = true;
-}
-
-String NodeBase::GetName()
-{
-	if (custnamed)
-	{
-		return custname;
-	}
-    return name;
 }
 
 }

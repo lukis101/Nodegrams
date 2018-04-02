@@ -12,9 +12,6 @@ namespace dsse
 class DSSE_EXPORT DynamicNode : public NodeBase
 {
 public:
-    DynamicNode(Dsse*, ContainerNode*);
-    virtual ~DynamicNode();
-
 	bool IsStatic() { return false; };
 	virtual bool IsContainer() { return false; };
 
@@ -34,6 +31,9 @@ public:
 protected:
 	std::vector<InletBase*> m_inlets;
 	std::vector<OutletBase*> m_outlets;
+
+    DynamicNode(Dsse*, ContainerNode*);
+    virtual ~DynamicNode();
 
     virtual NodeBase* CreateInstance(Dsse*, ContainerNode*) = 0;
 };

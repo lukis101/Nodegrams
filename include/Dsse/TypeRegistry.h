@@ -28,7 +28,7 @@ public:
     String GetModule(DataType dtype);
 
     DataType RegisterDataType(DataBox*&& dtype);
-    void DeregisterDataType(DataType dtype);
+    bool DeregisterDataType(DataType dtype);
     DataType GetDataType(String name);
 
     bool WriteSupported(DataBox* from, DataBox* to);
