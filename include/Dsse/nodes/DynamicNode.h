@@ -32,10 +32,10 @@ protected:
 	std::vector<InletBase*> m_inlets;
 	std::vector<OutletBase*> m_outlets;
 
-    DynamicNode(Dsse*, ContainerNode*);
+    DynamicNode(Dsse*);
     virtual ~DynamicNode();
 
-    virtual NodeBase* CreateInstance(Dsse*, ContainerNode*) = 0;
+    virtual NodeBase* CreateInstance(Dsse*) = 0;
 };
 
 }

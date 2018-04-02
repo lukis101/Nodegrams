@@ -17,8 +17,7 @@ Dsse::Dsse(std::shared_ptr<spdlog::logger> logger)
 	m_logger = logger;
 
     typereg = new TypeRegistry(spdlog::stdout_logger_mt(logger->name() + ".treg"));
-    rootcontainer = new ContainerNode(this, nullptr);
-	rootcontainer->m_parent = rootcontainer;
+    rootcontainer = new ContainerNode(this);
 	rootcontainer->m_id = 1;
     rootcontainer->SetCustomName("root");
 	m_nodes.Set(0, rootcontainer);
@@ -228,9 +227,10 @@ int Dsse::AddNode(String fullname, int parent, int id)
     }
 
     // Build and init
-    NodeBase* node = it->second->CreateInstance(this, container);
+    NodeBase* node = it->second->CreateInstance(this);
     m_nodes.Set(id-1, node);
     node->m_id = id;
+    //node->m_parent = container; // TODO
 	//container->AssignNode(node); // TODO
 
 	m_logger->info("Added node \"{}\" with id {}", node->name, id);

@@ -34,10 +34,10 @@ protected:
 	InletBase** m_inlets;
 	OutletBase** m_outlets;
 
-    StaticNode(Dsse*, ContainerNode*, int numinlets, int numoutlets);
+    StaticNode(Dsse*, int numinlets, int numoutlets);
     virtual ~StaticNode();
 
-    virtual NodeBase* CreateInstance(Dsse*, ContainerNode*) = 0;
+    virtual NodeBase* CreateInstance(Dsse*) = 0;
 };
 
 }

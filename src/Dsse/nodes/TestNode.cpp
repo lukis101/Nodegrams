@@ -9,8 +9,8 @@
 namespace dsse
 {
 
-TestNode::TestNode(Dsse* engine, ContainerNode* parent)
-	: StaticNode(engine, parent, 2, 0)
+TestNode::TestNode(Dsse* engine)
+	: StaticNode(engine, 2, 0)
 {
 	name = "TestNode";
 	category = "TESTS";
@@ -42,9 +42,9 @@ void TestNode::DoLogic()
             this->m_id, din_s64->GetValue());*/
 }
 
-NodeBase* TestNode::CreateInstance(Dsse* engine, ContainerNode* parent)
+NodeBase* TestNode::CreateInstance(Dsse* engine)
 {
-    return new TestNode(engine, parent);
+    return new TestNode(engine);
 }
 
 }

@@ -61,10 +61,10 @@ protected:
     int m_id;
     String registryName;
 
-    NodeBase(Dsse*, ContainerNode*);
+    NodeBase(Dsse*);
     virtual ~NodeBase();
 
-    virtual NodeBase* CreateInstance(Dsse*, ContainerNode*) = 0;
+    virtual NodeBase* CreateInstance(Dsse*) = 0;
 };
 
 }

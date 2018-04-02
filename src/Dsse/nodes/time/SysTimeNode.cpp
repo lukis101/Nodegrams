@@ -10,15 +10,16 @@ namespace dsse
 {
 static const String NODE_NAME = "SysTimeNode";
 static const String NODE_CATEGORY = "TIME";
-static const String NODE_DESCR = "";
+static const String NODE_DESCR = "Provides host system RTC time";
 
-SysTimeNode::SysTimeNode(Dsse* engine, ContainerNode* parent)
-	: StaticNode(engine, parent, 0, 2)
+SysTimeNode::SysTimeNode(Dsse* engine)
+	: StaticNode(engine, 0, 2)
 {
 	spdlog::get("dsse")->debug("SysTimeNode[{}] constr()", this->m_id);
 
 	name = NODE_NAME;
 	category = NODE_CATEGORY;
+    description = NODE_DESCR;
 
     dout_ms = new Int64(m_engine);
     dout_sec = new Int32(m_engine);
@@ -46,9 +47,9 @@ void SysTimeNode::DoLogic()
     dout_sec->SetValue(sec);
 }
 
-NodeBase* SysTimeNode::CreateInstance(Dsse* engine, ContainerNode* parent)
+NodeBase* SysTimeNode::CreateInstance(Dsse* engine)
 {
-    return new SysTimeNode(engine, parent);
+    return new SysTimeNode(engine);
 }
 
 }

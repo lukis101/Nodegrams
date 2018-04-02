@@ -8,8 +8,8 @@
 namespace dsse
 {
 
-DynamicNode::DynamicNode(Dsse* engine, ContainerNode* parent)
-	: NodeBase(engine, parent)
+DynamicNode::DynamicNode(Dsse* engine)
+	: NodeBase(engine)
 {
 	spdlog::get("dsse")->debug("DynamicNode() \"{}\" constr()", name);
 }

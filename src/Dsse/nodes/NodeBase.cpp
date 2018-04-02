@@ -2,14 +2,15 @@
 #include "spdlog/spdlog.h"
 
 #include "Dsse/nodes/NodeBase.h"
+#include "Dsse/DssEngine.h"
 
 namespace dsse
 {
 
-NodeBase::NodeBase(Dsse* engine, ContainerNode* parent)
+NodeBase::NodeBase(Dsse* engine)
 {
     m_engine = engine;
-    m_parent = parent;
+    m_parent = engine->rootcontainer;
     m_id = 0;
 
 	name = "UnnamedNode";

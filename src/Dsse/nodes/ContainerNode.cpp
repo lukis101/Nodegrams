@@ -6,8 +6,8 @@
 namespace dsse
 {
 
-ContainerNode::ContainerNode(Dsse* engine, ContainerNode* parent)
-	: DynamicNode(engine, parent)
+ContainerNode::ContainerNode(Dsse* engine)
+	: DynamicNode(engine)
 {
 	spdlog::get("dsse")->debug("ContainerNode() \"{}\" constr()", name);
 }
@@ -20,9 +20,9 @@ void ContainerNode::DoLogic()
 {
 }
 
-NodeBase* ContainerNode::CreateInstance(Dsse* engine, ContainerNode* parent)
+NodeBase* ContainerNode::CreateInstance(Dsse* engine)
 {
-    return new ContainerNode(engine, parent);
+    return new ContainerNode(engine);
 }
 
 }

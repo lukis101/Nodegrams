@@ -12,7 +12,7 @@ namespace dsse
 class DSSE_EXPORT ContainerNode : public DynamicNode
 {
 public:
-    ContainerNode(Dsse*, ContainerNode*);
+    ContainerNode(Dsse*);
 	~ContainerNode();
 
     void DoLogic(void);
@@ -25,7 +25,7 @@ public:
 protected:
 	std::vector<NodeBase*> m_nodes;
 
-    virtual NodeBase* CreateInstance(Dsse*, ContainerNode*);
+    virtual NodeBase* CreateInstance(Dsse*);
 };
 
 }

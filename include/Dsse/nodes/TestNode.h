@@ -14,7 +14,7 @@ class Int64;
 class DSSE_EXPORT TestNode : public StaticNode
 {
 public:
-    TestNode(Dsse*, ContainerNode*);
+    TestNode(Dsse*);
     ~TestNode();
 
 	void DoLogic();
@@ -25,7 +25,7 @@ protected:
     SimpleInlet* in_f;
     SimpleInlet* in_s64;
 
-    NodeBase* CreateInstance(Dsse*, ContainerNode*);
+    NodeBase* CreateInstance(Dsse*);
 };
 
 }
