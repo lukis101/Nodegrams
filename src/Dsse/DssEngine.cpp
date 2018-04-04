@@ -166,7 +166,7 @@ bool Dsse::DeregisterNode(String registryName)
             RemoveNode(node->m_id);
 
     noderegistry.erase(it);
-    m_logger->error("Deregistered node \"{}\"", registryName);
+    m_logger->info("Deregistered node \"{}\"", registryName);
     return true;
 }
 
@@ -245,11 +245,10 @@ bool Dsse::RemoveNode(int nodeid)
 		m_logger->error("Dsse.RemoveNode: invalid id {}", nodeid);
 		return false;
 	}
-    int zid = nodeid-1;
-	NodeBase* node = m_nodes.Remove(zid);
+	NodeBase* node = m_nodes.Remove(nodeid-1);
+	m_logger->info("Removed node \"{}\" from id {}", node->GetName(), nodeid);
     delete node;
 
-	m_logger->info("Removed node \"{}\" from id {}", node->GetName(), nodeid);
     RebuildUpdateSequence();
 	return true;
 }

@@ -15,6 +15,7 @@ NodeBase::NodeBase(Dsse* engine)
 
 	name = "UnnamedNode";
 	category = "NONE";
+    description = "No description";
 	custname = "";
 	custnamed = false;
 	//processed = false;
