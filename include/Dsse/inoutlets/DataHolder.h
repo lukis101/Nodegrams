@@ -23,7 +23,7 @@ public:
 	DataBox* GetData() { return m_data; }
 	bool HasDataChanged() { return m_dataChanged; }
 	void DataChanged() { m_dataChanged = true; }
-	void DataChangeHandled() { m_dataChanged = false; }
+	void DataChangeHandled() { m_dataChanged = false; m_data->ValueChangeHandled(); }
 
     String GetDataString() { return m_data->ToString(); }
 	virtual String GetFullName() = 0;

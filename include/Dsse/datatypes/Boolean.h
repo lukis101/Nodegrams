@@ -30,9 +30,6 @@ public:
     static void BooleanToInt64(DataBox*, DataBox*);
 
 protected:
-    Dsse* m_engine;
-	DataType m_datatype;
-
     bool m_data;
 };
 

@@ -30,9 +30,6 @@ public:
     static void Int32ToBoolean(DataBox*, DataBox*);
 
 protected:
-    Dsse* m_engine;
-	DataType m_datatype;
-
     int32_t m_data;
 };
 

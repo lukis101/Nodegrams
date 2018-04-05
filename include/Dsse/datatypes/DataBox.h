@@ -25,6 +25,7 @@ public:
 
     void SetHolder(DataHolder* holder) { m_holder = holder; }
     void ValueChanged();
+    virtual void ValueChangeHandled() {}; // For event types
 
 	virtual String ToString() = 0;
     virtual DataWriteFunc GetConversionFunc(String tname) = 0;

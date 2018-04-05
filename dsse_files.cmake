@@ -12,6 +12,7 @@ target_sources(${PROJECT_NAME} PRIVATE
     ${dsse_inc_dir}/TypeRegistry.h
 
     ${dsse_inc_dir}/datatypes/DataBox.h
+    ${dsse_inc_dir}/datatypes/Event.h
     ${dsse_inc_dir}/datatypes/Boolean.h
     ${dsse_inc_dir}/datatypes/Float.h
     ${dsse_inc_dir}/datatypes/Double.h
@@ -37,6 +38,7 @@ target_sources(${PROJECT_NAME} PRIVATE
     ${dsse_src_dir}/TypeRegistry.cpp
 
     ${dsse_src_dir}/datatypes/DataBox.cpp
+    ${dsse_src_dir}/datatypes/Event.cpp
     ${dsse_src_dir}/datatypes/Boolean.cpp
     ${dsse_src_dir}/datatypes/Float.cpp
     ${dsse_src_dir}/datatypes/Double.cpp

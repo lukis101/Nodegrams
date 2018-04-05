@@ -30,9 +30,6 @@ public:
     static void DoubleToInt64(DataBox*, DataBox*);
 
 protected:
-    Dsse* m_engine;
-	DataType m_datatype;
-
     double m_data;
 };
 

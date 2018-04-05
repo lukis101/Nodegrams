@@ -17,6 +17,12 @@ MultiwayInlet::~MultiwayInlet()
     assert(connections.size() == 0);
 }
 
+bool MultiwayInlet::IsConnectedTo(OutletBase* outlet)
+{
+    auto connit = std::find(std::begin(connections), std::end(connections), outlet);
+    return connit != std::end(connections);
+}
+
 bool MultiwayInlet::Connected(OutletBase* outlet)
 {
     auto connit = std::find(std::begin(connections), std::end(connections), outlet);
@@ -49,7 +55,6 @@ void MultiwayInlet::DisconnectAll()
     while (!connections.empty())
     {
         auto outlet = connections.back();
-        connections.pop_back();
         if (!outlet->Disconnect(this))
             spdlog::get("iolet")->critical("Broken connection! {}-><-/-{}", GetFullName(), outlet->GetFullName());
     }

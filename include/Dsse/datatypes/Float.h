@@ -30,9 +30,6 @@ public:
     static void FloatToInt64(DataBox*, DataBox*);
 
 protected:
-    Dsse* m_engine;
-	DataType m_datatype;
-
     float m_data;
 };
 
