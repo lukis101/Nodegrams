@@ -15,35 +15,31 @@ class OutletBase;
 
 class DSSE_EXPORT InletBase : public DataHolder
 {
-    friend class Dsse;
-	friend class OutletBase;
-	friend class SimpleOutlet;
+    //friend class Dsse;
 
 public:
 	String name;
 	String description;
 
-	InletBase(NodeBase* node, DataBox* data, String name, String desc);
-	virtual ~InletBase() = 0;
-
 	NodeBase* GetNode() { return m_node; }
 	String GetFullName();
-	//void SetDataReady(bool ready) { m_dataReady = ready; }
-	//bool DataReady() { return m_dataReady; }
 
-	virtual bool CanConnectTo(OutletBase* outlet)  = 0;
+	virtual bool IsMultiway() = 0;
 	virtual bool IsConnectedTo(OutletBase* outlet) = 0;
 
 	// TODO Iterator of connections
 	virtual int GetNumConnections() = 0;
 
+    virtual void DisconnectAll() = 0;
+
+	virtual bool Connected(OutletBase* outlet)    = 0; // only called by outlet
+	virtual bool Disconnected(OutletBase* outlet) = 0; // only called by outlet
+
 protected:
 	NodeBase* m_node;
-	//bool m_dataReady;
 
-	virtual bool Connect(OutletBase* outlet)    = 0; // only called by Outlet
-	virtual bool Disconnect(OutletBase* outlet) = 0; // only called by Outlet
-    virtual void DisconnectAll() = 0;
+	InletBase(NodeBase* node, DataBox* data, String name, String desc);
+	virtual ~InletBase() = 0;
 };
 
 }

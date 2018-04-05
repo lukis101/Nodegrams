@@ -40,7 +40,7 @@ bool OutletBase::Disconnect(InletBase* inlet)
     if (connit != std::end(connections))
     {
         connections.erase(connit); // TODO swap and pop
-        if (inlet->Disconnect(this))
+        if (inlet->Disconnected(this))
         {
             spdlog::get("iolet")->info("Disconnected {}->{}", GetFullName(), inlet->GetFullName());
             return true;
@@ -58,7 +58,7 @@ void OutletBase::DisconnectAll()
     {
         auto inlet = connections.back();
         connections.pop_back();
-        if (inlet->Disconnect(this))
+        if (inlet->Disconnected(this))
             spdlog::get("iolet")->info("Disconnected {}->{}", GetFullName(), inlet->GetFullName());
         else
             spdlog::get("iolet")->critical("Broken connection! {}-><-/-{}", GetFullName(), inlet->GetFullName());

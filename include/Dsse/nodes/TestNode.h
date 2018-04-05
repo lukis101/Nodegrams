@@ -7,7 +7,7 @@
 
 namespace dsse
 {
-class SimpleInlet;
+class SinglewayInlet;
 class Float;
 class Int64;
 
@@ -22,8 +22,8 @@ public:
 protected:
     Float* din_f;
     Int64* din_s64;
-    SimpleInlet* in_f;
-    SimpleInlet* in_s64;
+    SinglewayInlet* in_f;
+    SinglewayInlet* in_s64;
 
     NodeBase* CreateInstance(Dsse*);
 };

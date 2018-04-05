@@ -28,7 +28,8 @@ target_sources(${PROJECT_NAME} PRIVATE
 
     ${dsse_inc_dir}/inoutlets/InletBase.h
     ${dsse_inc_dir}/inoutlets/OutletBase.h
-    ${dsse_inc_dir}/inoutlets/SimpleInlet.h
+    ${dsse_inc_dir}/inoutlets/SinglewayInlet.h
+    ${dsse_inc_dir}/inoutlets/MultiwayInlet.h
     ${dsse_inc_dir}/inoutlets/SimpleOutlet.h
 
     # Sources
@@ -53,7 +54,8 @@ target_sources(${PROJECT_NAME} PRIVATE
 
     ${dsse_src_dir}/inoutlets/InletBase.cpp
     ${dsse_src_dir}/inoutlets/OutletBase.cpp
-    ${dsse_src_dir}/inoutlets/SimpleInlet.cpp
+    ${dsse_src_dir}/inoutlets/SinglewayInlet.cpp
+    ${dsse_src_dir}/inoutlets/MultiwayInlet.cpp
     ${dsse_src_dir}/inoutlets/SimpleOutlet.cpp
 )
 

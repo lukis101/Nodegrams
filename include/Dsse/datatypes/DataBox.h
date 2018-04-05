@@ -17,9 +17,6 @@ class DSSE_EXPORT DataBox
     friend class TypeRegistry;
 
 public:
-	DataBox(Dsse* engine, String name, String descr, String module);
-    virtual ~DataBox();
-
 	DataType GetTypeID() { return m_datatype; }
 	virtual bool IsComposite() = 0;
     String GetName() { return m_name; }
@@ -40,6 +37,9 @@ protected:
     String m_name;
     String m_descr;
     String m_module;
+
+	DataBox(Dsse* engine, String name, String descr, String module);
+    virtual ~DataBox();
 };
 
 }

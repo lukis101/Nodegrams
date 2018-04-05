@@ -15,15 +15,12 @@ class InletBase;
 
 class DSSE_EXPORT OutletBase : public DataHolder
 {
-    friend class Dsse;
+    //friend class Dsse;
 
 public:
 	String name;
 	String description;
 	std::vector<InletBase*> connections;
-
-	OutletBase(NodeBase* node, DataBox* data, String name, String desc);
-	virtual ~OutletBase();
 
 	NodeBase* GetNode() { return m_node; }
 	String GetFullName();
@@ -35,14 +32,15 @@ public:
 	// TODO Iterator of connections
 	int GetNumConnections() { return static_cast<int>(connections.size()); }
 
-protected:
-	NodeBase* m_node;
-	//bool m_dataReady;
-	//bool m_dataSent;
-
 	virtual bool ConnectTo(InletBase* inlet) = 0;
 	virtual bool Disconnect(InletBase* inlet);
     virtual void DisconnectAll();
+
+protected:
+	NodeBase* m_node;
+
+	OutletBase(NodeBase* node, DataBox* data, String name, String desc);
+	virtual ~OutletBase();
 };
 
 }

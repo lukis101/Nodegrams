@@ -89,7 +89,7 @@ void Dsse::RebuildUpdateSequence()
             std::vector<InletBase*> conns = node->GetOutlet(ol)->connections;
             for (auto& inl : conns)
             {
-                int brid = inl->m_node->GetID();
+                int brid = inl->GetNode()->GetID();
                 if (!visited[brid-1])
                 {
                     m_logger->info("> Found branch: {}", brid);
@@ -246,6 +246,10 @@ bool Dsse::RemoveNode(int nodeid)
 		return false;
 	}
 	NodeBase* node = m_nodes.Remove(nodeid-1);
+    for (int il = 0; il < node->GetInletCount(); ++il)
+        node->GetInlet(il)->DisconnectAll();
+    for (int ol = 0; ol < node->GetOutletCount(); ++ol)
+        node->GetOutlet(ol)->DisconnectAll();
 	m_logger->info("Removed node \"{}\" from id {}", node->GetName(), nodeid);
     delete node;
 
