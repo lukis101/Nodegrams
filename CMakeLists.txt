@@ -1,10 +1,12 @@
-# CMake build instructions for Dreamshows engine
+# CMake build instructions for NodeGrams core
 
 # configure cmake
 cmake_minimum_required(VERSION 3.6)
 
-project(DssEngine VERSION 0.1 LANGUAGES CXX)
-message("Dss engine version: ${PROJECT_VERSION}")
+project(NodeGrams VERSION 0.1 LANGUAGES CXX)
+message("NodeGrams version: ${PROJECT_VERSION}")
+
+include(GNUInstallDirs)
 
 find_package(spdlog CONFIG REQUIRED)
 #find_package(Threads REQUIRED)
@@ -14,7 +16,7 @@ add_library(${PROJECT_NAME} STATIC "")
 add_library(${PROJECT_NAME}::${PROJECT_NAME} ALIAS ${PROJECT_NAME})
 
 # Assign source files
-include(Dsse_files.cmake)
+include(cmake/sourcelist.cmake)
 
 # Compiler requirements
 target_compile_features(${PROJECT_NAME}
@@ -40,23 +42,23 @@ target_include_directories(${PROJECT_NAME}
 )
 
 # 'make install' to the correct locations (provided by GNUInstallDirs).
-install(TARGETS ${PROJECT_NAME} EXPORT DsseTargets
+install(TARGETS ${PROJECT_NAME} EXPORT ${PROJECT_NAME}Targets
     ARCHIVE  DESTINATION ${CMAKE_INSTALL_LIBDIR}
     LIBRARY  DESTINATION ${CMAKE_INSTALL_LIBDIR}
-    RUNTIME  DESTINATION ${CMAKE_INSTALL_BINDIR}  # This is for Windows
+    RUNTIME  DESTINATION ${CMAKE_INSTALL_BINDIR}  # For Windows
     INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
 )
 #install(DIRECTORY include/ DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
 
 # This makes the project importable from the install directory
 # Put config file in per-project dir (name MUST match)
-#install(EXPORT DsseTargets
-#    FILE DsseTargets.cmake
+#install(EXPORT ${PROJECT_NAME}Targets
+#    FILE ${PROJECT_NAME}Targets.cmake
 #    NAMESPACE ${PROJECT_NAME}::
 #    DESTINATION share/${PROJECT_NAME}/cmake
 #)
 # This makes the project importable from the build directory
-#export(TARGETS ${PROJECT_NAME} FILE DsseTargets.cmake)
+#export(TARGETS ${PROJECT_NAME} FILE ${PROJECT_NAME}Targets.cmake)
 
 # Tests
 # enable_testing()
