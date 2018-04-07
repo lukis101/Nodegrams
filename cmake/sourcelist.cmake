@@ -26,6 +26,10 @@ target_sources(${PROJECT_NAME} PRIVATE
     ${ndgm_inc_dir}/nodes/ContainerNode.h
     ${ndgm_inc_dir}/nodes/TestNode.h
     ${ndgm_inc_dir}/nodes/time/SysTimeNode.h
+    ${ndgm_inc_dir}/nodes/logic/gates/Gate2i1o.h
+    ${ndgm_inc_dir}/nodes/logic/gates/ANDGate.h
+    ${ndgm_inc_dir}/nodes/logic/gates/ORGate.h
+    ${ndgm_inc_dir}/nodes/logic/gates/XORGate.h
 
     ${ndgm_inc_dir}/inoutlets/InletBase.h
     ${ndgm_inc_dir}/inoutlets/OutletBase.h
@@ -52,6 +56,7 @@ target_sources(${PROJECT_NAME} PRIVATE
     ${ndgm_src_dir}/nodes/ContainerNode.cpp
     ${ndgm_src_dir}/nodes/TestNode.cpp
     ${ndgm_src_dir}/nodes/time/SysTimeNode.cpp
+    ${ndgm_src_dir}/nodes/logic/gates/Gate2i1o.cpp
 
     ${ndgm_src_dir}/inoutlets/InletBase.cpp
     ${ndgm_src_dir}/inoutlets/OutletBase.cpp
