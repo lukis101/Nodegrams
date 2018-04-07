@@ -5,16 +5,11 @@
 
 #include "Nodegrams/nodes/StaticNode.h"
 #include "Nodegrams/inoutlets/SimpleOutlet.h"
+#include "Nodegrams/datatypes/Int32.h"
+#include "Nodegrams/datatypes/Int64.h"
+#include "Nodegrams/datatypes/Event.h"
 
-namespace Nodegrams
-{
-namespace Data
-{
-class Int32;
-class Int64;
-class Event;
-}
-
+namespace Nodegrams {
 namespace Nodes
 {
 
@@ -27,12 +22,12 @@ public:
 	void DoLogic();
 
 protected:
-    Data::Int64* dout_ms;
-    Data::Int32* dout_sec;
-    Data::Event* dout_tick;
-    SimpleOutlet* out_ms;
-    SimpleOutlet* out_sec;
-    SimpleOutlet* out_tick;
+    Data::Int64 dout_ms;
+    Data::Int32 dout_sec;
+    Data::Event dout_tick;
+    SimpleOutlet out_ms;
+    SimpleOutlet out_sec;
+    SimpleOutlet out_tick;
 
     NodeBase* CreateInstance(Nodegrams* engine);
 };

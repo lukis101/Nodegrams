@@ -4,20 +4,15 @@
 #define NDGM_TESTNODE_H
 
 #include "Nodegrams/nodes/StaticNode.h"
+#include "Nodegrams/inoutlets/SinglewayInlet.h"
+#include "Nodegrams/inoutlets/MultiwayInlet.h"
+#include "Nodegrams/datatypes/Float.h"
+#include "Nodegrams/datatypes/Int64.h"
+#include "Nodegrams/datatypes/Event.h"
 
-namespace Nodegrams
-{
-namespace Data
-{
-class Float;
-class Int64;
-class Event;
-}
-
+namespace Nodegrams {
 namespace Nodes
 {
-class SinglewayInlet;
-class MultiwayInlet;
 
 class NDGM_EXPORT TestNode : public StaticNode
 {
@@ -30,12 +25,12 @@ public:
 protected:
 	std::shared_ptr<spdlog::logger> m_logger;
 
-    Data::Float* din_f;
-    Data::Int64* din_s64;
-    Data::Event* din_e;
-    SinglewayInlet* in_f;
-    SinglewayInlet* in_s64;
-    MultiwayInlet* in_e;
+    Data::Float din_f;
+    Data::Int64 din_s64;
+    Data::Event din_e;
+    SinglewayInlet in_f;
+    SinglewayInlet in_s64;
+    MultiwayInlet in_e;
 
     NodeBase* CreateInstance(Nodegrams*);
 };
