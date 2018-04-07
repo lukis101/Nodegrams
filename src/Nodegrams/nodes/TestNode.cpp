@@ -43,7 +43,7 @@ void TestNode::DoLogic()
     if (in_f->HasDataChanged())
 	    m_logger->debug("[{}:TestNode] got float: {}", this->m_id, din_f->GetValue());
     if (in_s64->HasDataChanged())
-	    m_logger->info("[{}:TestNode] got int64: {}", this->m_id, din_s64->GetValue());
+	    m_logger->debug("[{}:TestNode] got int64: {}", this->m_id, din_s64->GetValue());
     int events = din_e->GetCount();
     if (events != 0)
     {

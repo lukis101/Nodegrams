@@ -3,8 +3,8 @@
 # configure cmake
 cmake_minimum_required(VERSION 3.6)
 
-project(NodeGrams VERSION 0.1 LANGUAGES CXX)
-message("NodeGrams version: ${PROJECT_VERSION}")
+project(Nodegrams VERSION 0.1 LANGUAGES CXX)
+message("${PROJECT_NAME} version: ${PROJECT_VERSION}")
 
 include(GNUInstallDirs)
 
