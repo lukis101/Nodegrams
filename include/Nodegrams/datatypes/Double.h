@@ -8,6 +8,8 @@
 namespace Nodegrams
 {
 class Nodegrams;
+namespace Data
+{
 
 class NDGM_EXPORT Double : public DataBox
 {
@@ -33,5 +35,6 @@ protected:
     double m_data;
 };
 
+}
 } // namespace Nodegrams
 #endif // ifndef NDGM_DT_DOUBLE_H

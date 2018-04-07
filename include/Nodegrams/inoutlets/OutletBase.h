@@ -8,7 +8,8 @@
 #include "Nodegrams/DataTypes.h"
 #include "Nodegrams/inoutlets/DataHolder.h"
 
-namespace Nodegrams
+namespace Nodegrams {
+namespace Nodes
 {
 class NodeBase;
 class InletBase;
@@ -43,5 +44,6 @@ protected:
 	virtual ~OutletBase();
 };
 
+}
 } // namespace Nodegrams
 #endif // ifndef NDGM_OUTLETBASE_H

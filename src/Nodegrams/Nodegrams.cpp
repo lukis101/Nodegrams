@@ -10,6 +10,10 @@
 
 namespace Nodegrams
 {
+using Nodes::NodeBase;
+using Nodes::ContainerNode;
+using Nodes::InletBase;
+using Nodes::OutletBase;
 
 Nodegrams::Nodegrams(std::shared_ptr<spdlog::logger> logger)
     : noderegistry(20)

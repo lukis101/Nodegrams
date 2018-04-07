@@ -5,7 +5,8 @@
 #include "Nodegrams/datatypes/Float.h"
 #include "Nodegrams/datatypes/Boolean.h"
 
-namespace Nodegrams
+namespace Nodegrams {
+namespace Data
 {
 
 Int32::Int32(Nodegrams* engine)
@@ -73,4 +74,5 @@ void Int32::Int32ToBoolean(DataBox* intbox, DataBox* boolbox)
     bbox->SetValue(ibox->GetValue() != 0);
 }
 
+}
 } // namespace Nodegrams

@@ -15,7 +15,11 @@
 
 namespace Nodegrams
 {
-//class DataBox;
+namespace Data
+{
+class DataBox;
+}
+using Data::DataBox;
 
 class NDGM_EXPORT TypeRegistry
 {
@@ -43,7 +47,7 @@ protected:
     std::unordered_map<String, DataType> m_typeids;
 
     // Type conversion function mappings
-    std::unordered_map<DataType, std::unordered_map<DataType, DataWriteFunc>*> m_conversions;
+    std::unordered_map<DataType, std::unordered_map<DataType, Data::DataWriteFunc>*> m_conversions;
 };
 
 } // namespace Nodegrams

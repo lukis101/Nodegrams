@@ -9,6 +9,9 @@ namespace Nodegrams
 {
 class Nodegrams;
 
+namespace Data
+{
+
 class NDGM_EXPORT Event : public DataBox
 {
 public:
@@ -35,5 +38,6 @@ protected:
     int m_totalcount;
 };
 
+}
 } // namespace Nodegrams
 #endif // ifndef NDGM_DT_EVENT_H

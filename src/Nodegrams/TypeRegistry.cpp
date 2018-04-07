@@ -4,6 +4,7 @@
 
 namespace Nodegrams
 {
+using Data::DataWriteFunc;
 
 TypeRegistry::TypeRegistry(std::shared_ptr<spdlog::logger> logger)
     : m_typeids(10), m_conversions()

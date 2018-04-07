@@ -7,7 +7,8 @@
 #include "Nodegrams/TypeRegistry.h"
 #include "Nodegrams/nodes/ContainerNode.h"
 
-namespace Nodegrams
+namespace Nodegrams {
+namespace Nodes
 {
 
 SimpleOutlet::SimpleOutlet(NodeBase* node, DataBox* data, String name, String desc)
@@ -63,4 +64,5 @@ void SimpleOutlet::SendData()
     }
 }
 
+}
 } // namespace Nodegrams

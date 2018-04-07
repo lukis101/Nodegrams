@@ -10,7 +10,14 @@
 namespace Nodegrams
 {
 class Nodegrams;
+
+namespace Nodes
+{
 class DataHolder;
+}
+
+namespace Data
+{
 
 class NDGM_EXPORT DataBox
 {
@@ -23,7 +30,7 @@ public:
     String GetDescription() { return m_descr; }
     String GetModule() { return m_module; }
 
-    void SetHolder(DataHolder* holder) { m_holder = holder; }
+    void SetHolder(Nodes::DataHolder* holder) { m_holder = holder; }
     void ValueChanged();
     virtual void ValueChangeHandled() {}; // For event types
 
@@ -33,7 +40,7 @@ public:
 protected:
     Nodegrams* m_engine;
 	DataType m_datatype;
-    DataHolder* m_holder;
+    Nodes::DataHolder* m_holder;
 
     String m_name;
     String m_descr;
@@ -43,5 +50,6 @@ protected:
     virtual ~DataBox();
 };
 
+}
 } // namespace Nodegrams
 #endif // ifndef NDGM_DT_DATABOX_H

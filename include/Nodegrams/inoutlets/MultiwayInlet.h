@@ -8,8 +8,11 @@
 
 namespace Nodegrams
 {
-class NodeBase;
 class DataBox;
+
+namespace Nodes
+{
+class NodeBase;
 class OutletBase;
 
 class NDGM_EXPORT MultiwayInlet : public InletBase
@@ -34,5 +37,6 @@ public:
 protected:
 };
 
+}
 } // namespace Nodegrams
 #endif // ifndef NDGM_MULTIWAYINLET_H

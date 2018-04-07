@@ -7,8 +7,11 @@
 
 namespace Nodegrams
 {
-class NodeBase;
 class DataBox;
+
+namespace Nodes
+{
+class NodeBase;
 class OutletBase;
 
 class NDGM_EXPORT SinglewayInlet : public InletBase
@@ -32,5 +35,6 @@ protected:
 	OutletBase* m_connection;
 };
 
+}
 } // namespace Nodegrams
 #endif // ifndef NDGM_SINGLEWAYINLET_H

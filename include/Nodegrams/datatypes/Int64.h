@@ -9,6 +9,9 @@ namespace Nodegrams
 {
 class Nodegrams;
 
+namespace Data
+{
+
 class NDGM_EXPORT Int64 : public DataBox
 {
 public:
@@ -33,5 +36,6 @@ protected:
     int64_t m_data;
 };
 
+}
 } // namespace Nodegrams
 #endif // ifndef NDGM_DT_INT64_H

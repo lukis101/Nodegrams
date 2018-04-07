@@ -4,7 +4,8 @@
 #include "Nodegrams/nodes/NodeBase.h"
 #include "Nodegrams/Nodegrams.h"
 
-namespace Nodegrams
+namespace Nodegrams {
+namespace Nodes
 {
 
 NodeBase::NodeBase(Nodegrams* engine)
@@ -36,4 +37,5 @@ void NodeBase::SetCustomName(String thename)
 	custnamed = true;
 }
 
+}
 } // namespace Nodegrams

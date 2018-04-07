@@ -6,7 +6,8 @@
 #include "Nodegrams/inoutlets/OutletBase.h"
 #include "Nodegrams/Nodegrams.h"
 
-namespace Nodegrams
+namespace Nodegrams {
+namespace Nodes
 {
 
 StaticNode::StaticNode(Nodegrams* engine, int numinlets, int numoutlets)
@@ -92,4 +93,5 @@ OutletBase* StaticNode::GetOutlet(int index)
 	return m_outlets[index];
 }
 
+}
 } // namespace Nodegrams

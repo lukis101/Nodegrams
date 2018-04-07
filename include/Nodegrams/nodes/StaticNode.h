@@ -5,7 +5,8 @@
 
 #include "Nodegrams/nodes/NodeBase.h"
 
-namespace Nodegrams
+namespace Nodegrams {
+namespace Nodes
 {
 
 class NDGM_EXPORT StaticNode : public NodeBase
@@ -40,5 +41,6 @@ protected:
     virtual NodeBase* CreateInstance(Nodegrams*) = 0;
 };
 
+}
 } // namespace Nodegrams
 #endif // ifndef NDGM_STATICNODE_H

@@ -5,7 +5,8 @@
 #include "Nodegrams/datatypes/Int32.h"
 #include "Nodegrams/datatypes/Int64.h"
 
-namespace Nodegrams
+namespace Nodegrams {
+namespace Data
 {
 
 Float::Float(Nodegrams* engine)
@@ -72,4 +73,5 @@ void Float::FloatToInt64(DataBox* floatbox, DataBox* intbox)
     ibox->SetValue(static_cast<int64_t>(fbox->GetValue()));
 }
 
+}
 } // namespace Nodegrams

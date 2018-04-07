@@ -7,7 +7,8 @@
 #include "Nodegrams/datatypes/Int64.h"
 #include "Nodegrams/datatypes/Event.h"
 
-namespace Nodegrams
+namespace Nodegrams {
+namespace Nodes
 {
 
 SysTimeNode::SysTimeNode(Nodegrams* engine)
@@ -17,9 +18,9 @@ SysTimeNode::SysTimeNode(Nodegrams* engine)
 	category = "TIME";
     description = "Provides host system RTC time";
 
-    dout_ms   = new Int64(m_engine);
-    dout_sec  = new Int32(m_engine);
-    dout_tick = new Event(m_engine);
+    dout_ms   = new Data::Int64(m_engine);
+    dout_sec  = new Data::Int32(m_engine);
+    dout_tick = new Data::Event(m_engine);
     m_outlets[0] = out_ms   = new SimpleOutlet(this, dout_ms, "Milliseconds", "UNIX time in milliseconds");
     m_outlets[1] = out_sec  = new SimpleOutlet(this, dout_sec, "Seconds", "UNIX time in seconds");
     m_outlets[2] = out_tick = new SimpleOutlet(this, dout_tick, "Tick", "Events with 1 second period");
@@ -57,4 +58,5 @@ NodeBase* SysTimeNode::CreateInstance(Nodegrams* engine)
     return new SysTimeNode(engine);
 }
 
+}
 } // namespace Nodegrams

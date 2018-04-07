@@ -4,7 +4,8 @@
 #include "Nodegrams/inoutlets/SinglewayInlet.h"
 #include "Nodegrams/inoutlets/OutletBase.h"
 
-namespace Nodegrams
+namespace Nodegrams {
+namespace Nodes
 {
 
 SinglewayInlet::SinglewayInlet(NodeBase* node, DataBox* data, String name, String desc)
@@ -54,4 +55,5 @@ void SinglewayInlet::DisconnectAll()
     }
 }
 
+}
 } // namespace Nodegrams

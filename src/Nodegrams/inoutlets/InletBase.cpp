@@ -4,10 +4,11 @@
 #include "Nodegrams/inoutlets/InletBase.h"
 #include "Nodegrams/nodes/NodeBase.h"
 
-namespace Nodegrams
+namespace Nodegrams {
+namespace Nodes
 {
 
-InletBase::InletBase(NodeBase* node, DataBox* data, String name, String desc)
+InletBase::InletBase(NodeBase* node, Data::DataBox* data, String name, String desc)
     : DataHolder(data)
 {
 	m_node = node;
@@ -31,4 +32,5 @@ String InletBase::GetFullName()
 	return fname;
 }
 
+}
 } // namespace Nodegrams

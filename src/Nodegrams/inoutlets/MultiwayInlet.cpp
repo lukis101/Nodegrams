@@ -5,7 +5,8 @@
 #include "Nodegrams/inoutlets/MultiwayInlet.h"
 #include "Nodegrams/inoutlets/SimpleOutlet.h"
 
-namespace Nodegrams
+namespace Nodegrams {
+namespace Nodes
 {
 
 MultiwayInlet::MultiwayInlet(NodeBase* node, DataBox* data, String name, String desc)
@@ -60,4 +61,5 @@ void MultiwayInlet::DisconnectAll()
     }
 }
 
+}
 } // namespace Nodegrams

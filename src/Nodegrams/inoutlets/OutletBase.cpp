@@ -6,7 +6,8 @@
 #include "Nodegrams/inoutlets/InletBase.h"
 #include "Nodegrams/nodes/NodeBase.h"
 
-namespace Nodegrams
+namespace Nodegrams {
+namespace Nodes
 {
 
 OutletBase::OutletBase(NodeBase* node, DataBox* data, String name, String desc)
@@ -75,4 +76,5 @@ bool OutletBase::IsConnectedTo(InletBase* inlet)
 	return false;
 }
 
+}
 } // namespace Nodegrams

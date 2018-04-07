@@ -9,7 +9,8 @@
 #include "Nodegrams/datatypes/Event.h"
 #include "Nodegrams/Nodegrams.h"
 
-namespace Nodegrams
+namespace Nodegrams {
+namespace Nodes
 {
 
 TestNode::TestNode(Nodegrams* engine)
@@ -19,9 +20,9 @@ TestNode::TestNode(Nodegrams* engine)
 	category = "TESTS";
 
 	m_logger = engine->m_logger;
-    din_f = new Float(m_engine);
-    din_s64 = new Int64(m_engine);
-    din_e = new Event(m_engine);
+    din_f   = new Data::Float(m_engine);
+    din_s64 = new Data::Int64(m_engine);
+    din_e   = new Data::Event(m_engine);
     m_inlets[0] = in_f = new SinglewayInlet(this, din_f, "in_float", "");
     m_inlets[1] = in_s64 = new SinglewayInlet(this, din_s64, "in_int64", "");
     m_inlets[2] = in_e = new MultiwayInlet(this, din_e, "in_event", "");
@@ -57,4 +58,5 @@ NodeBase* TestNode::CreateInstance(Nodegrams* engine)
     return new TestNode(engine);
 }
 
+}
 } // namespace Nodegrams

@@ -5,7 +5,8 @@
 #include "Nodegrams/datatypes/Int32.h"
 #include "Nodegrams/datatypes/Int64.h"
 
-namespace Nodegrams
+namespace Nodegrams {
+namespace Data
 {
 
 Double::Double(Nodegrams* engine)
@@ -72,4 +73,5 @@ void Double::DoubleToInt64(DataBox* doublebox, DataBox* intbox)
     ibox->SetValue(static_cast<int64_t>(dbox->GetValue()));
 }
 
+}
 } // namespace Nodegrams

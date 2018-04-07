@@ -6,7 +6,8 @@
 #include "Nodegrams/TypeRegistry.h"
 #include "Nodegrams/inoutlets/DataHolder.h"
 
-namespace Nodegrams
+namespace Nodegrams {
+namespace Data
 {
 
 DataBox::DataBox(Nodegrams* engine, String name, String descr, String module)
@@ -32,4 +33,5 @@ void DataBox::ValueChanged()
     }
 }
 
+}
 } // namespace Nodegrams

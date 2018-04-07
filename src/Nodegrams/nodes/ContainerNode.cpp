@@ -3,7 +3,8 @@
 
 #include "Nodegrams/nodes/ContainerNode.h"
 
-namespace Nodegrams
+namespace Nodegrams {
+namespace Nodes
 {
 
 ContainerNode::ContainerNode(Nodegrams* engine)
@@ -23,4 +24,5 @@ NodeBase* ContainerNode::CreateInstance(Nodegrams* engine)
     return new ContainerNode(engine);
 }
 
+}
 } // namespace Nodegrams

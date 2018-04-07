@@ -6,7 +6,8 @@
 #include "Nodegrams/inoutlets/OutletBase.h"
 #include "Nodegrams/Nodegrams.h"
 
-namespace Nodegrams
+namespace Nodegrams {
+namespace Nodes
 {
 
 DynamicNode::DynamicNode(Nodegrams* engine)
@@ -81,4 +82,5 @@ OutletBase* DynamicNode::GetOutlet(int index)
 	return m_outlets[index];
 }
 
+}
 } // namespace Nodegrams

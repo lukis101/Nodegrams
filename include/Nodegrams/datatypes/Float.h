@@ -9,6 +9,9 @@ namespace Nodegrams
 {
 class Nodegrams;
 
+namespace Data
+{
+
 class NDGM_EXPORT Float : public DataBox
 {
 public:
@@ -33,5 +36,6 @@ protected:
     float m_data;
 };
 
+}
 } // namespace Nodegrams
 #endif // ifndef NDGM_DT_FLOAT_H

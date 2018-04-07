@@ -32,19 +32,21 @@
 namespace Nodegrams
 {
 class TypeRegistry;
+
+namespace Nodes
+{
 class NodeBase;
 class ContainerNode;
+}
 
 class NDGM_EXPORT Nodegrams
 {
-	//friend class NodeBase;
-
 public:
     TypeRegistry* typereg;
-    ContainerNode* rootcontainer;
+    Nodes::ContainerNode* rootcontainer;
     const static int NODECAP = 100;
-    SparseArray<NodeBase*, NODECAP> m_nodes;
-    std::unordered_map<String, NodeBase*> noderegistry;
+    SparseArray<Nodes::NodeBase*, NODECAP> m_nodes;
+    std::unordered_map<String, Nodes::NodeBase*> noderegistry;
 
 	Nodegrams(std::shared_ptr<spdlog::logger> logger);
 	Nodegrams();
@@ -53,7 +55,7 @@ public:
 	int Shutdown();
 	void Update();
 
-    bool RegisterNode(NodeBase*&& node);
+    bool RegisterNode(Nodes::NodeBase*&& node);
     bool DeregisterNode(String fullname);
     int AddNode(String fullName, int parent=1, int nodeid=0);
 	bool RemoveNode(int nodeid);
@@ -76,7 +78,7 @@ protected:
 	String m_version = "0.1.0";
     std::list<int> updateSequence;
 
-	int RegisterNode(NodeBase* node, int id); // known id (eg. from remote)
+	int RegisterNode(Nodes::NodeBase* node, int id); // known id (eg. from remote)
     bool CheckID(int id);
 };
 

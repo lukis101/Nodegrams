@@ -9,6 +9,10 @@
 
 namespace Nodegrams
 {
+using Data::DataBox;
+
+namespace Nodes
+{
 
 class NDGM_EXPORT DataHolder
 {
@@ -31,8 +35,8 @@ public:
 protected:
 	DataBox* m_data;
 	bool m_dataChanged = false;
-	//bool m_dataReady;
 };
 
+}
 } // namespace Nodegrams
 #endif // ifndef NDGM_DATAHOLDER_H

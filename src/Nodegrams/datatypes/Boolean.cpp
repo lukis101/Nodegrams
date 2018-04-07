@@ -5,7 +5,8 @@
 #include "Nodegrams/datatypes/Int32.h"
 #include "Nodegrams/datatypes/Int64.h"
 
-namespace Nodegrams
+namespace Nodegrams {
+namespace Data
 {
 
 Boolean::Boolean(Nodegrams* engine)
@@ -73,4 +74,5 @@ void Boolean::BooleanToInt64(DataBox* boolbox, DataBox* intbox)
     ibox->SetValue(bbox->GetValue() ? 1 : 0);
 }
 
+}
 } // namespace Nodegrams

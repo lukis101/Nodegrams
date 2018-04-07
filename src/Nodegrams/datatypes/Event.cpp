@@ -1,7 +1,8 @@
 
 #include "Nodegrams/datatypes/Event.h"
 
-namespace Nodegrams
+namespace Nodegrams {
+namespace Data
 {
 
 Event::Event(Nodegrams* engine)
@@ -39,4 +40,5 @@ void Event::EventToEvent(DataBox* eventbox1, DataBox* eventbox2)
     ebox2->Fire(ebox1->GetCount());
 }
 
+}
 } // namespace Nodegrams

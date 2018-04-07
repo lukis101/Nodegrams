@@ -6,7 +6,8 @@
 #include <vector>
 #include "Nodegrams/nodes/NodeBase.h"
 
-namespace Nodegrams
+namespace Nodegrams {
+namespace Nodes
 {
 
 class NDGM_EXPORT DynamicNode : public NodeBase
@@ -38,5 +39,6 @@ protected:
     virtual NodeBase* CreateInstance(Nodegrams*) = 0;
 };
 
+}
 } // namespace Nodegrams
 #endif // ifndef NDGM_DYNAMICNODE_H

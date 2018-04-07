@@ -9,6 +9,9 @@ namespace Nodegrams
 {
 class Nodegrams;
 
+namespace Data
+{
+
 class NDGM_EXPORT Boolean : public DataBox
 {
 public:
@@ -33,5 +36,6 @@ protected:
     bool m_data;
 };
 
+}
 } // namespace Nodegrams
 #endif // ifndef NDGM_DT_BOOLEAN_H

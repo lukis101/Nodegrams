@@ -7,11 +7,11 @@
 #include "Nodegrams/DataTypes.h"
 #include "Nodegrams/inoutlets/DataHolder.h"
 
-namespace Nodegrams
+namespace Nodegrams {
+namespace Nodes
 {
 class NodeBase;
 class OutletBase;
-//class DataBox;
 
 class NDGM_EXPORT InletBase : public DataHolder
 {
@@ -42,5 +42,6 @@ protected:
 	virtual ~InletBase() = 0;
 };
 
+}
 } // namespace Nodegrams
 #endif // ifndef NDGM_INLETBASE_H

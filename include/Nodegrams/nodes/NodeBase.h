@@ -9,6 +9,9 @@
 namespace Nodegrams
 {
 class Nodegrams;
+
+namespace Nodes
+{
 class InletBase;
 class OutletBase;
 class ContainerNode;
@@ -21,9 +24,7 @@ class NDGM_EXPORT NodeBase
     friend class SimpleOutlet;
 
 public:
-
     bool custnamed;
-	//bool processed; // inner logic and data exchange complete
 
 	virtual bool IsStatic() = 0;
 	virtual bool IsContainer() = 0;
@@ -67,5 +68,6 @@ protected:
     virtual NodeBase* CreateInstance(Nodegrams*) = 0;
 };
 
+}
 } // namespace Nodegrams
 #endif // ifndef NDGM_NODEBASE_H

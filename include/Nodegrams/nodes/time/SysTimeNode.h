@@ -8,9 +8,15 @@
 
 namespace Nodegrams
 {
+namespace Data
+{
 class Int32;
 class Int64;
 class Event;
+}
+
+namespace Nodes
+{
 
 class NDGM_EXPORT SysTimeNode : public StaticNode
 {
@@ -21,9 +27,9 @@ public:
 	void DoLogic();
 
 protected:
-    Int64* dout_ms;
-    Int32* dout_sec;
-    Event* dout_tick;
+    Data::Int64* dout_ms;
+    Data::Int32* dout_sec;
+    Data::Event* dout_tick;
     SimpleOutlet* out_ms;
     SimpleOutlet* out_sec;
     SimpleOutlet* out_tick;
@@ -31,5 +37,6 @@ protected:
     NodeBase* CreateInstance(Nodegrams* engine);
 };
 
+}
 } // namespace Nodegrams
 #endif // ifndef NDGM_SYSCLOCKNODE_H
