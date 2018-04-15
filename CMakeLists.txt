@@ -3,13 +3,17 @@
 # configure cmake
 cmake_minimum_required(VERSION 3.6)
 
+include(GNUInstallDirs)
+
 project(Nodegrams VERSION 0.1 LANGUAGES CXX)
 message("${PROJECT_NAME} version: ${PROJECT_VERSION}")
 
-include(GNUInstallDirs)
-
 find_package(spdlog CONFIG REQUIRED)
-#find_package(Threads REQUIRED)
+set(RAPIDJSON_BUILD_DOC OFF CACHE BOOL "" FORCE)
+set(RAPIDJSON_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
+set(RAPIDJSON_BUILD_TESTS OFF CACHE BOOL "" FORCE)
+set(RAPIDJSON_HAS_STDSTRING ON CACHE BOOL "" FORCE)
+find_package(RapidJSON REQUIRED)
 
 # Create target
 add_library(${PROJECT_NAME} STATIC "")
@@ -21,10 +25,9 @@ include(cmake/sourcelist.cmake)
 # Compiler requirements
 target_compile_features(${PROJECT_NAME}
     PUBLIC cxx_std_11
-    # PUBLIC cxx_auto_type
-    # PRIVATE cxx_variadic_templates
 )
 set_target_properties(${PROJECT_NAME} PROPERTIES CXX_EXTENSIONS OFF)
+target_compile_definitions(${PROJECT_NAME} PUBLIC RAPIDJSON_HAS_STDSTRING=1)
 
 # Link used libraries
 target_link_libraries(${PROJECT_NAME}
@@ -37,10 +40,10 @@ target_include_directories(${PROJECT_NAME}
     PUBLIC
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
         $<INSTALL_INTERFACE:$<INSTALL_PREFIX>/include>
+        ${RapidJSON_INCLUDE_DIR}
     PRIVATE
         src
 )
-
 # 'make install' to the correct locations (provided by GNUInstallDirs).
 install(TARGETS ${PROJECT_NAME} EXPORT ${PROJECT_NAME}Targets
     ARCHIVE  DESTINATION ${CMAKE_INSTALL_LIBDIR}

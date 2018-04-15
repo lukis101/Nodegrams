@@ -4,9 +4,15 @@
 #include <utility>
 #include "Nodegrams/Nodegrams.h"
 #include "Nodegrams/TypeRegistry.h"
+#include "Nodegrams/Serializing.h"
 #include "Nodegrams/nodes/ContainerNode.h"
 #include "Nodegrams/inoutlets/OutletBase.h"
 #include "Nodegrams/inoutlets/InletBase.h"
+
+#include "rapidjson/document.h"     // rapidjson's DOM-style API
+#include "rapidjson/prettywriter.h" // for stringify JSON
+#include "rapidjson/writer.h"
+#include "rapidjson/stringbuffer.h"
 
 namespace Nodegrams
 {
@@ -440,6 +446,109 @@ String Nodegrams::PrintNodes(bool recursive)
     std::ostringstream oss;
     PrintNodes(oss, recursive);
     return oss.str();
+}
+
+void Nodegrams::LoadProject()
+{
+    using namespace rapidjson;
+
+    const char json[] = "{ \"hello\" : \"world\", \"t\" : true , \"f\" : false, \"n\": null, \"i\":123, \"pi\": 3.1416, \"a\":[1, 2, 3, 4] }";
+    m_logger->info("Original JSON:\n {}", json);
+
+    Document document; // Default template parameter uses UTF8 and MemoryPoolAllocator.
+    if (document.Parse(json).HasParseError())
+        return;
+
+    assert(document.IsObject()); // Document is a JSON value represents the root of DOM. Root can be either an object or array.
+    assert(document.HasMember("hello"));
+    assert(document["hello"].IsString());
+    m_logger->info("hello = {}", document["hello"].GetString());
+
+    document["hello"] = "nodegrams"; // This will invoke strlen()
+
+    // Stringify
+    StringBuffer sb;
+    PrettyWriter<StringBuffer> writer(sb);
+    document.Accept(writer);    // Accept() traverses the DOM and generates Handler events.
+    m_logger->info("Modified JSON with reformatting:\n {}", sb.GetString());
+}
+
+void Nodegrams::SaveProject()
+{
+    Serializer serer;
+    //serer.StartObject(); // root object
+
+    serer.SetKey("FormatVersion");
+    serer.AddUint(1);
+    serer.SetKey("Nodes");
+    serer.StartArray();
+
+    for (auto& node : m_nodes)
+    {
+        //node->Serialize(&serer);
+        serer.StartObject();
+        serer.SetKey("ID");
+        serer.AddInt(node->GetID());
+        serer.SetKey("Name");
+        serer.AddString(node->GetName());
+
+        int icnt = node->GetInletCount();
+        if (icnt)
+        {
+            serer.SetKey("Inlets");
+            serer.StartArray();
+            for (int i=0; i<icnt; i++) // TODO use iterators
+            {
+                auto inlet = node->GetInlet(i);
+                serer.StartObject();
+                serer.SetKey("Name");
+                serer.AddString(inlet->name);
+
+                serer.SetKey("Data");
+                serer.AddString(inlet->GetData()->ToString());
+                //serer.SetKey("State");
+                //serer.AddString(inlet->SerializeState());
+                serer.EndObject();
+            }
+            serer.EndArray();
+        }
+
+        int ocnt = node->GetOutletCount();
+        if (ocnt)
+        {
+            serer.SetKey("Outlets");
+            serer.StartArray();
+            for (int i=0; i<ocnt; i++) // TODO use iterators
+            {
+                auto outlet = node->GetOutlet(i);
+                if (outlet->connections.size())
+                {
+                    serer.StartObject();
+                    serer.SetKey("Name");
+                    serer.AddString(outlet->name);
+
+                    serer.SetKey("Connections");
+                    serer.StartArray();
+                    for (auto& inlet : outlet->connections)
+                    {
+                        serer.AddString(inlet->GetFullName());
+                    }
+                    serer.EndArray();
+                    serer.EndObject();
+                }
+            }
+            serer.EndArray();
+        }
+        serer.EndObject(); // node
+    }
+    serer.EndArray(); // nodes
+    //serer.EndObject(); // root object
+
+    rapidjson::StringBuffer sb;
+    rapidjson::PrettyWriter<rapidjson::StringBuffer> writer(sb);
+    // Stringify
+    serer.doc.Accept(writer); // Accept() traverses the DOM and generates Handler events.
+    m_logger->info("Saving to JSON:\n {}", sb.GetString());
 }
 
 } // namespace Nodegrams

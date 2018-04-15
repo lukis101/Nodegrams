@@ -5,10 +5,12 @@
 
 #include "Nodegrams/Config.h"
 #include "Nodegrams/DataTypes.h"
+#include "Nodegrams/Serializing.h"
 
 namespace Nodegrams
 {
 class Nodegrams;
+//class Serializer;
 
 namespace Nodes
 {
@@ -50,6 +52,8 @@ public:
     String GetFullName() { return category + ':' + name; }
     String GetCategory() { return category; }
     String GetDescription() { return description; }
+
+    bool Serialize(Serializer* serer) { return false; }
 
 protected:
 	String name;
