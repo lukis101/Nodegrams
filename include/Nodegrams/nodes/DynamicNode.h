@@ -29,6 +29,8 @@ public:
 	OutletBase* GetOutlet(String name);
 	OutletBase* GetOutlet(int index);
 
+    void SerializeInoutlets(Serializer& serer);
+
 protected:
 	std::vector<InletBase*> m_inlets;
 	std::vector<OutletBase*> m_outlets;

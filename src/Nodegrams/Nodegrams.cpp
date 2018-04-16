@@ -30,6 +30,7 @@ Nodegrams::Nodegrams(std::shared_ptr<spdlog::logger> logger)
     rootcontainer = new ContainerNode(this);
 	rootcontainer->m_id = 1;
     rootcontainer->SetCustomName("root");
+    rootcontainer->m_parent = rootcontainer;
 	m_nodes.Set(0, rootcontainer);
 }
 Nodegrams::Nodegrams()
@@ -476,73 +477,20 @@ void Nodegrams::LoadProject()
 void Nodegrams::SaveProject()
 {
     Serializer serer;
-    //serer.StartObject(); // root object
 
     serer.SetKey("FormatVersion");
     serer.AddUint(1);
+    serer.SetKey("Name");
+    serer.AddString("TODO: ProjectName"); // TODO project name = root node name
+    //TODO globals?
+    //TODO dependencies
+
     serer.SetKey("Nodes");
     serer.StartArray();
-
-    for (auto& node : m_nodes)
-    {
-        //node->Serialize(&serer);
-        serer.StartObject();
-        serer.SetKey("ID");
-        serer.AddInt(node->GetID());
-        serer.SetKey("Name");
-        serer.AddString(node->GetName());
-
-        int icnt = node->GetInletCount();
-        if (icnt)
-        {
-            serer.SetKey("Inlets");
-            serer.StartArray();
-            for (int i=0; i<icnt; i++) // TODO use iterators
-            {
-                auto inlet = node->GetInlet(i);
-                serer.StartObject();
-                serer.SetKey("Name");
-                serer.AddString(inlet->name);
-
-                serer.SetKey("Data");
-                serer.AddString(inlet->GetData()->ToString());
-                //serer.SetKey("State");
-                //serer.AddString(inlet->SerializeState());
-                serer.EndObject();
-            }
-            serer.EndArray();
-        }
-
-        int ocnt = node->GetOutletCount();
-        if (ocnt)
-        {
-            serer.SetKey("Outlets");
-            serer.StartArray();
-            for (int i=0; i<ocnt; i++) // TODO use iterators
-            {
-                auto outlet = node->GetOutlet(i);
-                if (outlet->connections.size())
-                {
-                    serer.StartObject();
-                    serer.SetKey("Name");
-                    serer.AddString(outlet->name);
-
-                    serer.SetKey("Connections");
-                    serer.StartArray();
-                    for (auto& inlet : outlet->connections)
-                    {
-                        serer.AddString(inlet->GetFullName());
-                    }
-                    serer.EndArray();
-                    serer.EndObject();
-                }
-            }
-            serer.EndArray();
-        }
-        serer.EndObject(); // node
-    }
+    // Serialize all nodes skipping the root one
+    for (auto& it = ++m_nodes.begin(); it != m_nodes.end(); ++it)
+        it->Serialize(serer);
     serer.EndArray(); // nodes
-    //serer.EndObject(); // root object
 
     rapidjson::StringBuffer sb;
     rapidjson::PrettyWriter<rapidjson::StringBuffer> writer(sb);

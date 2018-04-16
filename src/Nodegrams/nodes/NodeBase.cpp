@@ -2,6 +2,7 @@
 #include "spdlog/spdlog.h"
 
 #include "Nodegrams/nodes/NodeBase.h"
+#include "Nodegrams/nodes/ContainerNode.h"
 #include "Nodegrams/Nodegrams.h"
 
 namespace Nodegrams {
@@ -35,6 +36,20 @@ void NodeBase::SetCustomName(String thename)
 	}
 	custname = thename;
 	custnamed = true;
+}
+
+void NodeBase::Serialize(Serializer& serer)
+{
+    serer.StartObject();
+    serer.SetKey("ID");
+    serer.AddInt(m_id);
+    serer.SetKey("Name");
+    serer.AddString(GetName());
+    serer.SetKey("Parent");
+    serer.AddInt(m_parent->m_id);
+    SerializeInoutlets(serer);
+    SerializeState(serer);
+    serer.EndObject();
 }
 
 }

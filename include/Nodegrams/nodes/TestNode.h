@@ -22,6 +22,8 @@ public:
 
 	void DoLogic();
 
+    void SerializeState(Serializer& serer) {};
+
 protected:
 	std::shared_ptr<spdlog::logger> m_logger;
 

@@ -93,5 +93,52 @@ OutletBase* StaticNode::GetOutlet(int index)
 	return m_outlets[index];
 }
 
+void StaticNode::SerializeInoutlets(Serializer& serer)
+{
+    if (m_numinlets)
+    {
+        serer.SetKey("Inlets");
+        serer.StartArray();
+        for (int i=0; i<m_numinlets; i++) // TODO use iterators
+        {
+            auto inlet = m_inlets[i];
+            serer.StartObject();
+            serer.SetKey("Name");
+            serer.AddString(inlet->name);
+
+            serer.SetKey("Data");
+            serer.AddString(inlet->GetData()->ToString());
+            serer.EndObject();
+        }
+        serer.EndArray();
+    }
+
+    if (m_numoutlets)
+    {
+        serer.SetKey("Outlets");
+        serer.StartArray();
+        for (int i=0; i<m_numoutlets; i++) // TODO use iterators
+        {
+            auto outlet = m_outlets[i];
+            if (outlet->connections.size())
+            {
+                serer.StartObject();
+                serer.SetKey("Name");
+                serer.AddString(outlet->name);
+
+                serer.SetKey("Connections");
+                serer.StartArray();
+                for (auto& inlet : outlet->connections)
+                {
+                    serer.AddString(inlet->GetFullName());
+                }
+                serer.EndArray();
+                serer.EndObject();
+            }
+        }
+        serer.EndArray();
+    }
+}
+
 }
 } // namespace Nodegrams

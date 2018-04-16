@@ -21,6 +21,8 @@ public:
 
 	virtual void DoLogic() = 0;
 
+    void SerializeState(Serializer& serer) {};
+
 protected:
     Data::Boolean  din_a;
     Data::Boolean  din_b;

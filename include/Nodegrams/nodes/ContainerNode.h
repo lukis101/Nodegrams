@@ -23,6 +23,8 @@ public:
 	void AssignNode(int id);
 	//void AssignNode(NodeBase* node); // TODO
 
+    void SerializeState(Serializer& serer) {};
+
 protected:
 	std::vector<NodeBase*> m_nodes;
 

@@ -21,6 +21,8 @@ public:
 
 	void DoLogic();
 
+    void SerializeState(Serializer& serer) {};
+
 protected:
     Data::Int64 dout_ms;
     Data::Int32 dout_sec;

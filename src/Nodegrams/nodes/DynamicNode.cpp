@@ -82,5 +82,50 @@ OutletBase* DynamicNode::GetOutlet(int index)
 	return m_outlets[index];
 }
 
+void DynamicNode::SerializeInoutlets(Serializer& serer)
+{
+    if (m_inlets.size())
+    {
+        serer.SetKey("Inlets");
+        serer.StartArray();
+        for (auto& inlet : m_inlets)
+        {
+            serer.StartObject();
+            serer.SetKey("Name");
+            serer.AddString(inlet->name);
+
+            serer.SetKey("Data");
+            serer.AddString(inlet->GetData()->ToString());
+            serer.EndObject();
+        }
+        serer.EndArray();
+    }
+
+    if (m_outlets.size())
+    {
+        serer.SetKey("Outlets");
+        serer.StartArray();
+        for (auto& outlet : m_outlets)
+        {
+            if (outlet->connections.size())
+            {
+                serer.StartObject();
+                serer.SetKey("Name");
+                serer.AddString(outlet->name);
+
+                serer.SetKey("Connections");
+                serer.StartArray();
+                for (auto& inlet : outlet->connections)
+                {
+                    serer.AddString(inlet->GetFullName());
+                }
+                serer.EndArray();
+                serer.EndObject();
+            }
+        }
+        serer.EndArray();
+    }
+}
+
 }
 } // namespace Nodegrams

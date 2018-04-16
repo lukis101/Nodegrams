@@ -53,7 +53,13 @@ public:
     String GetCategory() { return category; }
     String GetDescription() { return description; }
 
-    bool Serialize(Serializer* serer) { return false; }
+    void Serialize(Serializer& serer);
+    virtual void SerializeInoutlets(Serializer& serer) = 0;
+    virtual void SerializeState(Serializer& serer) = 0;
+
+    //void Deserialize(Serializer& serer);
+    //virtual void DeserializeInoutlets(Serializer& serer) = 0;
+    //virtual void DeserializeState(Serializer& serer) = 0;
 
 protected:
 	String name;

@@ -29,6 +29,8 @@ public:
 	OutletBase* GetOutlet(String name);
     OutletBase* GetOutlet(int index);
 
+    void SerializeInoutlets(Serializer& serer);
+
 protected:
 	int m_numinlets;
 	int m_numoutlets;
