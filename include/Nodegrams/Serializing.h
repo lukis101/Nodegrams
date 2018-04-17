@@ -9,10 +9,7 @@
 #include "Nodegrams/Config.h"
 #include "Nodegrams/DataTypes.h"
 
-#include "rapidjson/document.h"     // rapidjson's DOM-style API
-/*#include "rapidjson/prettywriter.h" // for stringify JSON
-#include "rapidjson/writer.h"
-#include "rapidjson/stringbuffer.h"*/
+#include "rapidjson/document.h"
 
 namespace Nodegrams
 {

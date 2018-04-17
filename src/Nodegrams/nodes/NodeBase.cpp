@@ -52,5 +52,14 @@ void NodeBase::Serialize(Serializer& serer)
     serer.EndObject();
 }
 
+void NodeBase::Deserialize(Deserializer& derer, NodeBase* node)
+{
+    derer.SelectMember("ID");
+    int idint = derer.GetInt();
+    derer.SelectMember("Name");
+    String namestr = derer.GetString();
+    m_engine->m_logger->info("ID={}, {}", idint, namestr);
+}
+
 }
 } // namespace Nodegrams

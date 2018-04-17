@@ -497,6 +497,29 @@ void Nodegrams::SaveProject()
     // Stringify
     serer.doc.Accept(writer); // Accept() traverses the DOM and generates Handler events.
     m_logger->info("Saving to JSON:\n {}", sb.GetString());
+
+
+    rapidjson::Value robj = serer.doc.GetObject();
+    Deserializer derer(robj);
+    derer.SelectMember("FormatVersion");
+        int idint = derer.GetInt();
+        derer.Pop();
+    derer.SelectMember("Name");
+        String projname = derer.GetString();
+        derer.Pop();
+
+    derer.SelectMember("Nodes");
+    for (unsigned i=0; i<derer.ArraySize(); i++)
+    {
+        derer.SelectIndex(i);
+        derer.SelectMember("Name");
+            String nodename = derer.GetString();
+            derer.Pop();
+        m_logger->info("Deser Node: {}", nodename);
+        //Deserialize(derer);
+        derer.Pop();
+    }
+    derer.Pop();
 }
 
 } // namespace Nodegrams

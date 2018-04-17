@@ -6,6 +6,7 @@
 #include "Nodegrams/Config.h"
 #include "Nodegrams/DataTypes.h"
 #include "Nodegrams/Serializing.h"
+#include "Nodegrams/Deserializer.h"
 
 namespace Nodegrams
 {
@@ -57,9 +58,9 @@ public:
     virtual void SerializeInoutlets(Serializer& serer) = 0;
     virtual void SerializeState(Serializer& serer) = 0;
 
-    //void Deserialize(Serializer& serer);
-    //virtual void DeserializeInoutlets(Serializer& serer) = 0;
-    //virtual void DeserializeState(Serializer& serer) = 0;
+    void Deserialize(Deserializer& derer, NodeBase* node);
+    //virtual void DeserializeInoutlets(Deserializer& derer, NodeBase* node) = 0;
+    //virtual void DeserializeState(Deserializer& derer, NodeBase* node) = 0;
 
 protected:
 	String name;
