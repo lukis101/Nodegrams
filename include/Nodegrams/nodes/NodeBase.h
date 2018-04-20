@@ -22,6 +22,7 @@ class ContainerNode;
 class NDGM_EXPORT NodeBase
 {
 	friend class Nodegrams;
+	friend class ContainerNode;
     friend class OutletBase;
     friend class InletBase;
     friend class SimpleOutlet;

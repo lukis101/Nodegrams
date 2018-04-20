@@ -59,9 +59,10 @@ public:
     bool DeregisterNode(String fullname);
     int AddNode(String fullName, int parent=1, int nodeid=0);
 	bool RemoveNode(int nodeid);
+    void ClearNodes(void);
+	bool MoveNode(int node, int container);
 	//NodeBase* GetNode(int nodeid);
 
-	//void MoveNode(int node, int container);
     bool ConnectInoutlets(int source, int outlet, int sink, int inlet);
     bool DisconnectInoutlets(int source, int outlet, int sink, int inlet);
     bool ClearInletConnections(int node, int inlet);

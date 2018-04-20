@@ -241,8 +241,7 @@ int Nodegrams::AddNode(String fullname, int parent, int id)
     NodeBase* node = it->second->CreateInstance(this);
     m_nodes.Set(id-1, node);
     node->m_id = id;
-    //node->m_parent = container; // TODO
-	//container->AssignNode(node); // TODO
+	container->AssignNode(node);
 
 	m_logger->info("Added node \"{}\" with id {}", node->name, id);
     RebuildUpdateSequence();
@@ -267,6 +266,52 @@ bool Nodegrams::RemoveNode(int nodeid)
     RebuildUpdateSequence();
 	return true;
 }
+
+void Nodegrams::ClearNodes(void)
+{
+    for (auto& it = ++m_nodes.begin(); it != m_nodes.end(); ++it)
+        delete *it; // TODO better release in case of managed resources?
+	m_logger->info("Removed all nodes");
+}
+
+bool Nodegrams::MoveNode(int node, int container)
+	{
+	if (node == container)
+	{
+		m_logger->error("MoveNode: target == destination");
+		return false;
+	}
+	if (!CheckID(node))
+{
+		m_logger->error("MoveNode: invalid target id {}", node);
+		return false;
+	}
+	if (!CheckID(container))
+	{
+		m_logger->error("MoveNode: invalid destination id {}", container);
+		return false;
+	}
+
+	NodeBase* cont = m_nodes.Get(container-1);
+	if (!cont->IsContainer())
+	{
+		m_logger->error("MoveNode: destination not a container");
+		return false;
+	}
+    ContainerNode* pcontainer = static_cast<ContainerNode*>(cont);
+
+	NodeBase* pnode = m_nodes.Get(node-1);
+    if (pnode->m_parent->m_id == container) // swapping child with parent
+	{
+        ContainerNode* pparent = static_cast<ContainerNode*>(cont);
+	    assert(false); // TODO
+		return true;
+	}
+    pnode->m_parent->RemoveNode(pnode);
+    pcontainer->AssignNode(pnode);
+    return true;
+}
+
 /*NodeBase* Nodegrams::GetNode(int nodeid)
 {
 	if (!CheckID(nodeid))
@@ -275,28 +320,6 @@ bool Nodegrams::RemoveNode(int nodeid)
 		return nullptr;
 	}
 	return m_nodes.Get(nodeid-1);
-}*/
-/*void Nodegrams::MoveNode(int targetid, int destid)
-{
-	if (!CheckID(targetid) || (targetid == 0))
-	{
-		m_logger->error("MoveNode: invalid target id {}", targetid);
-		return;
-	}
-	if (!CheckID(destid))
-	{
-		m_logger->error("MoveNode: invalid destination id {}", destid);
-		return;
-	}
-	if(targetid == destid)
-	{
-		m_logger->error("MoveNode: target == destination", destid);
-		return;
-	}
-	NodeBase* target = m_nodereg[targetid-1];
-	NodeBase* dest = m_nodereg[destid-1];
-	// TODO parent-child swap case
-	//target.parent = dest; // TODO
 }*/
 
 bool Nodegrams::ConnectInoutlets(int source, int outlet, int sink, int inlet)

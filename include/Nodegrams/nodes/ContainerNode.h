@@ -20,8 +20,10 @@ public:
 	bool IsContainer() { return true; };
 
 	NodeBase* getNode(int id);
-	void AssignNode(int id);
-	//void AssignNode(NodeBase* node); // TODO
+	//void AssignNode(int id);
+	void AssignNode(NodeBase* node);
+	void RemoveNode(NodeBase* node);
+    bool Contains(int id);
 
     void SerializeState(Serializer& serer) {};
 
