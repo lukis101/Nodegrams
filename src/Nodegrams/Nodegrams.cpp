@@ -269,8 +269,10 @@ bool Nodegrams::RemoveNode(int nodeid)
 
 void Nodegrams::ClearNodes(void)
 {
-    for (auto& it = ++m_nodes.begin(); it != m_nodes.end(); ++it)
+    for (auto& it = ++m_nodes.begin(); it != m_nodes.end(); ++it) // Skip root
         delete *it; // TODO better release in case of managed resources?
+    m_nodes.Clear();
+	m_nodes.Set(0, rootcontainer);
 	m_logger->info("Removed all nodes");
 }
 

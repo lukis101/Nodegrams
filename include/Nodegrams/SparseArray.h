@@ -103,6 +103,16 @@ public:
         return index;
     }
 
+    void Clear()
+    {
+        for (int i=m_first; i <= m_last; ++i)
+            m_array[i] = nullptr;
+        count = 0;
+        m_minfree = 0;
+        m_first = capacity;
+        m_last = capacity;
+    }
+
     int GetFreeSlot() { return m_minfree; }
 
     bool IsSet(int id)
