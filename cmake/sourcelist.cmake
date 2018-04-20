@@ -10,7 +10,8 @@ target_sources(${PROJECT_NAME} PRIVATE
     ${ndgm_inc_dir}/DataTypes.h
     ${ndgm_inc_dir}/Nodegrams.h
     ${ndgm_inc_dir}/TypeRegistry.h
-    ${ndgm_inc_dir}/Serializing.h
+    ${ndgm_inc_dir}/Serializer.h
+    ${ndgm_inc_dir}/Deserializer.h
 
     ${ndgm_inc_dir}/datatypes/DataBox.h
     ${ndgm_inc_dir}/datatypes/Event.h

@@ -5,6 +5,8 @@
 #include "Nodegrams/nodes/ContainerNode.h"
 #include "Nodegrams/inoutlets/InletBase.h"
 #include "Nodegrams/Nodegrams.h"
+#include "Nodegrams/Serializer.h"
+#include "Nodegrams/Deserializer.h"
 
 namespace Nodegrams {
 namespace Nodes

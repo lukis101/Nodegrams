@@ -1,7 +1,7 @@
 
 #pragma once
-#ifndef NDGM_SERIALIZING_H
-#define NDGM_SERIALIZING_H
+#ifndef NDGM_SERIALIZER_H
+#define NDGM_SERIALIZER_H
 
 #include <stack>
 #include <utility>
@@ -127,4 +127,4 @@ private:
 };
 
 } // namespace Nodegrams
-#endif // ifndef NDGM_SERIALIZING_H
+#endif // ifndef NDGM_SERIALIZER_H

@@ -6,6 +6,8 @@
 #include "Nodegrams/inoutlets/OutletBase.h"
 #include "Nodegrams/datatypes/DataBox.h"
 #include "Nodegrams/Nodegrams.h"
+#include "Nodegrams/Serializer.h"
+#include "Nodegrams/Deserializer.h"
 
 namespace Nodegrams {
 namespace Nodes

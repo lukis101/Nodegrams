@@ -6,7 +6,8 @@
 #include <utility>
 #include "Nodegrams/Nodegrams.h"
 #include "Nodegrams/TypeRegistry.h"
-#include "Nodegrams/Serializing.h"
+#include "Nodegrams/Serializer.h"
+#include "Nodegrams/Deserializer.h"
 #include "Nodegrams/nodes/ContainerNode.h"
 #include "Nodegrams/inoutlets/OutletBase.h"
 #include "Nodegrams/inoutlets/InletBase.h"

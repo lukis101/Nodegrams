@@ -5,13 +5,12 @@
 
 #include "Nodegrams/Config.h"
 #include "Nodegrams/DataTypes.h"
-#include "Nodegrams/Serializing.h"
-#include "Nodegrams/Deserializer.h"
 
 namespace Nodegrams
 {
 class Nodegrams;
-//class Serializer;
+class Serializer;
+class Deserializer;
 
 namespace Nodes
 {
