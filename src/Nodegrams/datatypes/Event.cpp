@@ -1,5 +1,7 @@
 
 #include "Nodegrams/datatypes/Event.h"
+#include "Nodegrams/Serializer.h"
+#include "Nodegrams/Deserializer.h"
 
 namespace Nodegrams {
 namespace Data
@@ -25,6 +27,16 @@ void Event::Fire(int count)
 String Event::ToString()
 {
     return std::to_string(m_totalcount);
+}
+
+void Event::Serialize(Serializer& serer)
+{
+    serer.AddInt(m_count);
+}
+void Event::Deserialize(Deserializer& derer)
+{
+    m_count = derer.GetInt();
+    m_totalcount = m_count;
 }
 
 DataWriteFunc Event::GetConversionFunc(String tname)

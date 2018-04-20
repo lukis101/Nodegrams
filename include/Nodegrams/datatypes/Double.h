@@ -31,6 +31,9 @@ public:
     static void DoubleToInt32(DataBox*, DataBox*);
     static void DoubleToInt64(DataBox*, DataBox*);
 
+    void Serialize(Serializer& serer);
+    void Deserialize(Deserializer& derer);
+
 protected:
     double m_data;
 };

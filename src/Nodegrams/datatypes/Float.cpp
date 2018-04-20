@@ -4,6 +4,8 @@
 #include "Nodegrams/datatypes/Boolean.h"
 #include "Nodegrams/datatypes/Int32.h"
 #include "Nodegrams/datatypes/Int64.h"
+#include "Nodegrams/Serializer.h"
+#include "Nodegrams/Deserializer.h"
 
 namespace Nodegrams {
 namespace Data
@@ -31,6 +33,15 @@ float Float::GetValue()
 String Float::ToString()
 {
     return std::to_string(m_data);
+}
+
+void Float::Serialize(Serializer& serer)
+{
+    serer.AddFloat(m_data);
+}
+void Float::Deserialize(Deserializer& derer)
+{
+    m_data = derer.GetFloat();
 }
 
 DataWriteFunc Float::GetConversionFunc(String tname)

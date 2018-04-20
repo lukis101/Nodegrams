@@ -33,6 +33,9 @@ public:
 
     static void EventToEvent(DataBox*, DataBox*);
 
+    void Serialize(Serializer& serer);
+    void Deserialize(Deserializer& derer);
+
 protected:
     int m_count;
     int m_totalcount;

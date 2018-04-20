@@ -32,6 +32,9 @@ public:
     static void Int64ToDouble(DataBox*, DataBox*);
     static void Int64ToBoolean(DataBox*, DataBox*);
 
+    void Serialize(Serializer& serer);
+    void Deserialize(Deserializer& derer);
+
 protected:
     int64_t m_data;
 };

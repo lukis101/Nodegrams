@@ -32,6 +32,9 @@ public:
     static void FloatToInt32(DataBox*, DataBox*);
     static void FloatToInt64(DataBox*, DataBox*);
 
+    void Serialize(Serializer& serer);
+    void Deserialize(Deserializer& derer);
+
 protected:
     float m_data;
 };

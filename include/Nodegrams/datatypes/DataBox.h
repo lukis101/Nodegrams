@@ -39,8 +39,8 @@ public:
 	virtual String ToString() = 0;
     virtual DataWriteFunc GetConversionFunc(String tname) = 0;
 
-    virtual void Serialize(Serializer& serer) {};//= 0;
-    virtual void Deserialize(Deserializer& derer) {};//= 0;
+    virtual void Serialize(Serializer& serer)     = 0;
+    virtual void Deserialize(Deserializer& derer) = 0;
 
 protected:
     Nodegrams* m_engine;

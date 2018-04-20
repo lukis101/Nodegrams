@@ -5,11 +5,15 @@
 
 #include <stack>
 #include <utility>
+#include <limits>
 
 #include "Nodegrams/Config.h"
 #include "Nodegrams/DataTypes.h"
 
 #include "rapidjson/document.h"
+
+#define MAXTYPEVALUE(type, value) ((value >= 0) ? \
+    std::numeric_limits<type>::max() : std::numeric_limits<type>::min())
 
 namespace Nodegrams
 {
@@ -74,6 +78,23 @@ public:
         return pval->GetString();
     }
 
+    int GetBool()
+    {
+        rapidjson::Value* pval = valstack.top();
+        if (!pval->IsBool())
+            return false;
+        return pval->GetBool();
+    }
+
+    float GetFloat()
+    {
+        rapidjson::Value* pval = valstack.top();
+        if (!pval->IsDouble())
+            return 0;
+        if (!pval->IsFloat())
+            return MAXTYPEVALUE(float, pval->GetInt64());
+        return pval->GetFloat();
+    }
     double GetDouble()
     {
         rapidjson::Value* pval = valstack.top();
@@ -85,16 +106,34 @@ public:
     int GetInt()
     {
         rapidjson::Value* pval = valstack.top();
-        if (!pval->IsInt())
+        if (!pval->IsInt64())
             return 0;
+        if (!pval->IsInt())
+            return MAXTYPEVALUE(int, pval->GetInt64());
         return pval->GetInt();
+    }
+    long long GetInt64()
+    {
+        rapidjson::Value* pval = valstack.top();
+        if (!pval->IsInt64())
+            return 0;
+        return pval->GetInt64();
     }
     unsigned int GetUint()
     {
         rapidjson::Value* pval = valstack.top();
-        if (!pval->IsUint())
+        if (!pval->IsUint64())
             return 0;
+        if (!pval->IsInt())
+            return MAXTYPEVALUE(unsigned int, pval->GetInt64());
         return pval->GetUint();
+    }
+    unsigned long long GetUint64()
+    {
+        rapidjson::Value* pval = valstack.top();
+        if (!pval->IsUint64())
+            return 0;
+        return pval->GetUint64();
     }
 
 private:
@@ -104,4 +143,7 @@ private:
 };
 
 } // namespace Nodegrams
+
+#undef MAXTYPEVALUE
+
 #endif // ifndef NDGM_DESERIALIZER_H
