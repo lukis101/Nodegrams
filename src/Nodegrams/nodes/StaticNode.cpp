@@ -4,6 +4,7 @@
 #include "Nodegrams/nodes/StaticNode.h"
 #include "Nodegrams/inoutlets/InletBase.h"
 #include "Nodegrams/inoutlets/OutletBase.h"
+#include "Nodegrams/datatypes/DataBox.h"
 #include "Nodegrams/Nodegrams.h"
 
 namespace Nodegrams {
@@ -107,7 +108,7 @@ void StaticNode::SerializeInoutlets(Serializer& serer)
             serer.AddString(inlet->name);
 
             serer.SetKey("Data");
-            serer.AddString(inlet->GetData()->ToString());
+            inlet->GetData()->Serialize(serer);
             serer.EndObject();
         }
         serer.EndArray();
@@ -130,7 +131,12 @@ void StaticNode::SerializeInoutlets(Serializer& serer)
                 serer.StartArray();
                 for (auto& inlet : outlet->connections)
                 {
-                    serer.AddString(inlet->GetFullName());
+                    serer.StartObject();
+                    serer.SetKey("Node");
+                    serer.AddInt(inlet->GetNode()->GetID());
+                    serer.SetKey("Inlet");
+                    serer.AddString(inlet->name);
+                    serer.EndObject();
                 }
                 serer.EndArray();
                 serer.EndObject();

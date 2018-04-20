@@ -73,8 +73,8 @@ public:
 
     void RebuildUpdateSequence();
 
-    void LoadProject();
-    void SaveProject();
+    bool LoadProject(String file);
+    bool SaveProject(String file);
 
 public:
 	std::shared_ptr<spdlog::logger> m_logger;

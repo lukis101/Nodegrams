@@ -1,6 +1,8 @@
 
 #include <iterator>
 #include <sstream>
+#include <fstream>
+#include <vector>
 #include <utility>
 #include "Nodegrams/Nodegrams.h"
 #include "Nodegrams/TypeRegistry.h"
@@ -9,10 +11,10 @@
 #include "Nodegrams/inoutlets/OutletBase.h"
 #include "Nodegrams/inoutlets/InletBase.h"
 
-#include "rapidjson/document.h"     // rapidjson's DOM-style API
-#include "rapidjson/prettywriter.h" // for stringify JSON
-#include "rapidjson/writer.h"
-#include "rapidjson/stringbuffer.h"
+#include "rapidjson/document.h"
+#include "rapidjson/prettywriter.h"
+#include "rapidjson/istreamwrapper.h"
+#include "rapidjson/ostreamwrapper.h"
 
 namespace Nodegrams
 {
@@ -277,14 +279,14 @@ void Nodegrams::ClearNodes(void)
 }
 
 bool Nodegrams::MoveNode(int node, int container)
-	{
+{
 	if (node == container)
 	{
 		m_logger->error("MoveNode: target == destination");
 		return false;
 	}
 	if (!CheckID(node))
-{
+	{
 		m_logger->error("MoveNode: invalid target id {}", node);
 		return false;
 	}
@@ -304,7 +306,7 @@ bool Nodegrams::MoveNode(int node, int container)
 
 	NodeBase* pnode = m_nodes.Get(node-1);
     if (pnode->m_parent->m_id == container) // swapping child with parent
-	{
+    {
         ContainerNode* pparent = static_cast<ContainerNode*>(cont);
 	    assert(false); // TODO
 		return true;
@@ -474,32 +476,161 @@ String Nodegrams::PrintNodes(bool recursive)
     return oss.str();
 }
 
-void Nodegrams::LoadProject()
+bool Nodegrams::LoadProject(String file)
 {
-    using namespace rapidjson;
+    std::ifstream ifs(file);
+    rapidjson::IStreamWrapper isw(ifs);
+    rapidjson::Document doc;
+    if (doc.ParseStream(isw).HasParseError())
+        return false;
+    if (!doc.IsObject())
+        return false;
 
-    const char json[] = "{ \"hello\" : \"world\", \"t\" : true , \"f\" : false, \"n\": null, \"i\":123, \"pi\": 3.1416, \"a\":[1, 2, 3, 4] }";
-    m_logger->info("Original JSON:\n {}", json);
+    rapidjson::Value robj = doc.GetObject();
+    Deserializer derer(robj);
+    if (derer.SelectMember("FormatVersion"))
+    {
+        int idint = derer.GetInt();
+        derer.Pop();
+        // TODO check compatibility?
+    }
 
-    Document document; // Default template parameter uses UTF8 and MemoryPoolAllocator.
-    if (document.Parse(json).HasParseError())
-        return;
+    ClearNodes(); // Looks OK, can proceed
 
-    assert(document.IsObject()); // Document is a JSON value represents the root of DOM. Root can be either an object or array.
-    assert(document.HasMember("hello"));
-    assert(document["hello"].IsString());
-    m_logger->info("hello = {}", document["hello"].GetString());
+    String projname;
+    if (derer.SelectMember("Name"))
+    {
+        projname = derer.GetString();
+        derer.Pop();
+    }
+    else
+    {
+        projname = file; // TODO extract properly
+    }
+    rootcontainer->SetCustomName(projname);
 
-    document["hello"] = "nodegrams"; // This will invoke strlen()
+    std::unordered_map<int, int> idmap; // Saved node ID -> deserialized node ID
+    std::vector<int> nodelist; // Saved node array indices
 
-    // Stringify
-    StringBuffer sb;
-    PrettyWriter<StringBuffer> writer(sb);
-    document.Accept(writer);    // Accept() traverses the DOM and generates Handler events.
-    m_logger->info("Modified JSON with reformatting:\n {}", sb.GetString());
+    derer.SelectMember("Nodes");
+    unsigned nodecount = derer.ArraySize();
+    idmap.reserve(nodecount);
+    nodelist.reserve(nodecount);
+    // Pass 1: add and init nodes
+    for (unsigned i=0; i<nodecount; i++)
+    {
+        derer.SelectIndex(i);
+        derer.SelectMember("ID"); // TODO safety checks
+            int sourceid = derer.GetInt();
+            derer.Pop();
+        derer.SelectMember("Name"); // TODO safety checks
+            String name = derer.GetString();
+            derer.Pop();
+        derer.SelectMember("Category"); // TODO safety checks
+            String category = derer.GetString();
+            derer.Pop();
+        String fullname = category + ':' + name;
+
+        int newid = AddNode(fullname);
+        if (newid)
+        {
+            idmap[sourceid] = newid;
+            nodelist.push_back(i);
+            m_nodes.Get(newid-1)->Deserialize(derer);
+            m_logger->info("Deserialized node \"{}\" {}->{}", fullname, sourceid, newid);
+        }
+        else
+        {
+            // TODO use special dummy type for compatibility
+            m_logger->error("Unknown node type \"{}\"", fullname);
+        }
+        derer.Pop();
+    }
+    // Pass 2: Resolve hierarchy
+    for (auto& n : nodelist)
+    {
+        derer.SelectIndex(n);
+        if (derer.SelectMember("Parent"))
+        {
+            int savedparent = derer.GetInt();
+            derer.Pop();
+            derer.SelectMember("ID");
+                int child = idmap[derer.GetInt()];
+                derer.Pop();
+            auto itparent = idmap.find(savedparent);
+            if (itparent != idmap.end())
+                MoveNode(child, (*itparent).second);
+        }
+        derer.Pop();
+    }
+    // Pass 3: Connect in/outlets
+    for (auto& n : nodelist)
+    {
+        derer.SelectIndex(n);
+        derer.SelectMember("ID");
+            int source = idmap[derer.GetInt()];
+            derer.Pop();
+        if (derer.SelectMember("Outlets"))
+        {
+            for (unsigned o=0; o<derer.ArraySize(); o++)
+            {
+                derer.SelectIndex(o);
+                derer.SelectMember("Name");
+                    String olet = derer.GetString();
+                    derer.Pop();
+                auto outlet = m_nodes.Get(source-1)->GetOutlet(olet);
+                if (outlet == nullptr)
+                {
+                    m_logger->error("Invalid outlet \"{}\" of \"{}\"",
+                        olet, m_nodes.Get(source-1)->GetFullName());
+                    derer.Pop();
+                    continue;
+                }
+                if (derer.SelectMember("Connections"))
+                {
+                    for (unsigned con=0; con<derer.ArraySize(); con++)
+                    {
+                        derer.SelectIndex(con);
+                        derer.SelectMember("Node");
+                            int sink = derer.GetInt();
+                            derer.Pop();
+                        auto it = idmap.find(sink);
+                        if (it == idmap.end()) // Invalid sink node
+                        {
+                            m_logger->error("Invalid connection to node {}", sink);
+                            derer.Pop();
+                        }
+                        sink = (*it).second;
+
+                        derer.SelectMember("Inlet");
+                            String ilet = derer.GetString();
+                            derer.Pop();
+                        auto inlet = m_nodes.Get(sink-1)->GetInlet(ilet);
+                        if (inlet == nullptr)
+                        {
+                            m_logger->error("Invalid connection: \"{}\"->\"{}\"",
+                                m_nodes.Get(sink-1)->GetFullName(), ilet);
+                        }
+                        else
+                        {
+                            outlet->ConnectTo(inlet);
+                        }
+                        derer.Pop();
+                    }
+                    derer.Pop();
+                }
+                derer.Pop();
+            }
+            derer.Pop();
+        }
+        derer.Pop();
+    }
+
+    derer.Pop();
+    return true;
 }
 
-void Nodegrams::SaveProject()
+bool Nodegrams::SaveProject(String file)
 {
     Serializer serer;
 
@@ -517,34 +648,14 @@ void Nodegrams::SaveProject()
         it->Serialize(serer);
     serer.EndArray(); // nodes
 
-    rapidjson::StringBuffer sb;
-    rapidjson::PrettyWriter<rapidjson::StringBuffer> writer(sb);
-    // Stringify
-    serer.doc.Accept(writer); // Accept() traverses the DOM and generates Handler events.
-    m_logger->info("Saving to JSON:\n {}", sb.GetString());
+    // Write to file
+    std::ofstream ofs(file);
+    rapidjson::OStreamWrapper osw(ofs);
+    rapidjson::PrettyWriter<rapidjson::OStreamWrapper> fwriter(osw);
+    serer.doc.Accept(fwriter);
+    m_logger->info("Saved project to \"{}\"", file);
 
-
-    rapidjson::Value robj = serer.doc.GetObject();
-    Deserializer derer(robj);
-    derer.SelectMember("FormatVersion");
-        int idint = derer.GetInt();
-        derer.Pop();
-    derer.SelectMember("Name");
-        String projname = derer.GetString();
-        derer.Pop();
-
-    derer.SelectMember("Nodes");
-    for (unsigned i=0; i<derer.ArraySize(); i++)
-    {
-        derer.SelectIndex(i);
-        derer.SelectMember("Name");
-            String nodename = derer.GetString();
-            derer.Pop();
-        m_logger->info("Deser Node: {}", nodename);
-        //Deserialize(derer);
-        derer.Pop();
-    }
-    derer.Pop();
+    return true;
 }
 
 } // namespace Nodegrams

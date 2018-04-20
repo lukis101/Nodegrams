@@ -59,9 +59,9 @@ public:
     virtual void SerializeInoutlets(Serializer& serer) = 0;
     virtual void SerializeState(Serializer& serer) = 0;
 
-    void Deserialize(Deserializer& derer, NodeBase* node);
-    //virtual void DeserializeInoutlets(Deserializer& derer, NodeBase* node) = 0;
-    //virtual void DeserializeState(Deserializer& derer, NodeBase* node) = 0;
+    void Deserialize(Deserializer& derer);
+    virtual void DeserializeInlets(Deserializer& derer);
+    virtual void DeserializeState(Deserializer& derer) {};
 
 protected:
 	String name;

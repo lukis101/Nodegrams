@@ -4,6 +4,7 @@
 #include "Nodegrams/nodes/DynamicNode.h"
 #include "Nodegrams/inoutlets/InletBase.h"
 #include "Nodegrams/inoutlets/OutletBase.h"
+#include "Nodegrams/datatypes/DataBox.h"
 #include "Nodegrams/Nodegrams.h"
 
 namespace Nodegrams {
@@ -95,7 +96,7 @@ void DynamicNode::SerializeInoutlets(Serializer& serer)
             serer.AddString(inlet->name);
 
             serer.SetKey("Data");
-            serer.AddString(inlet->GetData()->ToString());
+            inlet->GetData()->Serialize(serer);
             serer.EndObject();
         }
         serer.EndArray();
